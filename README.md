@@ -1,4 +1,7 @@
 # stac4s
+
+[![Join the chat at https://gitter.im/azavea/stac4s](https://badges.gitter.im/azavea/stac4s.svg)](https://gitter.im/azavea/stac4s?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A scala project that provides types and basic functionality for working with [SpatioTemporal Asset Catalogs](https://stacspec.org). This library is the basis for projects like [Franklin]() and others.
 
 ### Usage
