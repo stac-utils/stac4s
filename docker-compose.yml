@@ -1,0 +1,16 @@
+version: '2.3'
+services:
+  database:
+    image: quay.io/azavea/postgis:2.3-postgres9.6-slim
+    environment:
+      - POSTGRES_USER=stac4s
+      - POSTGRES_PASSWORD=stac4s
+      - POSTGRES_DB=stac4s
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "stac4s"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

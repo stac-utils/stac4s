@@ -1,0 +1,65 @@
+aliases:
+  - &run_cibuild
+    - checkout
+    - restore_cache:
+        keys:
+          - sbt-cache-{{ checksum "build.sbt" }}
+    - run:
+        name: Executing cibuild
+        command: ./scripts/test
+    - save_cache:
+        key: sbt-cache-{{ checksum "build.sbt" }}
+        paths:
+          - "~/.ivy2/cache"
+          - "~/.sbt"
+          - "~/.cache/coursier"
+
+  - &run_cipublish
+    - checkout
+    - restore_cache:
+        keys:
+          - sbt-cache-{{ checksum "build.sbt" }}
+    - run:
+        name: "Import signing key"
+        command: |
+          echo "${GPG_KEY}" | base64 -d > signing_key.asc && \
+          gpg --batch \
+            --passphrase "${GPG_PASSPHRASE}" \
+            --import signing_key.asc
+    - run:
+        name: Executing cipublish
+        command: ./scripts/cipublish
+
+  - &openjdk8-scala2_12_environment
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+version: 2
+workflows:
+  version: 2
+  build:
+    jobs:
+      - "openjdk8-scala2.12":
+          filters: # required since `openjdk8-scala2.12.8_deploy` has tag filters AND requires `openjdk8-scala2.12.8`
+            tags:
+              only:
+                - /^(.*)$/
+      - "openjdk8-scala2.12_deploy":
+          requires:
+            - "openjdk8-scala2.12"
+          filters:
+            tags:
+              only:
+                - /^(.*)$/
+            branches:
+              ignore:
+                - /^(.*)$/
+
+jobs:
+  "openjdk8-scala2.12":
+    <<: *openjdk8-scala2_12_environment
+    steps: *run_cibuild
+
+  "openjdk8-scala2.12_deploy":
+    <<: *openjdk8-scala2_12_environment
+    steps: *run_cipublish
