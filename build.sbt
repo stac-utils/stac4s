@@ -1,5 +1,4 @@
 import xerial.sbt.Sonatype._
-import Dependencies._
 
 lazy val commonSettings = Seq(
   // We are overriding the default behavior of sbt-git which, by default, only
@@ -103,6 +102,24 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
+val coreDependencies = Seq(
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
+  "io.circe"                    %% "circe-fs2"           % Versions.CirceFs2Version,
+  "io.circe"                    %% "circe-generic"       % Versions.CirceVersion,
+  "io.circe"                    %% "circe-parser"        % Versions.CirceVersion,
+  "io.circe"                    %% "circe-refined"       % Versions.CirceVersion,
+  "io.circe"                    %% "circe-shapes"        % Versions.CirceVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
+  "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion % Test,
+  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion % Test,
+  "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
+  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
+  "io.spray"                    %% "spray-json"          % Versions.sprayVersion
+)
+
 lazy val root = project
   .in(file("."))
   .settings(moduleName := "root")
@@ -115,20 +132,7 @@ lazy val core = (project in file("modules/core"))
   .settings(commonSettings)
   .settings(publishSettings)
   .settings({
-    libraryDependencies ++= Seq(
-      cats,
-      circeCore,
-      circeGeneric,
-      circeParser,
-      refined,
-      shapeless,
-      scalacheck,
-      scalacheckCats,
-      scalatest,
-      spdxChecker,
-      spray,
-      geotrellisVector
-    )
+    libraryDependencies ++= coreDependencies
   })
 
 lazy val coreRef = LocalProject("modules/core")
