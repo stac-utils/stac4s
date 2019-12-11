@@ -56,8 +56,8 @@ workflows:
               only:
                 - /^(.*)$/
             branches:
-              ignore:
-                - /^(.*)$/
+              only:
+                - jrb/get-publishing-working
 
 jobs:
   "openjdk8-scala2.12":
