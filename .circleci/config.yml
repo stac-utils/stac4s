@@ -48,7 +48,7 @@ workflows:
               only:
                 - /^(.*)$/
       - "openjdk8-scala2.12_deploy":
-          context: sonatype
+          context: sonatype-azavea-signing-key
           requires:
             - "openjdk8-scala2.12"
           filters:
