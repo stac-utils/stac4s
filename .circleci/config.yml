@@ -3,12 +3,12 @@ aliases:
     - checkout
     - restore_cache:
         keys:
-          - sbt-cache-{{ checksum "build.sbt" }}
+          - sbt-cache-{{ checksum "project/Versions.scala" }}
     - run:
         name: Executing cibuild
         command: ./scripts/test
     - save_cache:
-        key: sbt-cache-{{ checksum "build.sbt" }}
+        key: sbt-cache-{{ checksum "project/Versions.scala" }}
         paths:
           - "~/.ivy2/cache"
           - "~/.sbt"
@@ -18,7 +18,7 @@ aliases:
     - checkout
     - restore_cache:
         keys:
-          - sbt-cache-{{ checksum "build.sbt" }}
+          - sbt-cache-{{ checksum "project/Versions.scala" }}
     - run:
         name: "Import signing key"
         command: |
