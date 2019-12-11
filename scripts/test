@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 set -e
 
@@ -7,21 +7,24 @@ if [[ -n "${STAC4S_DEBUG}" ]]; then
 fi
 
 function usage() {
-    echo -ne \
-         "Usage: $(basename "${0}")
-Run linters and tests.
+    echo -n \
+        "Usage: $(basename "$0")
+Lint Scala source code and execute tests.
 "
 }
 
-
-if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
-    case "${1}" in
-        --help)
-            usage
-            ;;
-        *)
-            echo -e "\e[32m[stac4s] Executing Scala Tests and Linting\e[0m"
-            ./sbt ";scalafix --check;scalafmtCheck;scalafmtSbtCheck;scapegoat;undeclaredCompileDependenciesTest;unusedCompileDependenciesTest;test"
-            ;;
-    esac
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    if [[ "${1:-}" == "--help" ]]; then
+        usage
+    else
+        ./sbt ";\
+            scalafix --check; \
+            scalafmtCheck; \
+            scalafmtSbtCheck; \
+            scapegoat; \
+            undeclaredCompileDependenciesTest; \
+            unusedCompileDependenciesTest; \
+            test \
+        "
+    fi
 fi

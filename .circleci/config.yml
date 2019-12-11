@@ -40,11 +40,15 @@ workflows:
   build:
     jobs:
       - "openjdk8-scala2.12":
-          filters: # required since `openjdk8-scala2.12.8_deploy` has tag filters AND requires `openjdk8-scala2.12.8`
+          # required since openjdk8-scala2.12_deploy has tag filters AND requires
+          # openjdk8-scala2.12
+          # https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag
+          filters:
             tags:
               only:
                 - /^(.*)$/
       - "openjdk8-scala2.12_deploy":
+          context: sonatype
           requires:
             - "openjdk8-scala2.12"
           filters:
