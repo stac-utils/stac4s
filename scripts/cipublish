@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ -n "${STAC4S_SERVER_DEBUG}" ]]; then
+if [[ -n "${STAC4S_DEBUG}" ]]; then
     set -x
 fi
 

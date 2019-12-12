@@ -1,22 +1,60 @@
 import xerial.sbt.Sonatype._
 
-cancelable in Global := true
-onLoad in Global ~= (_ andThen ("project core" :: _))
-
-lazy val credentialSettings = Seq(
-  credentials += Credentials(
-    "GnuPG Key ID",
-    "gpg",
-    System.getenv().get("GPG_KEY_ID"),
-    "ignored"
+lazy val commonSettings = Seq(
+  // We are overriding the default behavior of sbt-git which, by default, only
+  // appends the `-SNAPSHOT` suffix if there are uncommitted changes in the
+  // workspace.
+  version := {
+    if (git.gitDescribedVersion.value.isEmpty)
+      git.gitHeadCommit.value.get.substring(0, 7) + "-SNAPSHOT"
+    else if (git.gitCurrentTags.value.isEmpty || git.gitUncommittedChanges.value)
+      git.gitDescribedVersion.value.get + "-SNAPSHOT"
+    else
+      git.gitDescribedVersion.value.get
+  },
+  scalaVersion := "2.12.10",
+  cancelable in Global := true,
+  scalafmtOnCompile := true,
+  scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
+  scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
+  unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.6"),
+  addCompilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.2.4"),
+  addCompilerPlugin(
+    "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full
   ),
-  credentials += Credentials(
-    "Sonatype Nexus Repository Manager",
-    "oss.sonatype.org",
-    System.getenv().get("SONATYPE_USERNAME"),
-    System.getenv().get("SONATYPE_PASSWORD")
+  addCompilerPlugin(scalafixSemanticdb),
+  autoCompilerPlugins := true,
+  externalResolvers := Seq(
+    DefaultMavenRepository,
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.typesafeIvyRepo("releases"),
+    Resolver.bintrayRepo("azavea", "maven"),
+    Resolver.bintrayRepo("azavea", "geotrellis"),
+    "locationtech-releases" at "https://repo.locationtech.org/content/groups/releases",
+    "locationtech-snapshots" at "https://repo.locationtech.org/content/groups/snapshots",
+    Resolver.bintrayRepo("guizmaii", "maven"),
+    Resolver.bintrayRepo("colisweb", "maven"),
+    "jitpack".at("https://jitpack.io"),
+    Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
+      Resolver.ivyStylePatterns
+    )
   )
 )
+
+lazy val noPublishSettings = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
+)
+
+lazy val publishSettings = Seq(
+  organization := "com.azavea.stac4s",
+  organizationName := "Azavea",
+  organizationHomepage := Some(new URL("https://azavea.com/")),
+  description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
+  publishArtifact in Test := false
+) ++ sonatypeSettings ++ credentialSettings
 
 lazy val sonatypeSettings = Seq(
   publishMavenStyle := true,
@@ -52,96 +90,46 @@ lazy val sonatypeSettings = Seq(
   publishTo := sonatypePublishTo.value
 )
 
-lazy val publishSettings = Seq(
-  organization := "com.azavea.stac4s",
-  organizationName := "Azavea",
-  organizationHomepage := Some(new URL("https://azavea.com/")),
-  description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
-  publishArtifact in Test := false
-) ++ sonatypeSettings ++ credentialSettings
-
-// Versions
-val CatsVersion           = "1.6.0"
-val CirceFs2Version       = "0.11.0"
-val CirceVersion          = "0.11.1"
-val GeoTrellisVersion     = "3.0.0-M3"
-val RefinedVersion        = "0.9.3"
-val ScapegoatVersion      = "1.3.8"
-val ShapelessVersion      = "2.3.3"
-val spdxCheckerVersion    = "1.0.0"
-val scalacheckCatsVersion = "0.1.1"
-val scalatestVersion      = "3.0.4"
-val sprayVersion          = "1.3.4"
-val scalacheckVersion     = "1.14.0"
-
-// Dependencies
-val cats             = "org.typelevel"               %% "cats-core"           % CatsVersion
-val circeCore        = "io.circe"                    %% "circe-core"          % CirceVersion
-val circeFs2         = "io.circe"                    %% "circe-fs2"           % CirceFs2Version
-val circeGeneric     = "io.circe"                    %% "circe-generic"       % CirceVersion
-val circeParser      = "io.circe"                    %% "circe-parser"        % CirceVersion
-val circeRefined     = "io.circe"                    %% "circe-refined"       % CirceVersion
-val circeShapes      = "io.circe"                    %% "circe-shapes"        % CirceVersion
-val geotrellisVector = "org.locationtech.geotrellis" %% "geotrellis-vector"   % GeoTrellisVersion
-val refined          = "eu.timepit"                  %% "refined"             % RefinedVersion
-val scalacheck       = "org.scalacheck"              %% "scalacheck"          % scalacheckVersion % Test
-val scalacheckCats   = "io.chrisdavenport"           %% "cats-scalacheck"     % scalacheckCatsVersion % Test
-val scalatest        = "org.scalatest"               %% "scalatest"           % scalatestVersion % Test
-val spdxChecker      = "com.github.tbouron"          % "spdx-license-checker" % spdxCheckerVersion
-val shapeless        = "com.chuusai"                 %% "shapeless"           % ShapelessVersion
-val spray            = "io.spray"                    %% "spray-json"          % sprayVersion
-
-lazy val settings = Seq(
-  organization := "com.azavea",
-  name := "stac4s",
-  version := "0.0.1-SNAPSHOT",
-  scalaVersion := "2.12.10",
-  scalafmtOnCompile := true,
-  scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
-  scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
-  unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
-  addCompilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.6"),
-  addCompilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.2.4"),
-  addCompilerPlugin(
-    "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full
-  ),
-  addCompilerPlugin(scalafixSemanticdb),
-  autoCompilerPlugins := true,
-  externalResolvers := Seq(
-    DefaultMavenRepository,
-    Resolver.sonatypeRepo("snapshots"),
-    Resolver.typesafeIvyRepo("releases"),
-    Resolver.bintrayRepo("azavea", "maven"),
-    Resolver.bintrayRepo("azavea", "geotrellis"),
-    "locationtech-releases" at "https://repo.locationtech.org/content/groups/releases",
-    "locationtech-snapshots" at "https://repo.locationtech.org/content/groups/snapshots",
-    Resolver.bintrayRepo("guizmaii", "maven"),
-    Resolver.bintrayRepo("colisweb", "maven"),
-    "jitpack".at("https://jitpack.io"),
-    Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
-      Resolver.ivyStylePatterns
-    )
-  )
+lazy val credentialSettings = Seq(
+  credentials ++= List(
+    for {
+      id <- sys.env.get("GPG_KEY_ID")
+    } yield Credentials("GnuPG Key ID", "gpg", id, "ignored"),
+    for {
+      user <- sys.env.get("SONATYPE_USERNAME")
+      pass <- sys.env.get("SONATYPE_PASSWORD")
+    } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
+  ).flatten
 )
 
-lazy val dependencies = Seq(
-  cats,
-  circeCore,
-  circeGeneric,
-  circeParser,
-  refined,
-  shapeless,
-  scalacheck,
-  scalacheckCats,
-  scalatest,
-  spdxChecker,
-  spray,
-  geotrellisVector
+val coreDependencies = Seq(
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
+  "io.circe"                    %% "circe-generic"       % Versions.CirceVersion,
+  "io.circe"                    %% "circe-parser"        % Versions.CirceVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
+  "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion % Test,
+  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion % Test,
+  "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
+  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
+  "io.spray"                    %% "spray-json"          % Versions.sprayVersion
 )
+
+lazy val root = project
+  .in(file("."))
+  .settings(moduleName := "root")
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(noPublishSettings)
+  .aggregate(core)
 
 lazy val core = (project in file("modules/core"))
-  .settings(settings: _*)
+  .settings(commonSettings)
+  .settings(publishSettings)
   .settings({
-    libraryDependencies ++= dependencies
+    libraryDependencies ++= coreDependencies
   })
+
 lazy val coreRef = LocalProject("modules/core")
