@@ -5,6 +5,7 @@ import geotrellis.vector.Extent
 import io.circe._
 import io.circe.syntax._
 
+@SuppressWarnings(Array("CatchThrowable"))
 sealed trait Bbox {
   val xmin: Double
   val ymin: Double
