@@ -3,14 +3,13 @@ package com.azavea.stac4s
 import java.time.Instant
 
 import cats.implicits._
-import com.azavea.stac4s.core.TemporalExtent
 import eu.timepit.refined.api.RefType
-import geotrellis.vector.{io => _, _}
+import geotrellis.vector.io.json.GeometryFormats
 import io.circe._
-import io.circe.parser.{decode, parse}
+import io.circe.parser.decode
 import io.circe.syntax._
 
-package object meta {
+package object meta extends GeometryFormats {
 
   // Stolen straight from circe docs
   implicit val decodeInstant: Decoder[Instant] = Decoder.decodeString.emap { str =>
@@ -35,20 +34,6 @@ package object meta {
       case l =>
         RefType.applyRef[TemporalExtent](l)
     }
-
-  implicit val geometryDecoder: Decoder[Geometry] = Decoder[Json] map { js =>
-    js.spaces4.parseGeoJson[Geometry]
-  }
-
-  implicit val geometryEncoder: Encoder[Geometry] = new Encoder[Geometry] {
-
-    def apply(geom: Geometry) = {
-      parse(geom.toGeoJson) match {
-        case Right(js) => js
-        case Left(e)   => throw e
-      }
-    }
-  }
 
   implicit val decTimeRange: Decoder[(Option[Instant], Option[Instant])] = Decoder[String] map { str =>
     val components = str.replace("[", "").replace("]", "").split(",") map {

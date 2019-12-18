@@ -1,4 +1,4 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import com.azavea.stac4s.meta._
 import Generators._
@@ -12,9 +12,7 @@ import org.scalatest.{FunSpec, Matchers}
 import org.scalatest.prop.PropertyChecks
 import java.time.Instant
 
-import com.typesafe.scalalogging.LazyLogging
-
-class SerDeSpec extends FunSpec with Matchers with PropertyChecks with LazyLogging {
+class SerDeSpec extends FunSpec with Matchers with PropertyChecks {
 
   private def getPropTest[T: Arbitrary: Encoder: Decoder] = forAll { (x: T) =>
     {

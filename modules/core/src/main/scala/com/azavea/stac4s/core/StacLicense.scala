@@ -1,4 +1,4 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import cats.implicits._
 import eu.timepit.refined.api.RefType

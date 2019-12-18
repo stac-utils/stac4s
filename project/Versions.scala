@@ -1,8 +1,8 @@
 object Versions {
-  val CatsVersion           = "1.6.0"
-  val CirceVersion          = "0.11.1"
-  val GeoTrellisVersion     = "3.0.0-M3"
-  val RefinedVersion        = "0.9.3"
+  val CatsVersion           = "2.0.0"
+  val CirceVersion          = "0.12.2"
+  val GeoTrellisVersion     = "3.2.0"
+  val RefinedVersion        = "0.9.10"
   val ScapegoatVersion      = "1.3.8"
   val ShapelessVersion      = "2.3.3"
   val spdxCheckerVersion    = "1.0.0"

@@ -1,4 +1,4 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import cats.implicits._
 import io.circe._
@@ -18,6 +18,7 @@ object StacProviderRole {
 
   implicit val encProviderRole: Encoder[StacProviderRole] =
     Encoder.encodeString.contramap[StacProviderRole](_.toString)
+
   implicit val decProviderRole: Decoder[StacProviderRole] =
     Decoder.decodeString.emap { str =>
       Either.catchNonFatal(fromString(str)).leftMap(_ => "StacProviderRole")

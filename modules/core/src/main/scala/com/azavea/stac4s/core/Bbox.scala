@@ -1,11 +1,22 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import cats.implicits._
+import geotrellis.vector.Extent
 import io.circe._
 import io.circe.syntax._
 
 sealed trait Bbox {
+  val xmin: Double
+  val ymin: Double
+  val xmax: Double
+  val ymax: Double
   val toList: List[Double]
+
+  val toExtent: Either[Throwable, Extent] = try {
+    Either.right(Extent(xmin, ymin, xmax, ymax))
+  } catch {
+    case e: Throwable => Either.left(e)
+  }
 }
 
 final case class TwoDimBbox(xmin: Double, ymin: Double, xmax: Double, ymax: Double) extends Bbox {

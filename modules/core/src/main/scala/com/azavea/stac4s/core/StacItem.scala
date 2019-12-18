@@ -1,7 +1,7 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import com.azavea.stac4s.meta._
-import geotrellis.vector.{io => _, _}
+import geotrellis.vector.Geometry
 import io.circe._
 
 final case class StacItem(
