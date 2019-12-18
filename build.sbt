@@ -114,7 +114,7 @@ val coreDependencies = Seq(
   "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
   "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
   "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
-  "io.spray"                    %% "spray-json"          % Versions.sprayVersion
+  "org.locationtech.jts"        % "jts-core"             % Versions.jts
 )
 
 lazy val root = project
