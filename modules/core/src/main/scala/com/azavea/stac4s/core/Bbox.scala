@@ -1,11 +1,10 @@
 package com.azavea.stac4s
 
 import cats.implicits._
-import geotrellis.vector.Extent
+import geotrellis.vector.{Extent, ExtentRangeError}
 import io.circe._
 import io.circe.syntax._
 
-@SuppressWarnings(Array("CatchThrowable"))
 sealed trait Bbox {
   val xmin: Double
   val ymin: Double
@@ -13,10 +12,10 @@ sealed trait Bbox {
   val ymax: Double
   val toList: List[Double]
 
-  val toExtent: Either[Throwable, Extent] = try {
+  val toExtent: Either[String, Extent] = try {
     Either.right(Extent(xmin, ymin, xmax, ymax))
   } catch {
-    case e: Throwable => Either.left(e)
+    case e: ExtentRangeError => Either.left(e.toString)
   }
 }
 
