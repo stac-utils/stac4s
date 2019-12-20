@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea
 
 import java.time.Instant
 
@@ -9,7 +9,7 @@ import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
 import geotrellis.vector.{io => _}
 
-package object core {
+package object stac4s {
 
   type SpdxId = String Refined ValidSpdxId
   object SpdxId extends RefinedTypeOps[SpdxId, String]
