@@ -8,6 +8,6 @@ object Versions {
   val spdxCheckerVersion    = "1.0.0"
   val scalacheckCatsVersion = "0.1.1"
   val scalatestVersion      = "3.0.4"
-  val scalacheckVersion     = "1.14.0"
+  val scalacheckVersion     = "1.14.3"
   val jts                   = "1.16.1"
 }
