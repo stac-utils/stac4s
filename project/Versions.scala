@@ -7,7 +7,7 @@ object Versions {
   val ShapelessVersion      = "2.3.3"
   val spdxCheckerVersion    = "1.0.0"
   val scalacheckCatsVersion = "0.1.1"
-  val scalatestVersion      = "3.0.4"
+  val scalatestVersion      = "3.0.8"
   val scalacheckVersion     = "1.14.0"
   val jts                   = "1.16.1"
 }
