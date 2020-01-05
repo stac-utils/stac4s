@@ -1,5 +1,5 @@
 addSbtCoursier
-addSbtPlugin("org.xerial.sbt"            % "sbt-sonatype"              % "2.5")
+addSbtPlugin("org.xerial.sbt"            % "sbt-sonatype"              % "2.6")
 addSbtPlugin("com.github.cb372"          % "sbt-explicit-dependencies" % "0.2.11")
 addSbtPlugin("io.crashbox"               % "sbt-gpg"                   % "0.2.0")
 addSbtPlugin("com.typesafe.sbt"          % "sbt-git"                   % "1.0.0")
