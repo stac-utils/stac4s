@@ -1,5 +1,5 @@
 object Versions {
-  val CatsVersion           = "2.0.0"
+  val CatsVersion           = "2.1.0"
   val CirceVersion          = "0.12.2"
   val GeoTrellisVersion     = "3.2.0"
   val RefinedVersion        = "0.9.10"
