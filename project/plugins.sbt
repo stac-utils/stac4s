@@ -1,7 +1,7 @@
 addSbtCoursier
 addSbtPlugin("org.xerial.sbt"            % "sbt-sonatype"              % "2.5")
 addSbtPlugin("com.github.cb372"          % "sbt-explicit-dependencies" % "0.2.11")
-addSbtPlugin("io.crashbox"               % "sbt-gpg"                   % "0.2.0")
+addSbtPlugin("io.crashbox"               % "sbt-gpg"                   % "0.2.1")
 addSbtPlugin("com.typesafe.sbt"          % "sbt-git"                   % "1.0.0")
 addSbtPlugin("io.spray"                  % "sbt-revolver"              % "0.9.1")
 addSbtPlugin("com.geirsson"              % "sbt-scalafmt"              % "1.5.1")
