@@ -8,11 +8,12 @@ import io.circe.syntax._
 import io.circe.parser._
 import org.scalacheck.Arbitrary
 
-import org.scalatest.{FunSpec, Matchers}
-import org.scalatest.prop.PropertyChecks
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import java.time.Instant
 
-class SerDeSpec extends FunSpec with Matchers with PropertyChecks {
+class SerDeSpec extends AnyFunSpec with Matchers with ScalaCheckPropertyChecks {
 
   private def getPropTest[T: Arbitrary: Encoder: Decoder] = forAll { (x: T) =>
     {

@@ -49,7 +49,7 @@ object StacItem {
         item.assets,
         item.collection,
         item.properties
-    )
+      )
   )
 
   implicit val decStacItem: Decoder[StacItem] = Decoder.forProduct10(

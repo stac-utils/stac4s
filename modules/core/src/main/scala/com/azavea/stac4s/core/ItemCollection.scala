@@ -20,7 +20,7 @@ object ItemCollection {
         itemCollection._type,
         itemCollection.features,
         itemCollection.links
-    )
+      )
   )
 
   implicit val decItemCollection: Decoder[ItemCollection] = Decoder.forProduct3(

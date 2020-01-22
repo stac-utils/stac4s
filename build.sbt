@@ -18,10 +18,10 @@ lazy val commonSettings = Seq(
   scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
-  addCompilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.6"),
-  addCompilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.2.4"),
+  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.0" cross CrossVersion.full),
+  addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(
-    "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full
+    "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
   ),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
@@ -114,7 +114,8 @@ val coreDependencies = Seq(
   "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
   "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
   "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
-  "org.locationtech.jts"        % "jts-core"             % Versions.jts
+  "org.locationtech.jts"        % "jts-core"             % Versions.jts,
+  "org.scalatestplus"           %% "scalacheck-1-14"     % Versions.ScalatestPlusScalacheck % Test
 )
 
 lazy val root = project
