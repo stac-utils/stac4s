@@ -46,7 +46,7 @@ object StacCollection {
           collection.extent,
           collection.properties,
           collection.links
-      )
+        )
     )
 
   implicit val decoderStacCollection: Decoder[StacCollection] =
@@ -88,6 +88,6 @@ object StacCollection {
           extent,
           properties getOrElse JsonObject.fromMap(Map.empty),
           links
-      )
+        )
     )
 }

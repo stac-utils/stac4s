@@ -21,7 +21,7 @@ object StacCatalog {
           catalog.title,
           catalog.description,
           catalog.links
-      )
+        )
     )
 
   implicit val decCatalog: Decoder[StacCatalog] =
