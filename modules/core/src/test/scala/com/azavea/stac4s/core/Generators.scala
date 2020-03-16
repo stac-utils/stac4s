@@ -64,7 +64,10 @@ object Generators {
     StacLinkType.ServiceDesc,
     StacLinkType.ServiceDoc,
     StacLinkType.Conformance,
-    StacLinkType.Data
+    StacLinkType.Data,
+    StacLinkType.LatestVersion,
+    StacLinkType.PredecessorVersion,
+    StacLinkType.SuccessorVersion
   )
 
   private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(

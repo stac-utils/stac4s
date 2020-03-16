@@ -38,24 +38,27 @@ object StacLinkType {
   }
 
   private def fromString(s: String): StacLinkType = s.toLowerCase match {
-    case "self"         => Self
-    case "root"         => StacRoot
-    case "parent"       => Parent
-    case "child"        => Child
-    case "item"         => Item
-    case "items"        => Items
-    case "alternate"    => Alternate
-    case "collection"   => Collection
-    case "describedby"  => DescribedBy
-    case "next"         => Next
-    case "license"      => License
-    case "prev"         => Prev
-    case "service-desc" => ServiceDesc
-    case "service-doc"  => ServiceDoc
-    case "conformance"  => Conformance
-    case "data"         => Data
-    case "source"       => Source
-    case s              => VendorLinkType(s)
+    case "self"                => Self
+    case "root"                => StacRoot
+    case "parent"              => Parent
+    case "child"               => Child
+    case "item"                => Item
+    case "items"               => Items
+    case "alternate"           => Alternate
+    case "collection"          => Collection
+    case "describedby"         => DescribedBy
+    case "next"                => Next
+    case "license"             => License
+    case "prev"                => Prev
+    case "service-desc"        => ServiceDesc
+    case "service-doc"         => ServiceDoc
+    case "conformance"         => Conformance
+    case "data"                => Data
+    case "source"              => Source
+    case "latest-version"      => LatestVersion
+    case "predecessor-version" => PredecessorVersion
+    case "successor-version"   => SuccessorVersion
+    case s                     => VendorLinkType(s)
   }
 
   implicit val encStacLinkType: Encoder[StacLinkType] =
