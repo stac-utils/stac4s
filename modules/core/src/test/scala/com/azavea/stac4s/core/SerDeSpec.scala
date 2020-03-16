@@ -4,14 +4,16 @@ import com.azavea.stac4s.meta._
 import com.azavea.stac4s.Generators._
 
 import geotrellis.vector.Geometry
+import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
 import java.time.Instant
 
-class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with ArbitraryInstances {
+class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
   checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
@@ -32,4 +34,9 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with A
   checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
   checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
 
+  test(" ignore optional fields") {
+    val link =
+      decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
+    link map { _.labelExtAssets } shouldBe Right(List.empty[String])
+  }
 }
