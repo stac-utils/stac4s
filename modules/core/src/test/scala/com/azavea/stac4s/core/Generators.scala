@@ -15,7 +15,7 @@ object Generators {
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
 
   private def rectangleGen: Gen[Geometry] =
-    for {
+    (for {
       lowerX <- Gen.choose(0.0, 1000.0)
       lowerY <- Gen.choose(0.0, 1000.0)
     } yield {
@@ -26,7 +26,7 @@ object Generators {
         Point(lowerX, lowerY + 100),
         Point(lowerX, lowerY)
       )
-    }
+    }).widen
 
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
