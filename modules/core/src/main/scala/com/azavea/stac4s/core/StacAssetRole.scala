@@ -11,7 +11,7 @@ sealed abstract class StacAssetRole(val repr: String) {
 object StacAssetRole {
 
   implicit def eqStacAssetRole: Eq[StacAssetRole] = Eq[String].imap(fromString _)(_.repr)
-  
+
   case object Thumbnail                   extends StacAssetRole("thumbnail")
   case object Overview                    extends StacAssetRole("overview")
   case object Data                        extends StacAssetRole("data")

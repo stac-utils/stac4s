@@ -13,11 +13,12 @@ sealed trait Bbox {
   val ymax: Double
   val toList: List[Double]
 
-  val toExtent: Either[String, Extent] = try {
-    Either.right(Extent(xmin, ymin, xmax, ymax))
-  } catch {
-    case e: ExtentRangeError => Either.left(e.toString)
-  }
+  val toExtent: Either[String, Extent] =
+    try {
+      Either.right(Extent(xmin, ymin, xmax, ymax))
+    } catch {
+      case e: ExtentRangeError => Either.left(e.toString)
+    }
 }
 
 final case class TwoDimBbox(xmin: Double, ymin: Double, xmax: Double, ymax: Double) extends Bbox {

@@ -26,7 +26,7 @@ final case class StacExtent(
 )
 
 object StacExtent {
-  implicit val eqStacExtent: Eq[StacExtent] = Eq.fromUniversalEquals
+  implicit val eqStacExtent: Eq[StacExtent]       = Eq.fromUniversalEquals
   implicit val encStacExtent: Encoder[StacExtent] = deriveEncoder
   implicit val decStacExtent: Decoder[StacExtent] = deriveDecoder
 }

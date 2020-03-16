@@ -40,20 +40,19 @@ object StacItem {
     "assets",
     "collection",
     "properties"
-  )(
-    item =>
-      (
-        item.id,
-        item.stacVersion,
-        item.stacExtensions,
-        item._type,
-        item.geometry,
-        item.bbox,
-        item.links,
-        item.assets,
-        item.collection,
-        item.properties
-      )
+  )(item =>
+    (
+      item.id,
+      item.stacVersion,
+      item.stacExtensions,
+      item._type,
+      item.geometry,
+      item.bbox,
+      item.links,
+      item.assets,
+      item.collection,
+      item.properties
+    )
   )
 
   implicit val decStacItem: Decoder[StacItem] = Decoder.forProduct10(

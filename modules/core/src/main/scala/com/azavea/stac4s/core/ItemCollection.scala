@@ -22,15 +22,14 @@ object ItemCollection {
     "stac_extensions",
     "features",
     "links"
-  )(
-    itemCollection =>
-      (
-        itemCollection._type,
-        itemCollection.stacVersion,
-        itemCollection.stacExtensions,
-        itemCollection.features,
-        itemCollection.links
-      )
+  )(itemCollection =>
+    (
+      itemCollection._type,
+      itemCollection.stacVersion,
+      itemCollection.stacExtensions,
+      itemCollection.features,
+      itemCollection.links
+    )
   )
 
   implicit val decItemCollection: Decoder[ItemCollection] = Decoder.forProduct5(

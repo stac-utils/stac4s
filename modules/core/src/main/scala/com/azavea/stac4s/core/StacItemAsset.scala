@@ -16,8 +16,8 @@ object StacItemAsset {
   implicit val eqStacItemAsset: Eq[StacItemAsset] = Eq.fromUniversalEquals
 
   implicit val encStacItemAsset: Encoder[StacItemAsset] =
-    Encoder.forProduct5("href", "title", "description", "roles", "type")(
-      asset => (asset.href, asset.title, asset.description, asset.roles, asset._type)
+    Encoder.forProduct5("href", "title", "description", "roles", "type")(asset =>
+      (asset.href, asset.title, asset.description, asset.roles, asset._type)
     )
 
   implicit val decStacItemAsset: Decoder[StacItemAsset] =
