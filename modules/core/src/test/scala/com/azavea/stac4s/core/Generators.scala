@@ -28,9 +28,7 @@ object Generators {
       )
     }
 
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x =>
-    Instant.now.plusMillis(x.toLong)
-  }
+  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     `image/tiff`,
@@ -50,23 +48,30 @@ object Generators {
   )
 
   private def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
-    Self,
-    StacRoot,
-    Parent,
-    Child,
-    Item,
-    Items,
-    Source,
-    Collection,
-    License,
-    Alternate,
-    DescribedBy,
-    Next,
-    Prev,
-    ServiceDesc,
-    ServiceDoc,
-    Conformance,
-    Data
+    StacLinkType.Self,
+    StacLinkType.StacRoot,
+    StacLinkType.Parent,
+    StacLinkType.Child,
+    StacLinkType.Item,
+    StacLinkType.Items,
+    StacLinkType.Source,
+    StacLinkType.Collection,
+    StacLinkType.License,
+    StacLinkType.Alternate,
+    StacLinkType.DescribedBy,
+    StacLinkType.Next,
+    StacLinkType.Prev,
+    StacLinkType.ServiceDesc,
+    StacLinkType.ServiceDoc,
+    StacLinkType.Conformance,
+    StacLinkType.Data
+  )
+
+  private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
+    StacAssetRole.Thumbnail,
+    StacAssetRole.Overview,
+    StacAssetRole.Data,
+    StacAssetRole.Metadata
   )
 
   private def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
@@ -103,7 +108,7 @@ object Generators {
   private def stacLinkGen: Gen[StacLink] =
     (
       nonEmptyStringGen,
-      Gen.const(Self), // self link type is required by TMS reification
+      Gen.const(StacLinkType.Self), // self link type is required by TMS reification
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
       Gen.nonEmptyListOf[String](arbitrary[String])
@@ -121,9 +126,7 @@ object Generators {
     (
       bboxGen,
       temporalExtentGen
-    ).mapN(
-      (bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval)))
-    )
+    ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
 
   private def stacProviderGen: Gen[StacProvider] =
     (
@@ -133,17 +136,31 @@ object Generators {
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply _)
 
-  private def stacAssetGen: Gen[StacAsset] =
-    (nonEmptyStringGen, Gen.option(nonEmptyStringGen), Gen.option(mediaTypeGen)) mapN {
-      StacAsset.apply _
+  private def stacItemAssetGen: Gen[StacItemAsset] =
+    (
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      Gen.option(nonEmptyStringGen),
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
+      Gen.option(mediaTypeGen)
+    ) mapN {
+      StacItemAsset.apply _
+    }
+
+  private def stacCollectionAssetGen: Gen[StacCollectionAsset] =
+    (
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
+      mediaTypeGen
+    ).mapN {
+      StacCollectionAsset.apply _
     }
 
   // Only do COGs for now, since we don't handle anything else in the example server.
   // As more types of stac items are supported, relax this assumption
-  private def cogAssetGen: Gen[StacAsset] =
-    stacAssetGen map { asset =>
-      asset.copy(_type = Some(`image/cog`))
-    }
+  private def cogAssetGen: Gen[StacItemAsset] =
+    stacItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
 
   private def stacItemGen: Gen[StacItem] =
     (
@@ -175,7 +192,6 @@ object Generators {
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.listOf(nonEmptyStringGen),
-      nonEmptyStringGen,
       stacLicenseGen,
       Gen.listOf(stacProviderGen),
       stacExtentGen,
@@ -186,6 +202,8 @@ object Generators {
   private def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
+      Gen.const(StacVersion.unsafeFrom("0.9.0")),
+      Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](stacLinkGen)
     ).mapN(ItemCollection.apply _)
@@ -204,7 +222,9 @@ object Generators {
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
 
-  implicit val arbAsset: Arbitrary[StacAsset] = Arbitrary { stacAssetGen }
+  implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
+
+  implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
 
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
@@ -238,5 +258,9 @@ object Generators {
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
     itemCollectionGen
+  }
+
+  implicit val arbStacAssetRole: Arbitrary[StacAssetRole] = Arbitrary {
+    assetRoleGen
   }
 }

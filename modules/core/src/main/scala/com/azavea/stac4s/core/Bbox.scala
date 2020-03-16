@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.Eq
 import cats.implicits._
 import geotrellis.vector.{Extent, ExtentRangeError}
 import io.circe._
@@ -36,6 +37,8 @@ final case class ThreeDimBbox(
 
 object TwoDimBbox {
 
+  implicit val eqTwoDimBbox: Eq[TwoDimBbox] = Eq.fromUniversalEquals
+
   implicit val decoderTwoDBox: Decoder[TwoDimBbox] =
     Decoder.decodeList[Double].emap {
       case twodim if twodim.length == 4 =>
@@ -54,6 +57,8 @@ object TwoDimBbox {
 }
 
 object ThreeDimBbox {
+
+  implicit val eqThreeDimBbox: Eq[ThreeDimBbox] = Eq.fromUniversalEquals
 
   implicit val decoderThreeDimBox: Decoder[ThreeDimBbox] =
     Decoder.decodeList[Double].emap {
@@ -92,5 +97,7 @@ object Bbox {
   }
 
   implicit val decoderBbox: Decoder[Bbox] = Decoder[TwoDimBbox].widen or Decoder[ThreeDimBbox].widen
+
+  implicit val eqBbox: Eq[Bbox] = Eq.fromUniversalEquals
 
 }

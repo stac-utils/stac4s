@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.Eq
 import cats.implicits._
 import eu.timepit.refined.api.RefType
 import io.circe._
@@ -15,6 +16,10 @@ final case class Proprietary() extends StacLicense {
 
 final case class SPDX(spdxId: SpdxId) extends StacLicense {
   val name = spdxId.value
+}
+
+object SPDX {
+  implicit val eqSpdx: Eq[SPDX] = Eq.fromUniversalEquals
 }
 
 object StacLicense {

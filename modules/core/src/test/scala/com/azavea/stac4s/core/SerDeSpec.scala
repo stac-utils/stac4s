@@ -1,82 +1,48 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.meta._
-import Generators._
-import geotrellis.vector.Geometry
-import io.circe._
-import io.circe.syntax._
-import io.circe.parser._
-import org.scalacheck.Arbitrary
+import com.azavea.stac4s.Generators._
 
-import org.scalatest.funspec.AnyFunSpec
-import org.scalatest.matchers.should.Matchers
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import geotrellis.vector.Geometry
+import io.circe.testing.{ArbitraryInstances, CodecTests}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.scalacheck.Checkers
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
+
 import java.time.Instant
 
-class SerDeSpec extends AnyFunSpec with Matchers with ScalaCheckPropertyChecks {
+class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with ArbitraryInstances {
 
-  private def getPropTest[T: Arbitrary: Encoder: Decoder] = forAll { (x: T) =>
-    {
-      withClue(x.asJson.spaces2) {
-        decode[T](x.asJson.noSpaces) shouldBe Right(x)
-      }
-    }
+  test("SerDe round trips work") {
+    checkAll("Codec.StacMediaType", CodecTests[StacMediaType].codec)
+    checkAll("Codec.StacMediaType", CodecTests[StacMediaType].codec)
+    checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].codec)
+    checkAll("Codec.StacLinkType", CodecTests[StacLinkType].codec)
+    checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].codec)
+
+    checkAll("Codec.Instant", CodecTests[Instant].codec)
+    checkAll("Codec.Geometry", CodecTests[Geometry].codec)
+
+    checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].codec)
+    checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].codec)
+
+    checkAll("Codec.SPDX", CodecTests[SPDX].codec)
+
+    checkAll("Codec.StacItem", CodecTests[StacItem].codec)
+
+    checkAll("Codec.ItemCollection", CodecTests[ItemCollection].codec)
+
+    checkAll("Codec.StacCatalog", CodecTests[StacCatalog].codec)
+
+    checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].codec)
+
+    checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].codec)
+
+    checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].codec)
+    checkAll("Codec.Bbox", CodecTests[Bbox].codec)
+    checkAll("Codec.StacExtent", CodecTests[StacExtent].codec)
+
+    checkAll("Codec.StacCollection", CodecTests[StacCollection].codec)
   }
 
-  describe("serialization / deserialization should succeed") {
-    it("enums should round trip") {
-      getPropTest[StacMediaType]
-      getPropTest[StacLinkType]
-      getPropTest[StacProviderRole]
-    }
-
-    it("times and geometries should round trip") {
-      getPropTest[Instant]
-      getPropTest[Geometry]
-    }
-
-    it("assets should round trip") {
-      getPropTest[StacAsset]
-    }
-
-    it("SPDX should round trip") {
-      getPropTest[SPDX]
-    }
-
-    it("items should round trip") {
-      getPropTest[StacItem]
-    }
-
-    it("item collections should round trip") {
-      getPropTest[ItemCollection]
-    }
-
-    it("catalogs should round trip") {
-      getPropTest[StacCatalog]
-    }
-
-    it("two dimensional bbox should round trip") {
-      getPropTest[TwoDimBbox]
-    }
-
-    it("three dimensional bbox should round trip") {
-      getPropTest[ThreeDimBbox]
-    }
-
-    it("stac extents should round trip") {
-      getPropTest[TemporalExtent]
-      getPropTest[Bbox]
-      getPropTest[StacExtent]
-    }
-
-    it("collections should round trip") {
-      getPropTest[StacCollection]
-    }
-  }
-
-  it("should ignore optional fields") {
-    val link =
-      decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
-    link map { _.labelExtAssets } shouldBe Right(List.empty[String])
-  }
 }

@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.Eq
 import cats.implicits._
 import io.circe._
 
@@ -8,6 +9,8 @@ sealed abstract class StacMediaType(val repr: String) {
 }
 
 object StacMediaType {
+
+  implicit def eqStacMediaType: Eq[StacMediaType] = Eq[String].imap(fromString _)(_.repr)
 
   private def fromString(s: String): StacMediaType = s match {
     case "image/tiff"                                   => `image/tiff`
@@ -31,9 +34,7 @@ object StacMediaType {
     Encoder.encodeString.contramap[StacMediaType](_.toString)
 
   implicit val decMediaType: Decoder[StacMediaType] =
-    Decoder.decodeString.emap { str =>
-      Either.catchNonFatal(fromString(str)).leftMap(_ => "StacLinkType")
-    }
+    Decoder.decodeString.emap { str => Either.catchNonFatal(fromString(str)).leftMap(_ => "StacLinkType") }
 }
 
 case object `image/tiff`                     extends StacMediaType("image/tiff")

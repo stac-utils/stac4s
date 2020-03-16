@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.Eq
 import cats.implicits._
 import io.circe._
 
@@ -8,6 +9,8 @@ sealed abstract class StacProviderRole(val repr: String) {
 }
 
 object StacProviderRole {
+
+  implicit def eqStacProviderRole: Eq[StacProviderRole] = Eq[String].imap(fromString _)(_.repr)
 
   def fromString(s: String): StacProviderRole = s.toLowerCase match {
     case "licensor"  => Licensor
@@ -20,9 +23,7 @@ object StacProviderRole {
     Encoder.encodeString.contramap[StacProviderRole](_.toString)
 
   implicit val decProviderRole: Decoder[StacProviderRole] =
-    Decoder.decodeString.emap { str =>
-      Either.catchNonFatal(fromString(str)).leftMap(_ => "StacProviderRole")
-    }
+    Decoder.decodeString.emap { str => Either.catchNonFatal(fromString(str)).leftMap(_ => "StacProviderRole") }
 }
 
 case object Licensor  extends StacProviderRole("licensor")

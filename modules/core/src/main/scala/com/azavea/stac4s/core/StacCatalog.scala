@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.Eq
 import io.circe._
 
 final case class StacCatalog(
@@ -11,6 +12,8 @@ final case class StacCatalog(
 )
 
 object StacCatalog {
+
+  implicit val eqStacCatalog: Eq[StacCatalog] = Eq.fromUniversalEquals
 
   implicit val encCatalog: Encoder[StacCatalog] =
     Encoder.forProduct5("stac_version", "id", "title", "description", "links")(
