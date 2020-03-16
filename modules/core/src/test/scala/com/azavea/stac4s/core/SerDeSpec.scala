@@ -13,33 +13,23 @@ import java.time.Instant
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with ArbitraryInstances {
 
-  checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
-  checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
-  checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
-  checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)
-
-  checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
-  checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
-
-  checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
-  checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
-
-  checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
-
-  checkAll("Codec.StacItem", CodecTests[StacItem].unserializableCodec)
-
-  checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
-
-  checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
-
-  checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
-
-  checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
-
-  checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
-  checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
-
+  checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
+  checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
+  checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
+  checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
+  checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
+  checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
   checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
+  checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
+  checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
+  checkAll("Codec.StacItem", CodecTests[StacItem].unserializableCodec)
+  checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
+  checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
+  checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
+  checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)
+  checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
+  checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
+  checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
 
 }
