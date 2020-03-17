@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import com.azavea.stac4s.Generators._
 
@@ -15,6 +16,7 @@ import java.time.Instant
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
+  // core
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
   checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
   checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
@@ -34,7 +36,23 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
   checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
 
-  test(" ignore optional fields") {
+  // extensions
+
+  // label extension
+  checkAll("Codec.LabelClass", CodecTests[LabelClass].unserializableCodec)
+  checkAll("Codec.LabelClassClasses", CodecTests[LabelClassClasses].unserializableCodec)
+  checkAll("Codec.LabelClassName", CodecTests[LabelClassName].unserializableCodec)
+  checkAll("Codec.LabelCount", CodecTests[LabelCount].unserializableCodec)
+  checkAll("Codec.LabelExtensionProperties", CodecTests[LabelExtensionProperties].unserializableCodec)
+  checkAll("Codec.LabelMethod", CodecTests[LabelMethod].unserializableCodec)
+  checkAll("Codec.LabelOverview", CodecTests[LabelOverview].unserializableCodec)
+  checkAll("Codec.LabelStats", CodecTests[LabelStats].unserializableCodec)
+  checkAll("Codec.LabelTask", CodecTests[LabelTask].unserializableCodec)
+  checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
+  checkAll("Codec.LabelProperties", CodecTests[LabelProperties].unserializableCodec)
+
+  // unit tests
+  test("ignore optional fields") {
     val link =
       decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
     link map { _.labelExtAssets } shouldBe Right(List.empty[String])
