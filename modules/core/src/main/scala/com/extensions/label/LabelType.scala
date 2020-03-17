@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.Eq
 import io.circe.{Decoder, Encoder}
 
 sealed abstract class LabelType(val repr: String) {
@@ -16,6 +17,9 @@ object LabelType {
     case s        => Left(s"$s is not a valid label type. Should be raster or vector")
   }
 
+  // There's no invariant functor with strings here because only two strings map to
+  // label types
+  implicit val eqLabelType: Eq[LabelType]       = Eq.fromUniversalEquals
   implicit val encLabelType: Encoder[LabelType] = Encoder[String].contramap(_.repr)
   implicit val decLabelType: Decoder[LabelType] = Decoder[String].emap(fromStringE _)
 }

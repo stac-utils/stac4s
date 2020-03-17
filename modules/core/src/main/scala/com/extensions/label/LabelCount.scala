@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.Eq
 import io.circe.{Decoder, Encoder}
 
 case class LabelCount(
@@ -8,6 +9,8 @@ case class LabelCount(
 )
 
 object LabelCount {
+
+  implicit val eqLabelCount: Eq[LabelCount] = Eq.fromUniversalEquals
 
   implicit val decLabelCount: Decoder[LabelCount] = Decoder.forProduct2(
     "name",

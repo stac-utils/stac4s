@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.Eq
 import cats.implicits._
 import io.circe.{Decoder, Encoder, HCursor}
 
@@ -67,4 +68,6 @@ object LabelExtensionProperties {
           )
       )
   }
+
+  implicit val eqLabelExtensionProperties: Eq[LabelExtensionProperties] = Eq.fromUniversalEquals
 }

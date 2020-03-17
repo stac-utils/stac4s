@@ -1,5 +1,8 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.label._
+
+import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
@@ -8,6 +11,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 import com.github.tbouron.SpdxLicense
+import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
+import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
 
 object Generators {
 
@@ -211,6 +216,96 @@ object Generators {
       Gen.listOf[StacLink](stacLinkGen)
     ).mapN(ItemCollection.apply _)
 
+  private def labelClassNameGen: Gen[LabelClassName] =
+    Gen.option(nonEmptyStringGen) map {
+      case Some(s) => LabelClassName.VectorName(s.toLowerCase)
+      case None    => LabelClassName.Raster
+    }
+
+  private def namedLabelClassesGen: Gen[LabelClassClasses] =
+    Gen.nonEmptyListOf(nonEmptyStringGen) map { names => NamedLabelClasses(NonEmptyList.fromListUnsafe(names)) }
+
+  private def numberedLabelClassesGen: Gen[LabelClassClasses] =
+    Gen.nonEmptyListOf(arbitrary[Int]) map { indices => NumberedLabelClasses(NonEmptyList.fromListUnsafe(indices)) }
+
+  private def labelClassClassesGen: Gen[LabelClassClasses] =
+    Gen.oneOf(
+      namedLabelClassesGen,
+      numberedLabelClassesGen
+    )
+
+  private def labelClassGen: Gen[LabelClass] =
+    (
+      labelClassNameGen,
+      labelClassClassesGen
+    ).mapN(LabelClass.apply _)
+
+  private def labelCountGen: Gen[LabelCount] =
+    (
+      nonEmptyStringGen,
+      arbitrary[Int]
+    ).mapN(LabelCount.apply _)
+
+  private def labelStatsGen: Gen[LabelStats] =
+    (
+      nonEmptyStringGen,
+      arbitrary[Double]
+    ).mapN(LabelStats.apply _)
+
+  private def labelOverviewWithCounts: Gen[LabelOverview] =
+    (
+      nonEmptyStringGen,
+      Gen.listOf(labelCountGen)
+    ).mapN((key: String, counts: List[LabelCount]) => LabelOverview(key, counts, Nil))
+
+  private def labelOverviewWithStats: Gen[LabelOverview] =
+    (
+      nonEmptyStringGen,
+      Gen.listOf(labelStatsGen)
+    ).mapN((key: String, stats: List[LabelStats]) => LabelOverview(key, Nil, stats))
+
+  private def labelOverviewGen: Gen[LabelOverview] = Gen.oneOf(
+    labelOverviewWithCounts,
+    labelOverviewWithStats
+  )
+
+  private def labelTaskGen: Gen[LabelTask] = Gen.oneOf(
+    Gen.oneOf(
+      LabelTask.Classification,
+      LabelTask.Detection,
+      LabelTask.Regression,
+      LabelTask.Segmentation
+    ),
+    nonEmptyStringGen map { s => LabelTask.VendorTask(s.toLowerCase) }
+  )
+
+  private def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
+    Gen.oneOf(
+      LabelMethod.Automatic,
+      LabelMethod.Manual
+    ),
+    nonEmptyStringGen map { LabelMethod.fromString(_) }
+  )
+
+  private def labelTypeGen: Gen[LabelType] = Gen.oneOf(
+    LabelType.Vector,
+    LabelType.Raster
+  )
+
+  private def labelPropertiesGen: Gen[LabelProperties] =
+    Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
+
+  private def labelExtensionPropertiesGen: Gen[LabelExtensionProperties] =
+    (
+      labelPropertiesGen,
+      Gen.listOf(labelClassGen),
+      nonEmptyStringGen,
+      labelTypeGen,
+      Gen.listOf(labelTaskGen),
+      Gen.listOf(labelMethodGen),
+      Gen.listOf(labelOverviewGen)
+    ).mapN(LabelExtensionProperties.apply _)
+
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
   }
@@ -265,5 +360,29 @@ object Generators {
 
   implicit val arbStacAssetRole: Arbitrary[StacAssetRole] = Arbitrary {
     assetRoleGen
+  }
+
+  implicit val arbLabelClassName: Arbitrary[LabelClassName] = Arbitrary { labelClassNameGen }
+
+  implicit val arbLabelClassClasses: Arbitrary[LabelClassClasses] = Arbitrary { labelClassClassesGen }
+
+  implicit val arbLabelClass: Arbitrary[LabelClass] = Arbitrary { labelClassGen }
+
+  implicit val arbLabelCount: Arbitrary[LabelCount] = Arbitrary { labelCountGen }
+
+  implicit val arbLabelStats: Arbitrary[LabelStats] = Arbitrary { labelStatsGen }
+
+  implicit val arbLabelOverview: Arbitrary[LabelOverview] = Arbitrary { labelOverviewGen }
+
+  implicit val arbLabelTask: Arbitrary[LabelTask] = Arbitrary { labelTaskGen }
+
+  implicit val arbLabelMethod: Arbitrary[LabelMethod] = Arbitrary { labelMethodGen }
+
+  implicit val arbLabelType: Arbitrary[LabelType] = Arbitrary { labelTypeGen }
+
+  implicit val arbLabelProperties: Arbitrary[LabelProperties] = Arbitrary { labelPropertiesGen }
+
+  implicit val arbLabelExtensionProperties: Arbitrary[LabelExtensionProperties] = Arbitrary {
+    labelExtensionPropertiesGen
   }
 }

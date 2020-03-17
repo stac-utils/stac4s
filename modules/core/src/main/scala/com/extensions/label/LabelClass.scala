@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.Eq
 import io.circe.{Decoder, Encoder}
 
 case class LabelClass(
@@ -8,6 +9,8 @@ case class LabelClass(
 )
 
 object LabelClass {
+
+  implicit val eqLabelClass: Eq[LabelClass] = Eq.fromUniversalEquals
 
   implicit val decLabelClass: Decoder[LabelClass] = Decoder.forProduct2(
     "name",

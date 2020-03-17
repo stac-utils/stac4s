@@ -46,10 +46,10 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LabelExtensionProperties", CodecTests[LabelExtensionProperties].unserializableCodec)
   checkAll("Codec.LabelMethod", CodecTests[LabelMethod].unserializableCodec)
   checkAll("Codec.LabelOverview", CodecTests[LabelOverview].unserializableCodec)
+  checkAll("Codec.LabelProperties", CodecTests[LabelProperties].unserializableCodec)
   checkAll("Codec.LabelStats", CodecTests[LabelStats].unserializableCodec)
   checkAll("Codec.LabelTask", CodecTests[LabelTask].unserializableCodec)
   checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
-  checkAll("Codec.LabelProperties", CodecTests[LabelProperties].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {

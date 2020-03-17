@@ -1,5 +1,7 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.data.NonEmptyList
+import cats.Eq
 import cats.implicits._
 import io.circe._
 import io.circe.syntax._
@@ -7,20 +9,25 @@ import io.circe.syntax._
 sealed abstract class LabelClassClasses
 
 object LabelClassClasses {
-  case class NamedLabelClasses(names: List[String])   extends LabelClassClasses
-  case class NumberedLabelClasses(indices: List[Int]) extends LabelClassClasses
+  // why non-empty? empty lists don't round trip, since we don't know whether
+  // they're empty lists of names or numbers. That's bad for tests, and also
+  // it doesn't really make any sense to be vectors labeled without classes,
+  // so I think the stricter requirement over the STAC spec is fine in this case
+  // https://github.com/radiantearth/stac-spec/tree/master/extensions/label#class-object
+  case class NamedLabelClasses(names: NonEmptyList[String])   extends LabelClassClasses
+  case class NumberedLabelClasses(indices: NonEmptyList[Int]) extends LabelClassClasses
 
   implicit val encNamedLabelClasses: Encoder[NamedLabelClasses] =
-    Encoder[List[String]].contramap(_.names)
+    Encoder[NonEmptyList[String]].contramap(_.names)
 
   implicit val decNamedLabelClasses: Decoder[NamedLabelClasses] =
-    Decoder[List[String]].map(NamedLabelClasses.apply _)
+    Decoder[NonEmptyList[String]].map(NamedLabelClasses.apply _)
 
   implicit val encNumberedLabelClasses: Encoder[NumberedLabelClasses] =
-    Encoder[List[Int]].contramap(_.indices)
+    Encoder[NonEmptyList[Int]].contramap(_.indices)
 
   implicit val decNumberedLabelClasses: Decoder[NumberedLabelClasses] =
-    Decoder[List[Int]].map(NumberedLabelClasses.apply _)
+    Decoder[NonEmptyList[Int]].map(NumberedLabelClasses.apply _)
 
   implicit val encLabelClassClasses: Encoder[LabelClassClasses] = new Encoder[LabelClassClasses] {
 
@@ -29,6 +36,8 @@ object LabelClassClasses {
       case numbered: NumberedLabelClasses => numbered.asJson
     }
   }
+
+  implicit val eqLabelClassClasses: Eq[LabelClassClasses] = Eq.fromUniversalEquals
 
   implicit val decLabelClassClassels: Decoder[LabelClassClasses] = Decoder[NumberedLabelClasses].widen or
     Decoder[NamedLabelClasses].widen

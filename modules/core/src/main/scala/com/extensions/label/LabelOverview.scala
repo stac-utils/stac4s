@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.label
 
+import cats.Eq
 import cats.implicits._
 import io.circe.{Decoder, Encoder, HCursor}
 
@@ -10,6 +11,8 @@ case class LabelOverview(
 )
 
 object LabelOverview {
+
+  implicit val eqLabelOverview: Eq[LabelOverview] = Eq.fromUniversalEquals
 
   implicit val decLabelOverview: Decoder[LabelOverview] = new Decoder[LabelOverview] {
 
