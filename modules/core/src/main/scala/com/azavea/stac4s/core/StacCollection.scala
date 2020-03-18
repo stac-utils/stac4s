@@ -6,6 +6,7 @@ import io.circe._
 
 final case class StacCollection(
     stacVersion: String,
+    stacExtensions: List[String],
     id: String,
     title: Option[String],
     description: String,
@@ -22,8 +23,9 @@ object StacCollection {
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 
   implicit val encoderStacCollection: Encoder[StacCollection] =
-    Encoder.forProduct10(
+    Encoder.forProduct11(
       "stac_version",
+      "stac_extensions",
       "id",
       "title",
       "description",
@@ -36,6 +38,7 @@ object StacCollection {
     )(collection =>
       (
         collection.stacVersion,
+        collection.stacExtensions,
         collection.id,
         collection.title,
         collection.description,
@@ -49,8 +52,9 @@ object StacCollection {
     )
 
   implicit val decoderStacCollection: Decoder[StacCollection] =
-    Decoder.forProduct10(
+    Decoder.forProduct11(
       "stac_version",
+      "stac_extensions",
       "id",
       "title",
       "description",
@@ -63,6 +67,7 @@ object StacCollection {
     )(
       (
           stacVersion: String,
+          stacExtensions: List[String],
           id: String,
           title: Option[String],
           description: String,
@@ -75,6 +80,7 @@ object StacCollection {
       ) =>
         StacCollection(
           stacVersion,
+          stacExtensions,
           id,
           title,
           description,

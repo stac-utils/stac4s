@@ -187,6 +187,7 @@ object Generators {
   private def stacCatalogGen: Gen[StacCatalog] =
     (
       nonEmptyStringGen,
+      Gen.listOf(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
@@ -196,6 +197,7 @@ object Generators {
   private def stacCollectionGen: Gen[StacCollection] =
     (
       nonEmptyStringGen,
+      Gen.listOf(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
