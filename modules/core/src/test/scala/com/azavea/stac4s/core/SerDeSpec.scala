@@ -1,80 +1,58 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
-import Generators._
-import geotrellis.vector.Geometry
-import io.circe._
-import io.circe.syntax._
-import io.circe.parser._
-import org.scalacheck.Arbitrary
+import com.azavea.stac4s.Generators._
 
-import org.scalatest.funspec.AnyFunSpec
+import geotrellis.vector.Geometry
+import io.circe.parser._
+import io.circe.testing.{ArbitraryInstances, CodecTests}
+import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatestplus.scalacheck.Checkers
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
+
 import java.time.Instant
 
-class SerDeSpec extends AnyFunSpec with Matchers with ScalaCheckPropertyChecks {
+class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
-  private def getPropTest[T: Arbitrary: Encoder: Decoder] = forAll { (x: T) =>
-    {
-      withClue(x.asJson.spaces2) {
-        decode[T](x.asJson.noSpaces) shouldBe Right(x)
-      }
-    }
-  }
+  // core
+  checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
+  checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
+  checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
+  checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
+  checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
+  checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
+  checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
+  checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
+  checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
+  checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
+  checkAll("Codec.StacItem", CodecTests[StacItem].unserializableCodec)
+  checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
+  checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
+  checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
+  checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)
+  checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
+  checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
+  checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
 
-  describe("serialization / deserialization should succeed") {
-    it("enums should round trip") {
-      getPropTest[StacMediaType]
-      getPropTest[StacLinkType]
-      getPropTest[StacProviderRole]
-    }
+  // extensions
 
-    it("times and geometries should round trip") {
-      getPropTest[Instant]
-      getPropTest[Geometry]
-    }
+  // label extension
+  checkAll("Codec.LabelClass", CodecTests[LabelClass].unserializableCodec)
+  checkAll("Codec.LabelClassClasses", CodecTests[LabelClassClasses].unserializableCodec)
+  checkAll("Codec.LabelClassName", CodecTests[LabelClassName].unserializableCodec)
+  checkAll("Codec.LabelCount", CodecTests[LabelCount].unserializableCodec)
+  checkAll("Codec.LabelExtensionProperties", CodecTests[LabelExtensionProperties].unserializableCodec)
+  checkAll("Codec.LabelMethod", CodecTests[LabelMethod].unserializableCodec)
+  checkAll("Codec.LabelOverview", CodecTests[LabelOverview].unserializableCodec)
+  checkAll("Codec.LabelProperties", CodecTests[LabelProperties].unserializableCodec)
+  checkAll("Codec.LabelStats", CodecTests[LabelStats].unserializableCodec)
+  checkAll("Codec.LabelTask", CodecTests[LabelTask].unserializableCodec)
+  checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
 
-    it("assets should round trip") {
-      getPropTest[StacAsset]
-    }
-
-    it("SPDX should round trip") {
-      getPropTest[SPDX]
-    }
-
-    it("items should round trip") {
-      getPropTest[StacItem]
-    }
-
-    it("item collections should round trip") {
-      getPropTest[ItemCollection]
-    }
-
-    it("catalogs should round trip") {
-      getPropTest[StacCatalog]
-    }
-
-    it("two dimensional bbox should round trip") {
-      getPropTest[TwoDimBbox]
-    }
-
-    it("three dimensional bbox should round trip") {
-      getPropTest[ThreeDimBbox]
-    }
-
-    it("stac extents should round trip") {
-      getPropTest[TemporalExtent]
-      getPropTest[Bbox]
-      getPropTest[StacExtent]
-    }
-
-    it("collections should round trip") {
-      getPropTest[StacCollection]
-    }
-  }
-
-  it("should ignore optional fields") {
+  // unit tests
+  test("ignore optional fields") {
     val link =
       decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
     link map { _.labelExtAssets } shouldBe Right(List.empty[String])

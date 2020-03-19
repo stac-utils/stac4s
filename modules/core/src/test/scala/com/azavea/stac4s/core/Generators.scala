@@ -1,5 +1,8 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.label._
+
+import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
@@ -8,6 +11,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 import com.github.tbouron.SpdxLicense
+import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
+import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
 
 object Generators {
 
@@ -15,7 +20,7 @@ object Generators {
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
 
   private def rectangleGen: Gen[Geometry] =
-    for {
+    (for {
       lowerX <- Gen.choose(0.0, 1000.0)
       lowerY <- Gen.choose(0.0, 1000.0)
     } yield {
@@ -26,11 +31,9 @@ object Generators {
         Point(lowerX, lowerY + 100),
         Point(lowerX, lowerY)
       )
-    }
+    }).widen
 
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x =>
-    Instant.now.plusMillis(x.toLong)
-  }
+  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     `image/tiff`,
@@ -50,23 +53,33 @@ object Generators {
   )
 
   private def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
-    Self,
-    StacRoot,
-    Parent,
-    Child,
-    Item,
-    Items,
-    Source,
-    Collection,
-    License,
-    Alternate,
-    DescribedBy,
-    Next,
-    Prev,
-    ServiceDesc,
-    ServiceDoc,
-    Conformance,
-    Data
+    StacLinkType.Self,
+    StacLinkType.StacRoot,
+    StacLinkType.Parent,
+    StacLinkType.Child,
+    StacLinkType.Item,
+    StacLinkType.Items,
+    StacLinkType.Source,
+    StacLinkType.Collection,
+    StacLinkType.License,
+    StacLinkType.Alternate,
+    StacLinkType.DescribedBy,
+    StacLinkType.Next,
+    StacLinkType.Prev,
+    StacLinkType.ServiceDesc,
+    StacLinkType.ServiceDoc,
+    StacLinkType.Conformance,
+    StacLinkType.Data,
+    StacLinkType.LatestVersion,
+    StacLinkType.PredecessorVersion,
+    StacLinkType.SuccessorVersion
+  )
+
+  private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
+    StacAssetRole.Thumbnail,
+    StacAssetRole.Overview,
+    StacAssetRole.Data,
+    StacAssetRole.Metadata
   )
 
   private def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
@@ -103,7 +116,7 @@ object Generators {
   private def stacLinkGen: Gen[StacLink] =
     (
       nonEmptyStringGen,
-      Gen.const(Self), // self link type is required by TMS reification
+      Gen.const(StacLinkType.Self), // self link type is required by TMS reification
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
       Gen.nonEmptyListOf[String](arbitrary[String])
@@ -121,9 +134,7 @@ object Generators {
     (
       bboxGen,
       temporalExtentGen
-    ).mapN(
-      (bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval)))
-    )
+    ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
 
   private def stacProviderGen: Gen[StacProvider] =
     (
@@ -133,17 +144,31 @@ object Generators {
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply _)
 
-  private def stacAssetGen: Gen[StacAsset] =
-    (nonEmptyStringGen, Gen.option(nonEmptyStringGen), Gen.option(mediaTypeGen)) mapN {
-      StacAsset.apply _
+  private def stacItemAssetGen: Gen[StacItemAsset] =
+    (
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      Gen.option(nonEmptyStringGen),
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
+      Gen.option(mediaTypeGen)
+    ) mapN {
+      StacItemAsset.apply _
+    }
+
+  private def stacCollectionAssetGen: Gen[StacCollectionAsset] =
+    (
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
+      mediaTypeGen
+    ).mapN {
+      StacCollectionAsset.apply _
     }
 
   // Only do COGs for now, since we don't handle anything else in the example server.
   // As more types of stac items are supported, relax this assumption
-  private def cogAssetGen: Gen[StacAsset] =
-    stacAssetGen map { asset =>
-      asset.copy(_type = Some(`image/cog`))
-    }
+  private def cogAssetGen: Gen[StacItemAsset] =
+    stacItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
 
   private def stacItemGen: Gen[StacItem] =
     (
@@ -162,6 +187,7 @@ object Generators {
   private def stacCatalogGen: Gen[StacCatalog] =
     (
       nonEmptyStringGen,
+      Gen.listOf(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
@@ -171,11 +197,11 @@ object Generators {
   private def stacCollectionGen: Gen[StacCollection] =
     (
       nonEmptyStringGen,
+      Gen.listOf(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.listOf(nonEmptyStringGen),
-      nonEmptyStringGen,
       stacLicenseGen,
       Gen.listOf(stacProviderGen),
       stacExtentGen,
@@ -186,9 +212,101 @@ object Generators {
   private def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
+      Gen.const(StacVersion.unsafeFrom("0.9.0")),
+      Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](stacLinkGen)
     ).mapN(ItemCollection.apply _)
+
+  private def labelClassNameGen: Gen[LabelClassName] =
+    Gen.option(nonEmptyStringGen) map {
+      case Some(s) => LabelClassName.VectorName(s.toLowerCase)
+      case None    => LabelClassName.Raster
+    }
+
+  private def namedLabelClassesGen: Gen[LabelClassClasses] =
+    Gen.nonEmptyListOf(nonEmptyStringGen) map { names => NamedLabelClasses(NonEmptyList.fromListUnsafe(names)) }
+
+  private def numberedLabelClassesGen: Gen[LabelClassClasses] =
+    Gen.nonEmptyListOf(arbitrary[Int]) map { indices => NumberedLabelClasses(NonEmptyList.fromListUnsafe(indices)) }
+
+  private def labelClassClassesGen: Gen[LabelClassClasses] =
+    Gen.oneOf(
+      namedLabelClassesGen,
+      numberedLabelClassesGen
+    )
+
+  private def labelClassGen: Gen[LabelClass] =
+    (
+      labelClassNameGen,
+      labelClassClassesGen
+    ).mapN(LabelClass.apply _)
+
+  private def labelCountGen: Gen[LabelCount] =
+    (
+      nonEmptyStringGen,
+      arbitrary[Int]
+    ).mapN(LabelCount.apply _)
+
+  private def labelStatsGen: Gen[LabelStats] =
+    (
+      nonEmptyStringGen,
+      arbitrary[Double]
+    ).mapN(LabelStats.apply _)
+
+  private def labelOverviewWithCounts: Gen[LabelOverview] =
+    (
+      nonEmptyStringGen,
+      Gen.listOf(labelCountGen)
+    ).mapN((key: String, counts: List[LabelCount]) => LabelOverview(key, counts, Nil))
+
+  private def labelOverviewWithStats: Gen[LabelOverview] =
+    (
+      nonEmptyStringGen,
+      Gen.listOf(labelStatsGen)
+    ).mapN((key: String, stats: List[LabelStats]) => LabelOverview(key, Nil, stats))
+
+  private def labelOverviewGen: Gen[LabelOverview] = Gen.oneOf(
+    labelOverviewWithCounts,
+    labelOverviewWithStats
+  )
+
+  private def labelTaskGen: Gen[LabelTask] = Gen.oneOf(
+    Gen.oneOf(
+      LabelTask.Classification,
+      LabelTask.Detection,
+      LabelTask.Regression,
+      LabelTask.Segmentation
+    ),
+    nonEmptyStringGen map { s => LabelTask.VendorTask(s.toLowerCase) }
+  )
+
+  private def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
+    Gen.oneOf(
+      LabelMethod.Automatic,
+      LabelMethod.Manual
+    ),
+    nonEmptyStringGen map { LabelMethod.fromString(_) }
+  )
+
+  private def labelTypeGen: Gen[LabelType] = Gen.oneOf(
+    LabelType.Vector,
+    LabelType.Raster
+  )
+
+  private def labelPropertiesGen: Gen[LabelProperties] =
+    Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
+
+  private def labelExtensionPropertiesGen: Gen[LabelExtensionProperties] =
+    (
+      labelPropertiesGen,
+      Gen.listOf(labelClassGen),
+      nonEmptyStringGen,
+      labelTypeGen,
+      Gen.listOf(labelTaskGen),
+      Gen.listOf(labelMethodGen),
+      Gen.listOf(labelOverviewGen)
+    ).mapN(LabelExtensionProperties.apply _)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
@@ -204,7 +322,9 @@ object Generators {
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
 
-  implicit val arbAsset: Arbitrary[StacAsset] = Arbitrary { stacAssetGen }
+  implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
+
+  implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
 
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
@@ -238,5 +358,33 @@ object Generators {
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
     itemCollectionGen
+  }
+
+  implicit val arbStacAssetRole: Arbitrary[StacAssetRole] = Arbitrary {
+    assetRoleGen
+  }
+
+  implicit val arbLabelClassName: Arbitrary[LabelClassName] = Arbitrary { labelClassNameGen }
+
+  implicit val arbLabelClassClasses: Arbitrary[LabelClassClasses] = Arbitrary { labelClassClassesGen }
+
+  implicit val arbLabelClass: Arbitrary[LabelClass] = Arbitrary { labelClassGen }
+
+  implicit val arbLabelCount: Arbitrary[LabelCount] = Arbitrary { labelCountGen }
+
+  implicit val arbLabelStats: Arbitrary[LabelStats] = Arbitrary { labelStatsGen }
+
+  implicit val arbLabelOverview: Arbitrary[LabelOverview] = Arbitrary { labelOverviewGen }
+
+  implicit val arbLabelTask: Arbitrary[LabelTask] = Arbitrary { labelTaskGen }
+
+  implicit val arbLabelMethod: Arbitrary[LabelMethod] = Arbitrary { labelMethodGen }
+
+  implicit val arbLabelType: Arbitrary[LabelType] = Arbitrary { labelTypeGen }
+
+  implicit val arbLabelProperties: Arbitrary[LabelProperties] = Arbitrary { labelPropertiesGen }
+
+  implicit val arbLabelExtensionProperties: Arbitrary[LabelExtensionProperties] = Arbitrary {
+    labelExtensionPropertiesGen
   }
 }

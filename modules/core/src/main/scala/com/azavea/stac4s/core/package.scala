@@ -1,18 +1,22 @@
 package com.azavea
 
-import java.time.Instant
+import com.azavea.stac4s.meta.{HasInstant, ValidSpdxId, ValidStacVersion}
 
-import com.azavea.stac4s.meta.{HasInstant, ValidSpdxId}
+import cats.Eq
 import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, RefinedTypeOps}
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
-import geotrellis.vector.{io => _}
+
+import java.time.Instant
 
 package object stac4s {
 
   type SpdxId = String Refined ValidSpdxId
   object SpdxId extends RefinedTypeOps[SpdxId, String]
+
+  type StacVersion = String Refined ValidStacVersion
+  object StacVersion extends RefinedTypeOps[StacVersion, String]
 
   type TemporalExtent =
     List[Option[Instant]] Refined And[
@@ -32,4 +36,7 @@ package object stac4s {
       TemporalExtent.unsafeFrom(List(Some(start), Some(end)))
 
   }
+
+  implicit val eqTemporalExtent: Eq[TemporalExtent] = Eq.fromUniversalEquals
+
 }

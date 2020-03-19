@@ -104,9 +104,12 @@ lazy val credentialSettings = Seq(
 
 val coreDependencies = Seq(
   "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "org.typelevel"               %% "cats-kernel"         % Versions.CatsVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
   "io.circe"                    %% "circe-generic"       % Versions.CirceVersion,
   "io.circe"                    %% "circe-parser"        % Versions.CirceVersion,
+  "io.circe"                    %% "circe-refined"       % Versions.CirceVersion,
+  "io.circe"                    %% "circe-testing"       % Versions.CirceVersion % "test",
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
   "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
   "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion % Test,

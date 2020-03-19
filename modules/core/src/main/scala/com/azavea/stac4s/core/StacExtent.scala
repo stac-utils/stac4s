@@ -1,6 +1,8 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.meta._
+
+import cats.Eq
 import io.circe._
 import io.circe.generic.semiauto._
 
@@ -24,6 +26,7 @@ final case class StacExtent(
 )
 
 object StacExtent {
+  implicit val eqStacExtent: Eq[StacExtent]       = Eq.fromUniversalEquals
   implicit val encStacExtent: Encoder[StacExtent] = deriveEncoder
   implicit val decStacExtent: Decoder[StacExtent] = deriveDecoder
 }
