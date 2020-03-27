@@ -1,4 +1,4 @@
-addSbtPlugin("org.xerial.sbt"            % "sbt-sonatype"              % "3.8.1")
+addSbtPlugin("org.xerial.sbt"            % "sbt-sonatype"              % "3.9.1")
 addSbtPlugin("com.github.cb372"          % "sbt-explicit-dependencies" % "0.2.12")
 addSbtPlugin("io.crashbox"               % "sbt-gpg"                   % "0.2.0")
 addSbtPlugin("com.typesafe.sbt"          % "sbt-git"                   % "1.0.0")
