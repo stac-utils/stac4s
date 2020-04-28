@@ -1,8 +1,9 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
+import com.azavea.stac4s._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
-import com.azavea.stac4s.Generators._
+import com.azavea.stac4s.core.Generators._
 
 import geotrellis.vector.Geometry
 import io.circe.parser._
