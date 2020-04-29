@@ -21,6 +21,6 @@ object StacCollectionAsset {
 
   implicit val decStacCollectionAsset: Decoder[StacCollectionAsset] =
     Decoder.forProduct4("title", "description", "roles", "type")(
-      StacCollectionAsset.apply _
+      StacCollectionAsset.apply
     )
 }

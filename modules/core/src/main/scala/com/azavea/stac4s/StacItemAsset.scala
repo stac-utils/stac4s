@@ -22,6 +22,6 @@ object StacItemAsset {
 
   implicit val decStacItemAsset: Decoder[StacItemAsset] =
     Decoder.forProduct5("href", "title", "description", "roles", "type")(
-      StacItemAsset.apply _
+      StacItemAsset.apply
     )
 }

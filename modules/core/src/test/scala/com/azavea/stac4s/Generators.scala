@@ -1,7 +1,6 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.label._
-import com.azavea.stac4s._
 
 import cats.data.NonEmptyList
 import cats.implicits._

@@ -10,7 +10,7 @@ sealed abstract class StacMediaType(val repr: String) {
 
 object StacMediaType {
 
-  implicit def eqStacMediaType: Eq[StacMediaType] = Eq[String].imap(fromString _)(_.repr)
+  implicit def eqStacMediaType: Eq[StacMediaType] = Eq[String].imap(fromString)(_.repr)
 
   private def fromString(s: String): StacMediaType = s match {
     case "image/tiff"                                   => `image/tiff`
