@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import com.azavea.stac4s.meta._
 

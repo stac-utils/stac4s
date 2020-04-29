@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.Eq
 import cats.implicits._
@@ -10,7 +10,7 @@ sealed abstract class StacProviderRole(val repr: String) {
 
 object StacProviderRole {
 
-  implicit def eqStacProviderRole: Eq[StacProviderRole] = Eq[String].imap(fromString _)(_.repr)
+  implicit def eqStacProviderRole: Eq[StacProviderRole] = Eq[String].imap(fromString)(_.repr)
 
   def fromString(s: String): StacProviderRole = s.toLowerCase match {
     case "licensor"  => Licensor

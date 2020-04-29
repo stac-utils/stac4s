@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.Eq
 import cats.implicits._
@@ -36,9 +36,7 @@ object StacLicense {
   }
 
   implicit val decodeSpdx: Decoder[SPDX] =
-    Decoder.decodeString.emap {
-      case s => RefType.applyRef[SpdxId](s) map (id => SPDX(id))
-    }
+    Decoder.decodeString.emap { s => RefType.applyRef[SpdxId](s) map (id => SPDX(id)) }
 
   implicit val decodeProprietary: Decoder[Proprietary] =
     Decoder.decodeString.emap {

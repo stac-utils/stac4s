@@ -1,6 +1,6 @@
 package com.azavea.stac4s.meta
 
-import com.azavea.stac4s.TemporalExtent
+import com.azavea.stac4s.core.TemporalExtent
 
 import cats.Eq
 import cats.implicits._
@@ -28,19 +28,10 @@ trait ForeignImplicits {
   implicit val encodeInstant: Encoder[Instant] =
     Encoder.encodeString.contramap[Instant](_.toString)
 
-  implicit val encodeTemporalExtent =
-    new Encoder[TemporalExtent] {
-
-      def apply(t: TemporalExtent): Json = {
-        t.value.map(x => x.asJson).asJson
-      }
-    }
+  implicit val encodeTemporalExtent: Encoder[TemporalExtent] = _.value.map(x => x.asJson).asJson
 
   implicit val decodeTemporalExtent =
-    Decoder.decodeList[Option[Instant]].emap {
-      case l =>
-        RefType.applyRef[TemporalExtent](l)
-    }
+    Decoder.decodeList[Option[Instant]].emap { l => RefType.applyRef[TemporalExtent](l) }
 
   implicit val decTimeRange: Decoder[(Option[Instant], Option[Instant])] = Decoder[String] map { str =>
     val components = str.replace("[", "").replace("]", "").split(",") map {

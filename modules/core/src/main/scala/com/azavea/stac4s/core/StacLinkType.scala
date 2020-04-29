@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.Eq
 import cats.implicits._
@@ -10,7 +10,7 @@ sealed abstract class StacLinkType(val repr: String) {
 
 object StacLinkType {
 
-  implicit def eqStacLinkType: Eq[StacLinkType] = Eq[String].imap(fromString _)(_.repr)
+  implicit def eqStacLinkType: Eq[StacLinkType] = Eq[String].imap(fromString)(_.repr)
 
   case object Self               extends StacLinkType("self")
   case object StacRoot           extends StacLinkType("root")

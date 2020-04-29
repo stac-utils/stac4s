@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.implicits._
 import io.circe._
@@ -21,23 +21,21 @@ object StacLink {
     "label:assets"
   )(link => (link.href, link.rel, link._type, link.title, link.labelExtAssets))
 
-  implicit val decStacLink: Decoder[StacLink] = new Decoder[StacLink] {
-
-    def apply(c: HCursor) =
+  implicit val decStacLink: Decoder[StacLink] = { c: HCursor =>
+    (
+      c.downField("href").as[String],
+      c.downField("rel").as[StacLinkType],
+      c.get[Option[StacMediaType]]("type"),
+      c.get[Option[String]]("title"),
+      c.get[Option[List[String]]]("label:assets")
+    ).mapN(
       (
-        c.downField("href").as[String],
-        c.downField("rel").as[StacLinkType],
-        c.get[Option[StacMediaType]]("type"),
-        c.get[Option[String]]("title"),
-        c.get[Option[List[String]]]("label:assets")
-      ).mapN(
-        (
-            href: String,
-            rel: StacLinkType,
-            _type: Option[StacMediaType],
-            title: Option[String],
-            assets: Option[List[String]]
-        ) => StacLink(href, rel, _type, title, assets getOrElse List.empty)
-      )
+          href: String,
+          rel: StacLinkType,
+          _type: Option[StacMediaType],
+          title: Option[String],
+          assets: Option[List[String]]
+      ) => StacLink(href, rel, _type, title, assets getOrElse List.empty)
+    )
   }
 }

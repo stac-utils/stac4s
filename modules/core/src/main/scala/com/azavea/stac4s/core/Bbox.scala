@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.Eq
 import cats.implicits._
@@ -50,11 +50,7 @@ object TwoDimBbox {
         )
     }
 
-  implicit val encoderTwoDimBbox: Encoder[TwoDimBbox] =
-    new Encoder[TwoDimBbox] {
-      def apply(a: TwoDimBbox): Json = a.toList.asJson
-    }
-
+  implicit val encoderTwoDimBbox: Encoder[TwoDimBbox] = _.toList.asJson
 }
 
 object ThreeDimBbox {
@@ -80,21 +76,14 @@ object ThreeDimBbox {
         )
     }
 
-  implicit val encoderThreeDimBbox: Encoder[ThreeDimBbox] =
-    new Encoder[ThreeDimBbox] {
-      def apply(a: ThreeDimBbox): Json = a.toList.asJson
-    }
-
+  implicit val encoderThreeDimBbox: Encoder[ThreeDimBbox] = _.toList.asJson
 }
 
 object Bbox {
 
-  implicit val encoderBbox: Encoder[Bbox] = new Encoder[Bbox] {
-
-    def apply(a: Bbox): Json = a match {
-      case two: TwoDimBbox     => two.asJson
-      case three: ThreeDimBbox => three.asJson
-    }
+  implicit val encoderBbox: Encoder[Bbox] = {
+    case two: TwoDimBbox     => two.asJson
+    case three: ThreeDimBbox => three.asJson
   }
 
   implicit val decoderBbox: Decoder[Bbox] = Decoder[TwoDimBbox].widen or Decoder[ThreeDimBbox].widen

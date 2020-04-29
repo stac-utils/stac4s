@@ -1,4 +1,4 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.core
 
 import cats.Eq
 import io.circe._
@@ -21,6 +21,6 @@ object StacCollectionAsset {
 
   implicit val decStacCollectionAsset: Decoder[StacCollectionAsset] =
     Decoder.forProduct4("title", "description", "roles", "type")(
-      StacCollectionAsset.apply _
+      StacCollectionAsset.apply
     )
 }

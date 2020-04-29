@@ -1,6 +1,5 @@
 package com.azavea.stac4s.core
 
-import com.azavea.stac4s._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import com.azavea.stac4s.core.Generators._
