@@ -1,4 +1,4 @@
-package com.azavea.stac4s.core
+package com.azavea.stac4s
 
 import cats.Eq
 import io.circe._
