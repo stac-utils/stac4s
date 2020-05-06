@@ -20,6 +20,7 @@ object StacMediaType {
     case "image/png"                                    => `image/png`
     case "image/jpeg"                                   => `image/jpeg`
     case "text/xml"                                     => `text/xml`
+    case "text/html"                                    => `text/html`
     case "application/xml"                              => `application/xml`
     case "application/json"                             => `application/json`
     case "text/plain"                                   => `text/plain`
@@ -27,7 +28,7 @@ object StacMediaType {
     case "application/geopackage+sqlite3"               => `application/geopackage+sqlite3`
     case "application/x-hdf5"                           => `application/x-hdf5`
     case "application/x-hdf"                            => `application/x-hdf`
-    case s                                              => VendorMediaType(s)
+    case s                                              => VendorMediaType(s.split("vendor-").last)
   }
 
   implicit val encMediaType: Encoder[StacMediaType] =
@@ -44,6 +45,7 @@ case object `image/jp2`                      extends StacMediaType("image/jp2")
 case object `image/png`                      extends StacMediaType("image/png")
 case object `image/jpeg`                     extends StacMediaType("image/jpeg")
 case object `text/xml`                       extends StacMediaType("text/xml")
+case object `text/html`                      extends StacMediaType("text/html")
 case object `application/xml`                extends StacMediaType("application/xml")
 case object `application/json`               extends StacMediaType("application/json")
 case object `text/plain`                     extends StacMediaType("text/plain")

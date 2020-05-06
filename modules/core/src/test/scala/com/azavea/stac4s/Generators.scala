@@ -1,7 +1,6 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.label._
-
 import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
@@ -43,13 +42,15 @@ object Generators {
     `image/png`,
     `image/jpeg`,
     `text/xml`,
+    `text/html`,
     `application/xml`,
     `application/json`,
     `text/plain`,
     `application/geo+json`,
     `application/geopackage+sqlite3`,
     `application/x-hdf5`,
-    `application/x-hdf`
+    `application/x-hdf`,
+    VendorMediaType("test-media-type")
   )
 
   private def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
@@ -72,14 +73,16 @@ object Generators {
     StacLinkType.Data,
     StacLinkType.LatestVersion,
     StacLinkType.PredecessorVersion,
-    StacLinkType.SuccessorVersion
+    StacLinkType.SuccessorVersion,
+    StacLinkType.VendorLinkType("test-link")
   )
 
   private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
     StacAssetRole.Thumbnail,
     StacAssetRole.Overview,
     StacAssetRole.Data,
-    StacAssetRole.Metadata
+    StacAssetRole.Metadata,
+    StacAssetRole.VendorAsset("test-asset")
   )
 
   private def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
@@ -91,7 +94,7 @@ object Generators {
 
   private def twoDimBboxGen: Gen[TwoDimBbox] =
     (arbitrary[Double], arbitrary[Double], arbitrary[Double], arbitrary[Double])
-      .mapN(TwoDimBbox.apply _)
+      .mapN(TwoDimBbox.apply)
 
   private def spdxGen: Gen[SPDX] =
     arbitrary[SpdxLicense] map (license => SPDX(SpdxId.unsafeFrom(license.id)))
@@ -108,7 +111,7 @@ object Generators {
       arbitrary[Double],
       arbitrary[Double],
       arbitrary[Double]
-    ).mapN(ThreeDimBbox.apply _)
+    ).mapN(ThreeDimBbox.apply)
 
   private def bboxGen: Gen[Bbox] =
     Gen.oneOf(twoDimBboxGen.widen, threeDimBboxGen.widen)
@@ -120,7 +123,7 @@ object Generators {
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
       Gen.nonEmptyListOf[String](arbitrary[String])
-    ).mapN(StacLink.apply _)
+    ).mapN(StacLink.apply)
 
   private def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
@@ -142,7 +145,7 @@ object Generators {
       Gen.option(nonEmptyStringGen),
       Gen.listOf(providerRoleGen),
       Gen.option(nonEmptyStringGen)
-    ).mapN(StacProvider.apply _)
+    ).mapN(StacProvider.apply)
 
   private def stacItemAssetGen: Gen[StacItemAsset] =
     (
@@ -152,7 +155,7 @@ object Generators {
       Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
       Gen.option(mediaTypeGen)
     ) mapN {
-      StacItemAsset.apply _
+      StacItemAsset.apply
     }
 
   private def stacCollectionAssetGen: Gen[StacCollectionAsset] =
@@ -162,7 +165,7 @@ object Generators {
       Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
       mediaTypeGen
     ).mapN {
-      StacCollectionAsset.apply _
+      StacCollectionAsset.apply
     }
 
   // Only do COGs for now, since we don't handle anything else in the example server.
@@ -182,7 +185,7 @@ object Generators {
       Gen.nonEmptyMap((nonEmptyStringGen, cogAssetGen).tupled),
       Gen.option(nonEmptyStringGen),
       Gen.const(JsonObject.fromMap(Map.empty))
-    ).mapN(StacItem.apply _)
+    ).mapN(StacItem.apply)
 
   private def stacCatalogGen: Gen[StacCatalog] =
     (
@@ -192,7 +195,7 @@ object Generators {
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.listOf(stacLinkGen)
-    ).mapN(StacCatalog.apply _)
+    ).mapN(StacCatalog.apply)
 
   private def stacCollectionGen: Gen[StacCollection] =
     (
@@ -207,7 +210,7 @@ object Generators {
       stacExtentGen,
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.listOf(stacLinkGen)
-    ).mapN(StacCollection.apply _)
+    ).mapN(StacCollection.apply)
 
   private def itemCollectionGen: Gen[ItemCollection] =
     (
@@ -216,7 +219,7 @@ object Generators {
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](stacLinkGen)
-    ).mapN(ItemCollection.apply _)
+    ).mapN(ItemCollection.apply)
 
   private def labelClassNameGen: Gen[LabelClassName] =
     Gen.option(nonEmptyStringGen) map {
@@ -240,19 +243,19 @@ object Generators {
     (
       labelClassNameGen,
       labelClassClassesGen
-    ).mapN(LabelClass.apply _)
+    ).mapN(LabelClass.apply)
 
   private def labelCountGen: Gen[LabelCount] =
     (
       nonEmptyStringGen,
       arbitrary[Int]
-    ).mapN(LabelCount.apply _)
+    ).mapN(LabelCount.apply)
 
   private def labelStatsGen: Gen[LabelStats] =
     (
       nonEmptyStringGen,
       arbitrary[Double]
-    ).mapN(LabelStats.apply _)
+    ).mapN(LabelStats.apply)
 
   private def labelOverviewWithCounts: Gen[LabelOverview] =
     (
@@ -276,7 +279,8 @@ object Generators {
       LabelTask.Classification,
       LabelTask.Detection,
       LabelTask.Regression,
-      LabelTask.Segmentation
+      LabelTask.Segmentation,
+      LabelTask.VendorTask("test-label-task")
     ),
     nonEmptyStringGen map { s => LabelTask.VendorTask(s.toLowerCase) }
   )
@@ -284,9 +288,10 @@ object Generators {
   private def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
     Gen.oneOf(
       LabelMethod.Automatic,
-      LabelMethod.Manual
+      LabelMethod.Manual,
+      LabelMethod.VendorMethod("test-label-vendor-method")
     ),
-    nonEmptyStringGen map { LabelMethod.fromString(_) }
+    nonEmptyStringGen map LabelMethod.fromString
   )
 
   private def labelTypeGen: Gen[LabelType] = Gen.oneOf(
@@ -306,7 +311,7 @@ object Generators {
       Gen.listOf(labelTaskGen),
       Gen.listOf(labelMethodGen),
       Gen.listOf(labelOverviewGen)
-    ).mapN(LabelExtensionProperties.apply _)
+    ).mapN(LabelExtensionProperties.apply)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen

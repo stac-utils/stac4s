@@ -20,7 +20,7 @@ final case class StacItem(
 ) {
 
   val cogUri: Option[String] = assets
-    .filter(_._2._type == Some(`image/cog`))
+    .filter(_._2._type.contains(`image/cog`))
     .values
     .headOption map { _.href }
 }
