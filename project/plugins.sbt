@@ -10,4 +10,3 @@ addSbtPlugin("com.eed3si9n"              % "sbt-assembly"              % "0.14.1
 addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat"              % "0.1.11")
 addSbtPlugin("ch.epfl.scala"             % "sbt-bloop"                 % "1.4.0-RC1")
 addSbtPlugin("org.jmotor.sbt"            % "sbt-dependency-updates"    % "1.2.2")
-addSbtPlugin("de.heikoseeberger"         % "sbt-header"                % "5.6.0")
