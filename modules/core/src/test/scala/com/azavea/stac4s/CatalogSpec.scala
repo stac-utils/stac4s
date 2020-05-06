@@ -1,6 +1,5 @@
 package com.azavea.stac4s
 
-import io.circe._
 import io.circe.syntax._
 import cats.syntax.either._
 
@@ -82,119 +81,95 @@ class CatalogSpec extends AnyFunSpec with Matchers {
         // properties can be anything
         // it is a part where extensions can be
         // at least EO, Label and potentially the layer extension
-        properties = JsonObject.fromMap(
-          Map(
-            "collection"         -> "landsat-8-l1".asJson,
-            "eo:gsd"             -> 15.asJson,
-            "eo:platform"        -> "landsat-8".asJson,
-            "eo:instrument"      -> "OLI_TIRS".asJson,
-            "view:off_nadir"     -> 0.asJson,
-            "view:sun_azimuth"   -> 149.01607154.asJson,
-            "view:sun_elevation" -> 59.21424700.asJson,
-            "view:azimuth"       -> 0.asJson,
-            "eo:bands" -> List(
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B1".asJson,
-                  "common_name"         -> "coastal".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.44.asJson,
-                  "full_width_half_max" -> 0.02.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B2".asJson,
-                  "common_name"         -> "blue".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.48.asJson,
-                  "full_width_half_max" -> 0.06.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B3".asJson,
-                  "common_name"         -> "green".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.56.asJson,
-                  "full_width_half_max" -> 0.06.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B4".asJson,
-                  "common_name"         -> "red".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.65.asJson,
-                  "full_width_half_max" -> 0.04.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B5".asJson,
-                  "common_name"         -> "nir".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.86.asJson,
-                  "full_width_half_max" -> 0.03.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B6".asJson,
-                  "common_name"         -> "swir16".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 1.6.asJson,
-                  "full_width_half_max" -> 0.08.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B7".asJson,
-                  "common_name"         -> "swir22".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 2.2.asJson,
-                  "full_width_half_max" -> 0.22.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B8".asJson,
-                  "common_name"         -> "pan".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 0.59.asJson,
-                  "full_width_half_max" -> 0.18.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B9".asJson,
-                  "common_name"         -> "cirrus".asJson,
-                  "gsd"                 -> 30.asJson,
-                  "center_wavelength"   -> 1.37.asJson,
-                  "full_width_half_max" -> 0.02.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B10".asJson,
-                  "common_name"         -> "lwir11".asJson,
-                  "gsd"                 -> 100.asJson,
-                  "center_wavelength"   -> 10.9.asJson,
-                  "full_width_half_max" -> 0.8.asJson
-                )
-              ),
-              JsonObject.fromMap(
-                Map(
-                  "name"                -> "B11".asJson,
-                  "common_name"         -> "lwir2".asJson,
-                  "gsd"                 -> 100.asJson,
-                  "center_wavelength"   -> 12.asJson,
-                  "full_width_half_max" -> 1.asJson
-                )
-              )
+        properties = Map(
+          "collection"         -> "landsat-8-l1".asJson,
+          "eo:gsd"             -> 15.asJson,
+          "eo:platform"        -> "landsat-8".asJson,
+          "eo:instrument"      -> "OLI_TIRS".asJson,
+          "view:off_nadir"     -> 0.asJson,
+          "view:sun_azimuth"   -> 149.01607154.asJson,
+          "view:sun_elevation" -> 59.21424700.asJson,
+          "view:azimuth"       -> 0.asJson,
+          "eo:bands" -> List(
+            Map(
+              "name"                -> "B1".asJson,
+              "common_name"         -> "coastal".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.44.asJson,
+              "full_width_half_max" -> 0.02.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B2".asJson,
+              "common_name"         -> "blue".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.48.asJson,
+              "full_width_half_max" -> 0.06.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B3".asJson,
+              "common_name"         -> "green".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.56.asJson,
+              "full_width_half_max" -> 0.06.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B4".asJson,
+              "common_name"         -> "red".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.65.asJson,
+              "full_width_half_max" -> 0.04.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B5".asJson,
+              "common_name"         -> "nir".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.86.asJson,
+              "full_width_half_max" -> 0.03.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B6".asJson,
+              "common_name"         -> "swir16".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 1.6.asJson,
+              "full_width_half_max" -> 0.08.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B7".asJson,
+              "common_name"         -> "swir22".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 2.2.asJson,
+              "full_width_half_max" -> 0.22.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B8".asJson,
+              "common_name"         -> "pan".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 0.59.asJson,
+              "full_width_half_max" -> 0.18.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B9".asJson,
+              "common_name"         -> "cirrus".asJson,
+              "gsd"                 -> 30.asJson,
+              "center_wavelength"   -> 1.37.asJson,
+              "full_width_half_max" -> 0.02.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B10".asJson,
+              "common_name"         -> "lwir11".asJson,
+              "gsd"                 -> 100.asJson,
+              "center_wavelength"   -> 10.9.asJson,
+              "full_width_half_max" -> 0.8.asJson
+            ).asJson,
+            Map(
+              "name"                -> "B11".asJson,
+              "common_name"         -> "lwir2".asJson,
+              "gsd"                 -> 100.asJson,
+              "center_wavelength"   -> 12.asJson,
+              "full_width_half_max" -> 1.asJson
             ).asJson
-          )
-        ),
+          ).asJson
+        ).asJsonObject,
         links = List(
           StacLink(
             href = "../../catalog.json",
@@ -267,29 +242,27 @@ class CatalogSpec extends AnyFunSpec with Matchers {
                      |    ]
                      |  }""".stripMargin.parseGeoJson[Polygon],
         bbox = TwoDimBbox(49.16354, 72.27502, 51.36812, 75.67662),
-        properties = JsonObject.fromMap(
-          Map(
-            "collection"                           -> "landsat-8-l1".asJson,
-            "datetime"                             -> "2014-06-02T09:22:02Z".asJson,
-            "eo:gsd"                               -> 15.asJson,
-            "eo:cloud_cover"                       -> 10.asJson,
-            "view:off_nadir"                       -> 0.asJson,
-            "view:sun_azimuth"                     -> 149.01607154.asJson,
-            "view:sun_elevation"                   -> 59.21424700.asJson,
-            "view:azimuth"                         -> 0.asJson,
-            "landsat:wrs_path"                     -> 153.asJson,
-            "landsat:wrs_row"                      -> 25.asJson,
-            "landsat:earth_sun_distance"           -> 1.0141560.asJson,
-            "landsat:ground_control_points_verify" -> 114.asJson,
-            "landsat:geometric_rmse_model"         -> 7.562.asJson,
-            "landsat:image_quality_tirs"           -> 9.asJson,
-            "landsat:ground_control_points_model"  -> 313.asJson,
-            "landsat:geometric_rmse_model_x"       -> 5.96.asJson,
-            "landsat:geometric_rmse_model_y"       -> 4.654.asJson,
-            "landsat:geometric_rmse_verify"        -> 5.364.asJson,
-            "landsat:image_quality_oli"            -> 9.asJson
-          )
-        ),
+        properties = Map(
+          "collection"                           -> "landsat-8-l1".asJson,
+          "datetime"                             -> "2014-06-02T09:22:02Z".asJson,
+          "eo:gsd"                               -> 15.asJson,
+          "eo:cloud_cover"                       -> 10.asJson,
+          "view:off_nadir"                       -> 0.asJson,
+          "view:sun_azimuth"                     -> 149.01607154.asJson,
+          "view:sun_elevation"                   -> 59.21424700.asJson,
+          "view:azimuth"                         -> 0.asJson,
+          "landsat:wrs_path"                     -> 153.asJson,
+          "landsat:wrs_row"                      -> 25.asJson,
+          "landsat:earth_sun_distance"           -> 1.0141560.asJson,
+          "landsat:ground_control_points_verify" -> 114.asJson,
+          "landsat:geometric_rmse_model"         -> 7.562.asJson,
+          "landsat:image_quality_tirs"           -> 9.asJson,
+          "landsat:ground_control_points_model"  -> 313.asJson,
+          "landsat:geometric_rmse_model_x"       -> 5.96.asJson,
+          "landsat:geometric_rmse_model_y"       -> 4.654.asJson,
+          "landsat:geometric_rmse_verify"        -> 5.364.asJson,
+          "landsat:image_quality_oli"            -> 9.asJson
+        ).asJsonObject,
         links = List(
           StacLink(
             href = "../../catalog.json",
