@@ -1,4 +1,6 @@
 import xerial.sbt.Sonatype._
+import de.heikoseeberger.sbtheader.{CommentCreator, CommentStyle, FileType}
+import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport.{headerLicense, headerMappings, HeaderLicense}
 
 lazy val commonSettings = Seq(
   // We are overriding the default behavior of sbt-git which, by default, only
@@ -39,6 +41,17 @@ lazy val commonSettings = Seq(
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
     )
+  ),
+  headerLicense := Some(HeaderLicense.ALv2(java.time.Year.now.getValue.toString, "Azavea")),
+  headerMappings := Map(
+    FileType.scala -> CommentStyle.cStyleBlockComment.copy(commentCreator = new CommentCreator() {
+
+      def apply(text: String, existingText: Option[String]): String = {
+        // preserve year of old headers
+        val newText = CommentStyle.cStyleBlockComment.commentCreator.apply(text, existingText)
+        existingText.flatMap(_ => existingText.map(_.trim)).getOrElse(newText)
+      }
+    })
   )
 )
 
