@@ -56,7 +56,7 @@ workflows:
               only:
                 - /^(.*)$/
             branches:
-              ignore:
+              only:
                 - /^(.*)$/
 
 jobs:
