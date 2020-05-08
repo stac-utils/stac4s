@@ -2,6 +2,7 @@ package com.azavea.stac4s
 
 import io.circe.syntax._
 import cats.syntax.either._
+import cats.syntax.option._
 import geotrellis.vector._
 import java.time._
 
@@ -18,7 +19,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
           id = "landsat-stac",
           stacVersion = "0.9.0",
           stacExtensions = Nil,
-          title = Some("STAC for Landsat data"),
+          title = "STAC for Landsat data".some,
           description = "STAC for Landsat data",
           links = List(
             StacLink(
@@ -57,7 +58,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
         stacVersion = "0.9.0",
         stacExtensions = List("eo", "view", "https://example.com/stac/landsat-extension/1.0/schema.json"),
         id = "landsat-8-l1",
-        title = Some("Landsat 8 L1"),
+        title = "Landsat 8 L1".some,
         description =
           "Landat 8 imagery radiometrically calibrated and orthorectified using gound points and Digital Elevation Model (DEM) data to correct relief displacement.",
         keywords = List("landsat", "earth observation", "usgs"),
@@ -67,7 +68,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             name = "Development Seed",
             description = None,
             roles = List(Processor),
-            url = Some("https://github.com/sat-utils/sat-api")
+            url = "https://github.com/sat-utils/sat-api".some
           )
         ),
         extent = StacExtent(
@@ -287,7 +288,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
           StacLink(
             href = "https://landsatonaws.com/L8/153/025/LC81530252014153LGN0",
             rel = StacLinkType.Alternate,
-            _type = Some(`text/html`),
+            _type = `text/html`.some,
             title = None,
             labelExtAssets = Nil
           )
@@ -296,108 +297,108 @@ class CatalogSpec extends AnyFunSpec with Matchers {
           "thumbnail" -> StacItemAsset(
             href =
               "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_thumb_large.jpg",
-            title = Some("Thumbnail"),
-            description = Some("A medium sized thumbnail"),
+            title = "Thumbnail".some,
+            description = "A medium sized thumbnail".some,
             roles = List(StacAssetRole.Thumbnail),
-            _type = Some(`image/jpeg`)
+            _type = `image/jpeg`.some
           ),
           "metadata" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
-            title = Some("Original Metadata"),
-            description = Some("The original MTL metadata file provided for each Landsat scene"),
+            title = "Original Metadata".some,
+            description = "The original MTL metadata file provided for each Landsat scene".some,
             roles = List(StacAssetRole.Metadata),
-            _type = Some(VendorMediaType("mtl"))
+            _type = VendorMediaType("mtl").some
           ),
           "B1" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
-            title = Some("Coastal Band (B1)"),
-            description = Some("Coastal Band Top Of the Atmosphere"),
+            title = "Coastal Band (B1)".some,
+            description = "Coastal Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [0],
           ),
           "B2" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B2.TIF",
-            title = Some("Blue Band (B2)"),
-            description = Some("Blue Band Top Of the Atmosphere"),
+            title = "Blue Band (B2)".some,
+            description = "Blue Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [1],
           ),
           "B3" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B3.TIF",
-            title = Some("Green Band (B3)"),
-            description = Some("Green Band Top Of the Atmosphere"),
+            title = "Green Band (B3)".some,
+            description = "Green Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [2],
           ),
           "B4" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",
-            title = Some("Red Band (B4)"),
-            description = Some("Red Band Top Of the Atmosphere"),
+            title = "Red Band (B4)".some,
+            description = "Red Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [3],
           ),
           "B5" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B5.TIF",
-            title = Some("NIR Band (B5)"),
-            description = Some("NIR Band Top Of the Atmosphere"),
+            title = "NIR Band (B5)".some,
+            description = "NIR Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [4],
           ),
           "B6" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B6.TIF",
-            title = Some("SWIR (B6)"),
-            description = Some("SWIR Band Top Of the Atmosphere"),
+            title = "SWIR (B6)".some,
+            description = "SWIR Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [5],
           ),
           "B7" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B7.TIF",
-            title = Some("SWIR Band (B7)"),
-            description = Some("SWIR Band Top Of the Atmosphere"),
+            title = "SWIR Band (B7)".some,
+            description = "SWIR Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [6],
           ),
           "B8" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B8.TIF",
-            title = Some("Panchromatic Band (B8)"),
-            description = Some("Panchromatic Band Top Of the Atmosphere"),
+            title = "Panchromatic Band (B8)".some,
+            description = "Panchromatic Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [7],
           ),
           "B9" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B9.TIF",
-            title = Some("Cirrus Band (B9)"),
-            description = Some("Cirrus Band Top Of the Atmosphere"),
+            title = "Cirrus Band (B9)".some,
+            description = "Cirrus Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [8],
           ),
           "B10" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B10.TIF",
-            title = Some("LWIR Band (B10)"),
-            description = Some("LWIR Band Top Of the Atmosphere"),
+            title = "LWIR Band (B10)".some,
+            description = "LWIR Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [9],
           ),
           "B11" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B11.TIF",
-            title = Some("LWIR Band (B11)"),
-            description = Some("LWIR Band Top Of the Atmosphere"),
+            title = "LWIR Band (B11)".some,
+            description = "LWIR Band Top Of the Atmosphere".some,
             roles = Nil,
-            _type = Some(`image/tiff`)
+            _type = `image/tiff`.some
             // "eo:bands": [10],
           )
         ),
-        collection = Some(collection.id)
+        collection = collection.id.some
       )
 
       item.asJson.deepDropNullValues shouldBe getJson(
