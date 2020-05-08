@@ -15,7 +15,7 @@ object LabelCount {
   implicit val decLabelCount: Decoder[LabelCount] = Decoder.forProduct2(
     "name",
     "count"
-  )(LabelCount.apply _)
+  )(LabelCount.apply)
 
   implicit val encLabelCount: Encoder[LabelCount] = Encoder.forProduct2(
     "name",

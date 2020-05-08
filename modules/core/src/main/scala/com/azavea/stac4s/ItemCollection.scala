@@ -38,5 +38,5 @@ object ItemCollection {
     "stac_extensions",
     "features",
     "links"
-  )(ItemCollection.apply _)
+  )(ItemCollection.apply)
 }

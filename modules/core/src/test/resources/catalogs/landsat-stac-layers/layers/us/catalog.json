@@ -134,7 +134,7 @@
   },
   "links" : [
     {
-      "href" : "../../catalog.json",
+      "href" : "../catalog.json",
       "rel" : "root",
       "label:assets" : [
       ]
@@ -152,7 +152,7 @@
       ]
     },
     {
-      "href" : "LC81530252014153LGN00.json",
+      "href" : "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
       "rel" : "item",
       "label:assets" : [
       ]

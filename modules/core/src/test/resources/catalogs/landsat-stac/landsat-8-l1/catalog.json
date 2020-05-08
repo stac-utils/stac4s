@@ -5,7 +5,7 @@
     "view",
     "https://example.com/stac/landsat-extension/1.0/schema.json"
   ],
-  "id" : "layer-ca",
+  "id" : "landsat-8-l1",
   "title" : "Landsat 8 L1",
   "description" : "Landat 8 imagery radiometrically calibrated and orthorectified using gound points and Digital Elevation Model (DEM) data to correct relief displacement.",
   "keywords" : [
@@ -44,7 +44,7 @@
     }
   },
   "properties" : {
-    "layer" : "layer-ca",
+    "collection" : "landsat-8-l1",
     "eo:instrument" : "OLI_TIRS",
     "view:sun_azimuth" : 149.01607154,
     "eo:bands" : [
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "href" : "../catalog.json",
+      "href" : "../../catalog.json",
       "rel" : "parent",
       "label:assets" : [
       ]
@@ -152,7 +152,7 @@
       ]
     },
     {
-      "href" : "LC81530252014153LGN00.json",
+      "href" : "./2014-153/LC81530252014153LGN00.json",
       "rel" : "item",
       "label:assets" : [
       ]

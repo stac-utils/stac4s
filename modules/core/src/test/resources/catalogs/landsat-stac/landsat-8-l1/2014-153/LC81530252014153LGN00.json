@@ -54,7 +54,7 @@
       ]
     },
     {
-      "href" : "LC81530252014153LGN00.json",
+      "href" : "./LC81530252014153LGN00.json",
       "rel" : "self",
       "label:assets" : [
       ]
@@ -177,7 +177,6 @@
   },
   "collection" : "landsat-8-l1",
   "properties" : {
-    "layers" : ["layer-us", "layer-ca"],
     "collection" : "landsat-8-l1",
     "landsat:image_quality_oli" : 9,
     "datetime" : "2014-06-02T09:22:02Z",

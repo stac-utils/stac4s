@@ -1,21 +1,23 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.layer._
 import io.circe.syntax._
 import cats.syntax.either._
 import geotrellis.vector._
+
 import java.time._
 
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
-class CatalogSpec extends AnyFunSpec with Matchers {
+class CatalogLayerSpec extends AnyFunSpec with Matchers {
   import JsonUtils._
 
-  describe("CatalogSpec") {
-    it("Create LC8 Catalog") {
+  describe("CatalogLayerSpec") {
+    it("Create LC8 Layers Catalog") {
       val root =
         StacCatalog(
-          id = "landsat-stac",
+          id = "landsat-stac-layers",
           stacVersion = "0.9.0",
           stacExtensions = Nil,
           title = Some("STAC for Landsat data"),
@@ -44,19 +46,35 @@ class CatalogSpec extends AnyFunSpec with Matchers {
               title = None,
               // should it be an optional thing?
               labelExtAssets = Nil
+            ),
+            StacLink(
+              href = "./layers/ca/catalog.json",
+              rel = StacLinkType.Child,
+              _type = None,
+              title = None,
+              // should it be an optional thing?
+              labelExtAssets = Nil
+            ),
+            StacLink(
+              href = "./layers/us/catalog.json",
+              rel = StacLinkType.Child,
+              _type = None,
+              title = None,
+              // should it be an optional thing?
+              labelExtAssets = Nil
             )
           )
         )
 
-      root.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac/catalog.json")
+      root.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/catalog.json")
       root.asJson.as[StacCatalog].valueOr(throw _) shouldBe root
     }
 
-    it("Create LC8 Collection") {
-      val collection = StacCollection(
+    it("Create LC8 Layer Collection") {
+      val layerUS = StacCollection(
         stacVersion = "0.9.0",
         stacExtensions = List("eo", "view", "https://example.com/stac/landsat-extension/1.0/schema.json"),
-        id = "landsat-8-l1",
+        id = "layer-us",
         title = Some("Landsat 8 L1"),
         description =
           "Landat 8 imagery radiometrically calibrated and orthorectified using gound points and Digital Elevation Model (DEM) data to correct relief displacement.",
@@ -80,7 +98,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
         // it is a part where extensions can be
         // at least EO, Label and potentially the layer extension
         properties = Map(
-          "collection"         -> "landsat-8-l1".asJson,
+          "layer"              -> "layer-us".asJson,
           "eo:gsd"             -> 15.asJson,
           "eo:platform"        -> "landsat-8".asJson,
           "eo:instrument"      -> "OLI_TIRS".asJson,
@@ -170,14 +188,14 @@ class CatalogSpec extends AnyFunSpec with Matchers {
         ).asJsonObject,
         links = List(
           StacLink(
-            href = "../../catalog.json",
+            href = "../catalog.json",
             rel = StacLinkType.StacRoot,
             _type = None,
             title = None,
             labelExtAssets = Nil
           ),
           StacLink(
-            href = "../../catalog.json",
+            href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
             title = None,
@@ -191,7 +209,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             labelExtAssets = Nil
           ),
           StacLink(
-            href = "./2014-153/LC81530252014153LGN00.json",
+            href = "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
             rel = StacLinkType.Item,
             _type = None,
             title = None,
@@ -200,17 +218,28 @@ class CatalogSpec extends AnyFunSpec with Matchers {
         )
       )
 
-      collection.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac/landsat-8-l1/catalog.json")
-      collection.asJson.as[StacCollection].valueOr(throw _) shouldBe collection
+      val layerCA = layerUS.copy(
+        id = "layer-ca",
+        properties = layerUS.properties.deepMerge(Map("layer" -> "layer-ca".asJson).asJsonObject)
+      )
+
+      layerUS.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/layers/us/catalog.json")
+      layerUS.asJson.as[StacCollection].valueOr(throw _) shouldBe layerUS
+
+      layerCA.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/layers/ca/catalog.json")
+      layerCA.asJson.as[StacCollection].valueOr(throw _) shouldBe layerCA
     }
 
-    it("Create LC8 Item") {
-      val collection = getJson("/catalogs/landsat-stac/landsat-8-l1/catalog.json").as[StacCollection].valueOr(throw _)
+    it("Create LC8 Layer Item") {
+      val collection =
+        getJson("/catalogs/landsat-stac-layers/landsat-8-l1/catalog.json").as[StacCollection].valueOr(throw _)
+      val layerUS = getJson("/catalogs/landsat-stac-layers/layers/us/catalog.json").as[StacCollection].valueOr(throw _)
+      val layerCA = getJson("/catalogs/landsat-stac-layers/layers/ca/catalog.json").as[StacCollection].valueOr(throw _)
 
       val item = StacItem(
         id = "LC81530252014153LGN00",
         stacVersion = "0.9.0",
-        stacExtensions = List("eo", "view", "https://example.com/stac/landsat-extension/1.0/schema.json"),
+        stacExtensions = List("eo", "view", "layers", "https://example.com/stac/landsat-extension/1.0/schema.json"),
         geometry = """
                      |{
                      |    "type": "Polygon",
@@ -260,7 +289,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
           "landsat:geometric_rmse_model_y"       -> 4.654.asJson,
           "landsat:geometric_rmse_verify"        -> 5.364.asJson,
           "landsat:image_quality_oli"            -> 9.asJson
-        ).asJsonObject,
+        ).asJsonObject.deepMerge(LayerProperties(List(layerUS.id, layerCA.id)).asJsonObject), // layer extension
         links = List(
           StacLink(
             href = "../../catalog.json",
@@ -401,7 +430,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
       )
 
       item.asJson.deepDropNullValues shouldBe getJson(
-        "/catalogs/landsat-stac/landsat-8-l1/2014-153/LC81530252014153LGN00.json"
+        "/catalogs/landsat-stac-layers/landsat-8-l1/2014-153/LC81530252014153LGN00.json"
       )
       item.asJson.as[StacItem].valueOr(throw _) shouldBe item
     }
