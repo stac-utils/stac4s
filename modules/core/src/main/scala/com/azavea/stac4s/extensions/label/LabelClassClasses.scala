@@ -21,13 +21,13 @@ object LabelClassClasses {
     Encoder[NonEmptyList[String]].contramap(_.names)
 
   implicit val decNamedLabelClasses: Decoder[NamedLabelClasses] =
-    Decoder[NonEmptyList[String]].map(NamedLabelClasses.apply _)
+    Decoder[NonEmptyList[String]].map(NamedLabelClasses.apply)
 
   implicit val encNumberedLabelClasses: Encoder[NumberedLabelClasses] =
     Encoder[NonEmptyList[Int]].contramap(_.indices)
 
   implicit val decNumberedLabelClasses: Decoder[NumberedLabelClasses] =
-    Decoder[NonEmptyList[Int]].map(NumberedLabelClasses.apply _)
+    Decoder[NonEmptyList[Int]].map(NumberedLabelClasses.apply)
 
   implicit val encLabelClassClasses: Encoder[LabelClassClasses] = new Encoder[LabelClassClasses] {
 

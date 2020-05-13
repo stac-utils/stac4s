@@ -140,7 +140,7 @@
       ]
     },
     {
-      "href" : "../catalog.json",
+      "href" : "../../catalog.json",
       "rel" : "parent",
       "label:assets" : [
       ]
@@ -152,7 +152,7 @@
       ]
     },
     {
-      "href" : "LC81530252014153LGN00.json",
+      "href" : "./2014-153/LC81530252014153LGN00.json",
       "rel" : "item",
       "label:assets" : [
       ]

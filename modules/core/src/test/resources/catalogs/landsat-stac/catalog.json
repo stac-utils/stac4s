@@ -6,7 +6,7 @@
   "description" : "STAC for Landsat data",
   "links" : [
     {
-      "href" : "https://landsat-stac.s3.amazonaws.com/catalog.json",
+      "href" : "./catalog.json",
       "rel" : "self",
       "label:assets" : []
     },
@@ -16,7 +16,7 @@
       "label:assets" : []
     },
     {
-      "href" : "landsat-8-l1/catalog.json",
+      "href" : "./landsat-8-l1/catalog.json",
       "rel" : "child",
       "label:assets" : []
     }

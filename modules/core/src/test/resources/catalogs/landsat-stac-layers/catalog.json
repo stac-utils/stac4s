@@ -1,0 +1,34 @@
+{
+  "stac_version" : "0.9.0",
+  "stac_extensions" : [],
+  "id" : "landsat-stac-layers",
+  "title" : "STAC for Landsat data",
+  "description" : "STAC for Landsat data",
+  "links" : [
+    {
+      "href" : "./catalog.json",
+      "rel" : "self",
+      "label:assets" : []
+    },
+    {
+      "href" : "./catalog.json",
+      "rel" : "root",
+      "label:assets" : []
+    },
+    {
+      "href" : "./landsat-8-l1/catalog.json",
+      "rel" : "child",
+      "label:assets" : []
+    },
+    {
+      "href" : "./layers/ca/catalog.json",
+      "rel" : "child",
+      "label:assets" : []
+    },
+    {
+      "href" : "./layers/us/catalog.json",
+      "rel" : "child",
+      "label:assets" : []
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "stac_version" : "0.9.0",
+  "stac_extensions" : [
+    "eo",
+    "view",
+    "https://example.com/stac/landsat-extension/1.0/schema.json"
+  ],
+  "id" : "layer-ca",
+  "title" : "Landsat 8 L1",
+  "description" : "CA STAC Layer",
+  "links" : [
+    {
+      "href" : "../catalog.json",
+      "rel" : "root",
+      "label:assets" : [
+      ]
+    },
+    {
+      "href" : "../catalog.json",
+      "rel" : "parent",
+      "label:assets" : [
+      ]
+    },
+    {
+      "href" : "./catalog.json",
+      "rel" : "self",
+      "label:assets" : [
+      ]
+    },
+    {
+      "href" : "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
+      "rel" : "item",
+      "label:assets" : [
+      ]
+    }
+  ]
+}
