@@ -179,7 +179,7 @@
   "collection" : "landsat-8-l1",
   "properties" : {
     "collection" : "landsat-8-l1",
-    "layers" : ["layer-us", "layer-ca"],
+    "layer:ids" : ["layer-us", "layer-ca"],
     "landsat:image_quality_oli" : 9,
     "datetime" : "2014-06-02T09:22:02Z",
     "landsat:ground_control_points_verify" : 114,
