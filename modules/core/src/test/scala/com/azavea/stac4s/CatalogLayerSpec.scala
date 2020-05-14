@@ -174,7 +174,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
           "landsat:geometric_rmse_model_y"       -> 4.654.asJson,
           "landsat:geometric_rmse_verify"        -> 5.364.asJson,
           "landsat:image_quality_oli"            -> 9.asJson
-        ).asJsonObject.deepMerge(LayerProperties(List(layerUS.id, layerCA.id)).asJsonObject), // layer extension
+        ).asJsonObject.deepMerge(LayerItemExtension(List(layerUS.id, layerCA.id)).asJsonObject), // layer extension
         links = List(
           StacLink(
             href = "../../catalog.json",

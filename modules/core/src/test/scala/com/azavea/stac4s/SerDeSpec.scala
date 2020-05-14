@@ -13,7 +13,7 @@ import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import java.time.Instant
 
-import com.azavea.stac4s.extensions.layer.LayerProperties
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
@@ -53,7 +53,7 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
 
   // Layer extension
-  checkAll("Codec.LayerProperties", CodecTests[LayerProperties].unserializableCodec)
+  checkAll("Codec.LayerProperties", CodecTests[LayerItemExtension].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {

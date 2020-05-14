@@ -14,7 +14,7 @@ import java.time.Instant
 import com.github.tbouron.SpdxLicense
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
-import com.azavea.stac4s.extensions.layer.LayerProperties
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
 
 object Generators {
 
@@ -305,8 +305,8 @@ object Generators {
   private def labelPropertiesGen: Gen[LabelProperties] =
     Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
-  private def layerPropertiesGen: Gen[LayerProperties] =
-    Gen.listOf(nonEmptyStringGen).map(LayerProperties.apply)
+  private def layerPropertiesGen: Gen[LayerItemExtension] =
+    Gen.listOf(nonEmptyStringGen).map(LayerItemExtension.apply)
 
   private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
@@ -399,5 +399,5 @@ object Generators {
     labelExtensionPropertiesGen
   }
 
-  implicit val arbLayerProperties: Arbitrary[LayerProperties] = Arbitrary { layerPropertiesGen }
+  implicit val arbLayerProperties: Arbitrary[LayerItemExtension] = Arbitrary { layerPropertiesGen }
 }
