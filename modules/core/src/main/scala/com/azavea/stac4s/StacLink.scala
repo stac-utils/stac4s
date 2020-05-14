@@ -2,24 +2,32 @@ package com.azavea.stac4s
 
 import cats.implicits._
 import io.circe._
+import io.circe.syntax._
 
 final case class StacLink(
     href: String,
     rel: StacLinkType,
     _type: Option[StacMediaType],
     title: Option[String],
-    labelExtAssets: List[String]
+    extensionFields: JsonObject
 )
 
 object StacLink {
 
-  implicit val encStacLink: Encoder[StacLink] = Encoder.forProduct5(
-    "href",
-    "rel",
-    "type",
-    "title",
-    "label:assets"
-  )(link => (link.href, link.rel, link._type, link.title, link.labelExtAssets))
+  implicit val encStacLink: Encoder[StacLink] = new Encoder[StacLink] {
+
+    def apply(link: StacLink): Json = {
+      val baseEncoder = Encoder
+        .forProduct4(
+          "href",
+          "rel",
+          "type",
+          "title"
+        )((link: StacLink) => (link.href, link.rel, link._type, link.title))
+
+      baseEncoder(link).deepMerge(link.extensionFields.asJson)
+    }
+  }
 
   implicit val decStacLink: Decoder[StacLink] = { c: HCursor =>
     (
@@ -27,15 +35,18 @@ object StacLink {
       c.downField("rel").as[StacLinkType],
       c.get[Option[StacMediaType]]("type"),
       c.get[Option[String]]("title"),
-      c.get[Option[List[String]]]("label:assets")
+      c.value.as[JsonObject]
     ).mapN(
       (
           href: String,
           rel: StacLinkType,
           _type: Option[StacMediaType],
           title: Option[String],
-          assets: Option[List[String]]
-      ) => StacLink(href, rel, _type, title, assets getOrElse List.empty)
+          document: JsonObject
+      ) =>
+        StacLink(href, rel, _type, title, document.filter({
+          case (k, _) => !Set("href", "rel", "type", "title").contains(k)
+        }))
     )
   }
 }

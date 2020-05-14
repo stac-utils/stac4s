@@ -44,28 +44,20 @@
   "links" : [
     {
       "href" : "../../catalog.json",
-      "rel" : "root",
-      "label:assets" : [
-      ]
+      "rel" : "root"
     },
     {
       "href" : "../catalog.json",
-      "rel" : "parent",
-      "label:assets" : [
-      ]
+      "rel" : "parent"
     },
     {
       "href" : "./LC81530252014153LGN00.json",
-      "rel" : "self",
-      "label:assets" : [
-      ]
+      "rel" : "self"
     },
     {
       "href" : "https://landsatonaws.com/L8/153/025/LC81530252014153LGN0",
       "rel" : "alternate",
-      "type" : "text/html",
-      "label:assets" : [
-      ]
+      "type" : "text/html"
     }
   ],
   "assets" : {

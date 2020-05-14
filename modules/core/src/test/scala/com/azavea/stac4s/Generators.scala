@@ -5,6 +5,7 @@ import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
+import io.circe.syntax._
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
@@ -124,7 +125,7 @@ object Generators {
       Gen.const(StacLinkType.Self), // self link type is required by TMS reification
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
-      Gen.nonEmptyListOf[String](arbitrary[String])
+      Gen.const(().asJsonObject)
     ).mapN(StacLink.apply)
 
   private def temporalExtentGen: Gen[TemporalExtent] = {

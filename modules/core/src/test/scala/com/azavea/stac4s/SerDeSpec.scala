@@ -4,6 +4,7 @@ import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import Generators._
 import geotrellis.vector.Geometry
+import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
 import org.scalatest.funsuite.AnyFunSuite
@@ -58,6 +59,6 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   test("ignore optional fields") {
     val link =
       decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
-    link map { _.labelExtAssets } shouldBe Right(List.empty[String])
+    link map { _.extensionFields } shouldBe Right(().asJsonObject)
   }
 }

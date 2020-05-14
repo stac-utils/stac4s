@@ -27,40 +27,35 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
               rel = StacLinkType.Self,
               _type = None,
               title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              extensionFields = ().asJsonObject
             ),
             StacLink(
               href = "./catalog.json",
               rel = StacLinkType.StacRoot,
               _type = None,
               title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              extensionFields = ().asJsonObject
             ),
             StacLink(
               href = "./landsat-8-l1/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
               title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              extensionFields = ().asJsonObject
             ),
             StacLink(
               href = "./layers/ca/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
               title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              extensionFields = ().asJsonObject
             ),
             StacLink(
               href = "./layers/us/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
               title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              extensionFields = ().asJsonObject
             )
           )
         )
@@ -82,28 +77,28 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             rel = StacLinkType.StacRoot,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           StacLink(
             href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           StacLink(
             href = "./catalog.json",
             rel = StacLinkType.Self,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           StacLink(
             href = "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
             rel = StacLinkType.Item,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           )
         )
       )
@@ -186,21 +181,21 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             rel = StacLinkType.StacRoot,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           StacLink(
             href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           StacLink(
             href = "./LC81530252014153LGN00.json",
             rel = StacLinkType.Self,
             _type = None,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           ),
           //  { "rel":"alternate", "href": "https://landsatonaws.com/L8/153/025/LC81530252014153LGN00", "type": "text/html"},
           StacLink(
@@ -208,7 +203,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             rel = StacLinkType.Alternate,
             _type = `text/html`.some,
             title = None,
-            labelExtAssets = Nil
+            extensionFields = ().asJsonObject
           )
         ),
         assets = Map(

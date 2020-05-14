@@ -135,27 +135,19 @@
   "links" : [
     {
       "href" : "../../catalog.json",
-      "rel" : "root",
-      "label:assets" : [
-      ]
+      "rel" : "root"
     },
     {
       "href" : "../../catalog.json",
-      "rel" : "parent",
-      "label:assets" : [
-      ]
+      "rel" : "parent"
     },
     {
       "href" : "./catalog.json",
-      "rel" : "self",
-      "label:assets" : [
-      ]
+      "rel" : "self"
     },
     {
       "href" : "./2014-153/LC81530252014153LGN00.json",
-      "rel" : "item",
-      "label:assets" : [
-      ]
+      "rel" : "item"
     }
   ]
 }
