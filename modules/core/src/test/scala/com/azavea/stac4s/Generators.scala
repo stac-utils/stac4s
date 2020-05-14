@@ -165,7 +165,8 @@ object Generators {
       Gen.option(nonEmptyStringGen),
       Gen.option(nonEmptyStringGen),
       Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
-      Gen.option(mediaTypeGen)
+      Gen.option(mediaTypeGen),
+      Gen.const(().asJsonObject)
     ) mapN {
       StacItemAsset.apply
     }
@@ -206,7 +207,8 @@ object Generators {
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
-      Gen.listOf(stacLinkGen)
+      Gen.listOf(stacLinkGen),
+      Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
   private def stacCollectionGen: Gen[StacCollection] =
@@ -220,8 +222,10 @@ object Generators {
       stacLicenseGen,
       Gen.listOf(stacProviderGen),
       stacExtentGen,
+      Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
-      Gen.listOf(stacLinkGen)
+      Gen.listOf(stacLinkGen),
+      Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
   private def itemCollectionGen: Gen[ItemCollection] =

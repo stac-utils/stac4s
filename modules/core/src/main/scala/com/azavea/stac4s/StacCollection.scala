@@ -1,8 +1,10 @@
 package com.azavea.stac4s
 
 import cats.Eq
+import cats.implicits._
 import geotrellis.vector.{io => _}
 import io.circe._
+import io.circe.syntax._
 
 final case class StacCollection(
     stacVersion: String,
@@ -14,60 +16,87 @@ final case class StacCollection(
     license: StacLicense,
     providers: List[StacProvider],
     extent: StacExtent,
+    summaries: JsonObject,
     properties: JsonObject,
-    links: List[StacLink]
+    links: List[StacLink],
+    extensionFields: JsonObject
 )
 
 object StacCollection {
 
+  val collectionFields = Set(
+    "stac_version",
+    "stac_extensions",
+    "id",
+    "title",
+    "description",
+    "keywords",
+    "license",
+    "providers",
+    "extent",
+    "summaries",
+    "properties",
+    "links"
+  )
+
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 
-  implicit val encoderStacCollection: Encoder[StacCollection] =
-    Encoder.forProduct11(
-      "stac_version",
-      "stac_extensions",
-      "id",
-      "title",
-      "description",
-      "keywords",
-      "license",
-      "providers",
-      "extent",
-      "properties",
-      "links"
-    )(collection =>
-      (
-        collection.stacVersion,
-        collection.stacExtensions,
-        collection.id,
-        collection.title,
-        collection.description,
-        collection.keywords,
-        collection.license,
-        collection.providers,
-        collection.extent,
-        collection.properties,
-        collection.links
-      )
-    )
+  implicit val encoderStacCollection: Encoder[StacCollection] = new Encoder[StacCollection] {
 
-  implicit val decoderStacCollection: Decoder[StacCollection] =
-    Decoder.forProduct11(
-      "stac_version",
-      "stac_extensions",
-      "id",
-      "title",
-      "description",
-      "keywords",
-      "license",
-      "providers",
-      "extent",
-      "properties",
-      "links"
-    )(
+    def apply(collection: StacCollection): Json = {
+      val baseEncoder: Encoder[StacCollection] = Encoder.forProduct12(
+        "stac_version",
+        "stac_extensions",
+        "id",
+        "title",
+        "description",
+        "keywords",
+        "license",
+        "providers",
+        "extent",
+        "summaries",
+        "properties",
+        "links"
+      )(collection =>
+        (
+          collection.stacVersion,
+          collection.stacExtensions,
+          collection.id,
+          collection.title,
+          collection.description,
+          collection.keywords,
+          collection.license,
+          collection.providers,
+          collection.extent,
+          collection.summaries,
+          collection.properties,
+          collection.links
+        )
+      )
+
+      baseEncoder(collection).deepMerge(collection.extensionFields.asJson)
+    }
+  }
+
+  implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>
+    (
+      c.get[String]("stac_version"),
+      c.get[Option[List[String]]]("stac_extensions"),
+      c.get[String]("id"),
+      c.get[Option[String]]("title"),
+      c.get[String]("description"),
+      c.get[Option[List[String]]]("keywords"),
+      c.get[StacLicense]("license"),
+      c.get[Option[List[StacProvider]]]("providers"),
+      c.get[StacExtent]("extent"),
+      c.get[Option[JsonObject]]("summaries"),
+      c.get[JsonObject]("properties"),
+      c.get[List[StacLink]]("links"),
+      c.value.as[JsonObject]
+    ).mapN(
       (
           stacVersion: String,
-          stacExtensions: List[String],
+          stacExtensions: Option[List[String]],
           id: String,
           title: Option[String],
           description: String,
@@ -75,12 +104,14 @@ object StacCollection {
           license: StacLicense,
           providers: Option[List[StacProvider]],
           extent: StacExtent,
-          properties: Option[JsonObject],
-          links: List[StacLink]
+          summaries: Option[JsonObject],
+          properties: JsonObject,
+          links: List[StacLink],
+          extensionFields: JsonObject
       ) =>
         StacCollection(
           stacVersion,
-          stacExtensions,
+          stacExtensions getOrElse Nil,
           id,
           title,
           description,
@@ -88,8 +119,11 @@ object StacCollection {
           license,
           providers getOrElse List.empty,
           extent,
-          properties getOrElse JsonObject.fromMap(Map.empty),
-          links
+          summaries getOrElse JsonObject.fromMap(Map.empty),
+          properties,
+          links,
+          extensionFields
         )
     )
+  }
 }
