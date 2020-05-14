@@ -308,7 +308,7 @@ object Generators {
   private def layerPropertiesGen: Gen[LayerProperties] =
     Gen.listOf(nonEmptyStringGen).map(LayerProperties.apply)
 
-  private def labelExtensionPropertiesGen: Gen[LabelExtensionProperties] =
+  private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
       labelPropertiesGen,
       Gen.listOf(labelClassGen),
@@ -317,7 +317,7 @@ object Generators {
       Gen.listOf(labelTaskGen),
       Gen.listOf(labelMethodGen),
       Gen.listOf(labelOverviewGen)
-    ).mapN(LabelExtensionProperties.apply)
+    ).mapN(LabelItemExtension.apply)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
@@ -395,7 +395,7 @@ object Generators {
 
   implicit val arbLabelProperties: Arbitrary[LabelProperties] = Arbitrary { labelPropertiesGen }
 
-  implicit val arbLabelExtensionProperties: Arbitrary[LabelExtensionProperties] = Arbitrary {
+  implicit val arbLabelExtensionProperties: Arbitrary[LabelItemExtension] = Arbitrary {
     labelExtensionPropertiesGen
   }
 

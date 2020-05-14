@@ -7,7 +7,7 @@ import cats.implicits._
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import io.circe.syntax._
 
-case class LabelExtensionProperties(
+case class LabelItemExtension(
     properties: LabelProperties,
     classes: List[LabelClass],
     description: String,
@@ -17,11 +17,11 @@ case class LabelExtensionProperties(
     overviews: List[LabelOverview]
 )
 
-object LabelExtensionProperties {
+object LabelItemExtension {
 
-  implicit val encLabelExtensionPropertiesObject: Encoder.AsObject[LabelExtensionProperties] = Encoder
+  implicit val encLabelExtensionPropertiesObject: Encoder.AsObject[LabelItemExtension] = Encoder
     .AsObject[Map[String, Json]]
-    .contramapObject((properties: LabelExtensionProperties) =>
+    .contramapObject((properties: LabelItemExtension) =>
       Map(
         "label:properties"  -> properties.properties.asJson,
         "label:classes"     -> properties.classes.asJson,
@@ -33,7 +33,7 @@ object LabelExtensionProperties {
       )
     )
 
-  implicit val decLabelExtensionProperties: Decoder[LabelExtensionProperties] = new Decoder[LabelExtensionProperties] {
+  implicit val decLabelExtensionProperties: Decoder[LabelItemExtension] = new Decoder[LabelItemExtension] {
 
     def apply(c: HCursor) =
       (
@@ -54,7 +54,7 @@ object LabelExtensionProperties {
             methods: Option[List[LabelMethod]],
             overviews: Option[List[LabelOverview]]
         ) =>
-          LabelExtensionProperties(
+          LabelItemExtension(
             properties,
             classes,
             description,
@@ -66,7 +66,7 @@ object LabelExtensionProperties {
       )
   }
 
-  implicit val eqLabelExtensionProperties: Eq[LabelExtensionProperties] = Eq.fromUniversalEquals
+  implicit val eqLabelExtensionProperties: Eq[LabelItemExtension] = Eq.fromUniversalEquals
 
-  implicit val itemExtensionLabelProperties: ItemExtension[LabelExtensionProperties] = ItemExtension.instance
+  implicit val itemExtensionLabelProperties: ItemExtension[LabelItemExtension] = ItemExtension.instance
 }
