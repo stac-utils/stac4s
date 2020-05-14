@@ -37,6 +37,15 @@ object Generators {
 
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
+  private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    Gen
+      .nonEmptyListOf(nonEmptyStringGen)
+      .map(NonEmptyList.fromListUnsafe)
+      .map(LabelLinkExtension.apply)
+      .map(_.asJsonObject)
+  )
+
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     `image/tiff`,
     `image/vnd.stac.geotiff`,
@@ -125,7 +134,7 @@ object Generators {
       Gen.const(StacLinkType.Self), // self link type is required by TMS reification
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
-      Gen.const(().asJsonObject)
+      linkExtensionFields
     ).mapN(StacLink.apply)
 
   private def temporalExtentGen: Gen[TemporalExtent] = {
