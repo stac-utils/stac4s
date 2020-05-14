@@ -1,8 +1,11 @@
 package com.azavea.stac4s.extensions.label
 
+import com.azavea.stac4s.extensions.ItemExtension
+
 import cats.Eq
 import cats.implicits._
-import io.circe.{Decoder, Encoder, HCursor}
+import io.circe.{Decoder, Encoder, HCursor, Json}
+import io.circe.syntax._
 
 case class LabelExtensionProperties(
     properties: LabelProperties,
@@ -16,25 +19,19 @@ case class LabelExtensionProperties(
 
 object LabelExtensionProperties {
 
-  implicit val encLabelExtensionProperties: Encoder[LabelExtensionProperties] = Encoder.forProduct7(
-    "label:properties",
-    "label:classes",
-    "label:description",
-    "label:type",
-    "label:tasks",
-    "label:methods",
-    "label:overviews"
-  )(extensionProps =>
-    (
-      extensionProps.properties,
-      extensionProps.classes,
-      extensionProps.description,
-      extensionProps._type,
-      extensionProps.tasks,
-      extensionProps.methods,
-      extensionProps.overviews
+  implicit val encLabelExtensionPropertiesObject: Encoder.AsObject[LabelExtensionProperties] = Encoder
+    .AsObject[Map[String, Json]]
+    .contramapObject((properties: LabelExtensionProperties) =>
+      Map(
+        "label:properties"  -> properties.properties.asJson,
+        "label:classes"     -> properties.classes.asJson,
+        "label:description" -> properties.description.asJson,
+        "label:type"        -> properties._type.asJson,
+        "label:tasks"       -> properties.tasks.asJson,
+        "label:methods"     -> properties.methods.asJson,
+        "label:overviews"   -> properties.overviews.asJson
+      )
     )
-  )
 
   implicit val decLabelExtensionProperties: Decoder[LabelExtensionProperties] = new Decoder[LabelExtensionProperties] {
 
@@ -70,4 +67,6 @@ object LabelExtensionProperties {
   }
 
   implicit val eqLabelExtensionProperties: Eq[LabelExtensionProperties] = Eq.fromUniversalEquals
+
+  implicit val itemExtensionLabelProperties: ItemExtension[LabelExtensionProperties] = ItemExtension.instance
 }
