@@ -122,7 +122,9 @@ object StacCollection {
           summaries getOrElse JsonObject.fromMap(Map.empty),
           properties,
           links,
-          extensionFields
+          extensionFields.filter({
+            case (k, _) => !collectionFields.contains(k)
+          })
         )
     )
   }
