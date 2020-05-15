@@ -43,6 +43,7 @@
       ]
     }
   },
+  "summaries": {},
   "properties" : {
     "collection" : "landsat-8-l1",
     "eo:instrument" : "OLI_TIRS",
