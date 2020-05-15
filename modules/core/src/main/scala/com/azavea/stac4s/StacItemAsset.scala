@@ -16,6 +16,14 @@ final case class StacItemAsset(
 
 object StacItemAsset {
 
+  val assetFields = Set(
+    "href",
+    "title",
+    "description",
+    "roles",
+    "type"
+  )
+
   implicit val eqStacItemAsset: Eq[StacItemAsset] = Eq.fromUniversalEquals
 
   implicit val encStacItemAsset: Encoder[StacItemAsset] = new Encoder[StacItemAsset] {
@@ -35,7 +43,7 @@ object StacItemAsset {
       c.get[String]("href"),
       c.get[Option[String]]("title"),
       c.get[Option[String]]("description"),
-      c.get[List[StacAssetRole]]("roles"),
+      c.get[Option[List[StacAssetRole]]]("roles"),
       c.get[Option[StacMediaType]]("type"),
       c.value.as[JsonObject]
     ).mapN(
@@ -43,12 +51,12 @@ object StacItemAsset {
           href: String,
           title: Option[String],
           description: Option[String],
-          roles: List[StacAssetRole],
+          roles: Option[List[StacAssetRole]],
           mediaType: Option[StacMediaType],
           document: JsonObject
       ) =>
-        StacItemAsset(href, title, description, roles, mediaType, document.filter({
-          case (k, _) => !Set("href", "title", "description", "roles", "type").contains(k)
+        StacItemAsset(href, title, description, roles getOrElse Nil, mediaType, document.filter({
+          case (k, _) => !assetFields.contains(k)
         }))
     )
   }

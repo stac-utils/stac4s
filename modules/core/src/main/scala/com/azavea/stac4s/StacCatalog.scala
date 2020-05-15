@@ -17,6 +17,15 @@ final case class StacCatalog(
 
 object StacCatalog {
 
+  val catalogFields = Set(
+    "stac_version",
+    "stac_extensions",
+    "id",
+    "title",
+    "description",
+    "links"
+  )
+
   implicit val eqStacCatalog: Eq[StacCatalog] = Eq.fromUniversalEquals
 
   implicit val encCatalog: Encoder[StacCatalog] = new Encoder[StacCatalog] {
@@ -65,7 +74,7 @@ object StacCatalog {
           description,
           links,
           document.filter({
-            case (k, _) => !Set("stac_version", "stac_extensions", "id", "title", "description", "links").contains(k)
+            case (k, _) => !catalogFields.contains(k)
           })
         )
     )

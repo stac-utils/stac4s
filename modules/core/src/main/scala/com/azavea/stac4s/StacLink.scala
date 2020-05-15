@@ -14,6 +14,8 @@ final case class StacLink(
 
 object StacLink {
 
+  val linkFields = Set("href", "rel", "type", "title")
+
   implicit val encStacLink: Encoder[StacLink] = new Encoder[StacLink] {
 
     def apply(link: StacLink): Json = {
@@ -45,7 +47,7 @@ object StacLink {
           document: JsonObject
       ) =>
         StacLink(href, rel, _type, title, document.filter({
-          case (k, _) => !Set("href", "rel", "type", "title").contains(k)
+          case (k, _) => !linkFields.contains(k)
         }))
     )
   }

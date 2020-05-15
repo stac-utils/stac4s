@@ -21,6 +21,8 @@ object LinkExtension {
         decoder.decodeAccumulating(link.extensionFields.asJson.hcursor)
 
       def extend(link: StacLink, extensionFields: T): StacLink =
-        link.copy(extensionFields = link.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields)))
+        link.copy(extensionFields =
+          link.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields))
+        )
     }
 }
