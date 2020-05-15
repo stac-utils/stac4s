@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.asset._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import Generators._

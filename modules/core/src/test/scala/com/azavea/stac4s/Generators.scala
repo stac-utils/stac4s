@@ -1,6 +1,7 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.asset._
 import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
@@ -36,6 +37,16 @@ object Generators {
     }).widen
 
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
+
+  private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    Gen
+      .mapOf(
+        (nonEmptyStringGen, stacCollectionAssetGen).tupled
+      )
+      .map(AssetCollectionExtension.apply)
+      .map(_.asJsonObject)
+  )
 
   private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
@@ -225,7 +236,7 @@ object Generators {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.listOf(stacLinkGen),
-      Gen.const(().asJsonObject)
+      collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
   private def itemCollectionGen: Gen[ItemCollection] =
