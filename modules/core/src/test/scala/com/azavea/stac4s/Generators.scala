@@ -234,7 +234,8 @@ object Generators {
       Gen.const(StacVersion.unsafeFrom("0.9.0")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
-      Gen.listOf[StacLink](stacLinkGen)
+      Gen.listOf[StacLink](stacLinkGen),
+      Gen.const(().asJsonObject)
     ).mapN(ItemCollection.apply)
 
   private def labelClassNameGen: Gen[LabelClassName] =
