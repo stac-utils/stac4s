@@ -5,6 +5,7 @@ Brief description of what this PR does, and why it is needed.
 ### Checklist
 
 - [ ] New tests have been added or existing tests have been modified
+- [ ] Changelog updated
 
 ### Notes
 
