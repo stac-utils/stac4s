@@ -15,7 +15,7 @@ object ItemExtension {
   // summoner
   def apply[T](implicit ev: ItemExtension[T]): ItemExtension[T] = ev
 
-  // constructor for anything with a `Decoder`
+  // constructor for anything with a `Decoder` and an `Encoder.AsObject`
   def instance[T](implicit decoder: Decoder[T], objectEncoder: Encoder.AsObject[T]): ItemExtension[T] =
     new ItemExtension[T] {
 
