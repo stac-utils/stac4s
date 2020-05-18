@@ -3,10 +3,12 @@ package com.azavea.stac4s.extensions.layer
 import com.azavea.stac4s.extensions.ItemExtension
 
 import cats.Eq
+import eu.timepit.refined.types.string.NonEmptyString
 import io.circe.{Decoder, Encoder}
+import io.circe.refined._
 import io.circe.syntax._
 
-case class LayerItemExtension(ids: List[String])
+case class LayerItemExtension(ids: List[NonEmptyString])
 
 object LayerItemExtension {
   implicit val eqLayerProperties: Eq[LayerItemExtension] = Eq.fromUniversalEquals
