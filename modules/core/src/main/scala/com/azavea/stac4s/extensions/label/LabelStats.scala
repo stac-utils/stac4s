@@ -13,7 +13,7 @@ object LabelStats {
   implicit val eqLabelStats: Eq[LabelStats] = Eq.fromUniversalEquals
 
   implicit val decLabelStats: Decoder[LabelStats] = Decoder.forProduct2("name", "value")(
-    LabelStats.apply _
+    LabelStats.apply
   )
 
   implicit val encLabelStats: Encoder[LabelStats] =

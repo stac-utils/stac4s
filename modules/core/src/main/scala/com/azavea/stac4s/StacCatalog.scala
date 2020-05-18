@@ -29,5 +29,5 @@ object StacCatalog {
     )
 
   implicit val decCatalog: Decoder[StacCatalog] =
-    Decoder.forProduct6("stac_version", "stac_extensions", "id", "title", "description", "links")(StacCatalog.apply _)
+    Decoder.forProduct6("stac_version", "stac_extensions", "id", "title", "description", "links")(StacCatalog.apply)
 }

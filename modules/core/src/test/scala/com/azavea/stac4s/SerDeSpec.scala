@@ -3,7 +3,6 @@ package com.azavea.stac4s
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import Generators._
-
 import geotrellis.vector.Geometry
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
@@ -11,8 +10,9 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
-
 import java.time.Instant
+
+import com.azavea.stac4s.extensions.layer.LayerProperties
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
@@ -50,6 +50,9 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LabelStats", CodecTests[LabelStats].unserializableCodec)
   checkAll("Codec.LabelTask", CodecTests[LabelTask].unserializableCodec)
   checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
+
+  // Layer extension
+  checkAll("Codec.LayerProperties", CodecTests[LayerProperties].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {

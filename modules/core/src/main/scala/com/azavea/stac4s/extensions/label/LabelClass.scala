@@ -15,7 +15,7 @@ object LabelClass {
   implicit val decLabelClass: Decoder[LabelClass] = Decoder.forProduct2(
     "name",
     "classes"
-  )(LabelClass.apply _)
+  )(LabelClass.apply)
 
   implicit val encLabelClass: Encoder[LabelClass] = Encoder.forProduct2(
     "name",

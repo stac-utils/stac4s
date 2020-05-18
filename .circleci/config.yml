@@ -33,6 +33,9 @@ aliases:
   - &openjdk8-scala2_12_environment
     docker:
       - image: circleci/openjdk:8-jdk
+        environment:
+          # https://circleci.com/docs/2.0/java-oom/
+          _JAVA_OPTIONS: "-Xms128m -Xmx2g"
 
 version: 2
 workflows:
