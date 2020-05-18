@@ -16,6 +16,7 @@ import com.github.tbouron.SpdxLicense
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
 import com.azavea.stac4s.extensions.layer.LayerItemExtension
+import eu.timepit.refined.types.string.NonEmptyString
 
 object Generators {
 
@@ -175,7 +176,7 @@ object Generators {
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       Gen.option(nonEmptyStringGen),
-      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen),
       Gen.option(mediaTypeGen),
       Gen.const(().asJsonObject)
     ) mapN {
@@ -331,7 +332,7 @@ object Generators {
     Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
   private def layerPropertiesGen: Gen[LayerItemExtension] =
-    Gen.listOf(nonEmptyStringGen).map(LayerItemExtension.apply)
+    Gen.listOf(nonEmptyStringGen).map(layerIds => LayerItemExtension(layerIds map { NonEmptyString.unsafeFrom }))
 
   private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (

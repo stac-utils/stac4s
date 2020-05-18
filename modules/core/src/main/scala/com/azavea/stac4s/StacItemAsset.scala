@@ -9,7 +9,7 @@ final case class StacItemAsset(
     href: String,
     title: Option[String],
     description: Option[String],
-    roles: List[StacAssetRole],
+    roles: Set[StacAssetRole],
     _type: Option[StacMediaType],
     extensionFields: JsonObject
 )
@@ -43,7 +43,7 @@ object StacItemAsset {
       c.get[String]("href"),
       c.get[Option[String]]("title"),
       c.get[Option[String]]("description"),
-      c.get[Option[List[StacAssetRole]]]("roles"),
+      c.get[Option[Set[StacAssetRole]]]("roles"),
       c.get[Option[StacMediaType]]("type"),
       c.value.as[JsonObject]
     ).mapN(
@@ -51,11 +51,11 @@ object StacItemAsset {
           href: String,
           title: Option[String],
           description: Option[String],
-          roles: Option[List[StacAssetRole]],
+          roles: Option[Set[StacAssetRole]],
           mediaType: Option[StacMediaType],
           document: JsonObject
       ) =>
-        StacItemAsset(href, title, description, roles getOrElse Nil, mediaType, document.filter({
+        StacItemAsset(href, title, description, roles getOrElse Set.empty, mediaType, document.filter({
           case (k, _) => !assetFields.contains(k)
         }))
     )

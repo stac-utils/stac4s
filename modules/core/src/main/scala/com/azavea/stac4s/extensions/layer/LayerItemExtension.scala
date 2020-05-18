@@ -16,7 +16,7 @@ object LayerItemExtension {
   implicit val encLayerProperties: Encoder.AsObject[LayerItemExtension] =
     Encoder.AsObject.instance[LayerItemExtension] { o => Map("layer:ids" -> o.ids.asJson).asJsonObject }
 
-  implicit val decLayerProperties: Decoder[LayerItemExtension] = Decoder[Map[String, List[String]]] emap {
+  implicit val decLayerProperties: Decoder[LayerItemExtension] = Decoder[Map[String, List[NonEmptyString]]] emap {
     _.get("layer:ids") match {
       case Some(l) => Right(LayerItemExtension(l))
       case _       => Left("Could not decode LayerProperties.")
