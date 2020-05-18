@@ -1,8 +1,8 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.layer._
-import cats.syntax.either._
-import cats.syntax.option._
+import cats.data.NonEmptyList
+import cats.implicits._
 import eu.timepit.refined.types.string.NonEmptyString
 import geotrellis.vector.{io => _, _}
 import io.circe.syntax._
@@ -178,7 +178,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
           "landsat:geometric_rmse_verify"        -> 5.364.asJson,
           "landsat:image_quality_oli"            -> 9.asJson
         ).asJsonObject.deepMerge(
-          LayerItemExtension(List(layerUS.id, layerCA.id) map { NonEmptyString.unsafeFrom }).asJsonObject
+          LayerItemExtension(NonEmptyList.of(layerUS.id, layerCA.id) map { NonEmptyString.unsafeFrom }).asJsonObject
         ), // layer extension
         links = List(
           StacLink(

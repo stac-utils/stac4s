@@ -332,7 +332,9 @@ object Generators {
     Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
   private def layerPropertiesGen: Gen[LayerItemExtension] =
-    Gen.listOf(nonEmptyStringGen).map(layerIds => LayerItemExtension(layerIds map { NonEmptyString.unsafeFrom }))
+    Gen
+      .nonEmptyListOf(nonEmptyStringGen)
+      .map(layerIds => LayerItemExtension(NonEmptyList.fromListUnsafe(layerIds map { NonEmptyString.unsafeFrom })))
 
   private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
