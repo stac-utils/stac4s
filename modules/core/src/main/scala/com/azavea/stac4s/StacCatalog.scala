@@ -19,9 +19,9 @@ final case class StacCatalog(
 
 object StacCatalog {
 
-  private val generic = LabelledGeneric[StacCatalog] 
-  private val keys = Keys[generic.Repr].apply
-  val catalogFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
+  private val generic = LabelledGeneric[StacCatalog]
+  private val keys    = Keys[generic.Repr].apply
+  val catalogFields   = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqStacCatalog: Eq[StacCatalog] = Eq.fromUniversalEquals
 

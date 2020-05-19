@@ -21,6 +21,8 @@ object CollectionExtension {
         decoder.decodeAccumulating(collection.extensionFields.asJson.hcursor)
 
       def addExtensionFields(collection: StacCollection, extensionFields: T): StacCollection =
-        collection.copy(extensionFields = collection.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields)))
+        collection.copy(extensionFields =
+          collection.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields))
+        )
     }
 }

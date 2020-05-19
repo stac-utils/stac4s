@@ -19,8 +19,8 @@ final case class ItemCollection(
 
 object ItemCollection {
 
-  private val generic = LabelledGeneric[ItemCollection] 
-  private val keys = Keys[generic.Repr].apply
+  private val generic      = LabelledGeneric[ItemCollection]
+  private val keys         = Keys[generic.Repr].apply
   val itemCollectionFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqItemCollection: Eq[ItemCollection] = Eq.fromUniversalEquals

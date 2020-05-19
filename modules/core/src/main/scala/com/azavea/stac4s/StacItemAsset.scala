@@ -18,9 +18,9 @@ final case class StacItemAsset(
 
 object StacItemAsset {
 
-  private val generic = LabelledGeneric[StacItemAsset] 
-  private val keys = Keys[generic.Repr].apply
-  val assetFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
+  private val generic = LabelledGeneric[StacItemAsset]
+  private val keys    = Keys[generic.Repr].apply
+  val assetFields     = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqStacItemAsset: Eq[StacItemAsset] = Eq.fromUniversalEquals
 

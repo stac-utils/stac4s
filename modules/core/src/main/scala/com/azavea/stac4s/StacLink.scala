@@ -16,9 +16,9 @@ final case class StacLink(
 
 object StacLink {
 
-  private val generic = LabelledGeneric[StacLink] 
-  private val keys = Keys[generic.Repr].apply
-  val linkFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
+  private val generic = LabelledGeneric[StacLink]
+  private val keys    = Keys[generic.Repr].apply
+  val linkFields      = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val encStacLink: Encoder[StacLink] = new Encoder[StacLink] {
 
