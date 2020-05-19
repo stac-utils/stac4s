@@ -46,4 +46,6 @@ package object stac4s {
     case "extensionFields" => None
     case s                 => Some(s)
   }
+
+  def productFieldNames[T: ProductFieldNames]: Set[String] = ProductFieldNames[T].get
 }
