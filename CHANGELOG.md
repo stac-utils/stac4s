@@ -12,6 +12,8 @@
 
 ### Fixed
 
+- Stopped generating `NaN`s as valid `Double` values [#91](https://github.com/azavea/stac4s/pull/91)
+
 ### Security
 
 ## [0.0.4]
