@@ -127,7 +127,7 @@ object Generators {
   )
 
   private def finiteDoubleGen: Gen[Double] =
-    arbitrary[Double].filter((n: Double) => !n.isNaN)
+    arbitrary[Double].filter(java.lang.Double.isFinite)
 
   private def twoDimBboxGen: Gen[TwoDimBbox] =
     (finiteDoubleGen, finiteDoubleGen, finiteDoubleGen, finiteDoubleGen)
