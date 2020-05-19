@@ -7,28 +7,23 @@
   "links" : [
     {
       "href" : "./catalog.json",
-      "rel" : "self",
-      "label:assets" : []
+      "rel" : "self"
     },
     {
       "href" : "./catalog.json",
-      "rel" : "root",
-      "label:assets" : []
+      "rel" : "root"
     },
     {
       "href" : "./landsat-8-l1/catalog.json",
-      "rel" : "child",
-      "label:assets" : []
+      "rel" : "child"
     },
     {
       "href" : "./layers/ca/catalog.json",
-      "rel" : "child",
-      "label:assets" : []
+      "rel" : "child"
     },
     {
       "href" : "./layers/us/catalog.json",
-      "rel" : "child",
-      "label:assets" : []
+      "rel" : "child"
     }
   ]
 }

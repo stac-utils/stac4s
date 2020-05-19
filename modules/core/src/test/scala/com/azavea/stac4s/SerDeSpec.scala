@@ -1,9 +1,11 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.asset._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.meta._
 import Generators._
 import geotrellis.vector.Geometry
+import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
 import org.scalatest.funsuite.AnyFunSuite
@@ -12,7 +14,7 @@ import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import java.time.Instant
 
-import com.azavea.stac4s.extensions.layer.LayerProperties
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
@@ -43,7 +45,7 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LabelClassClasses", CodecTests[LabelClassClasses].unserializableCodec)
   checkAll("Codec.LabelClassName", CodecTests[LabelClassName].unserializableCodec)
   checkAll("Codec.LabelCount", CodecTests[LabelCount].unserializableCodec)
-  checkAll("Codec.LabelExtensionProperties", CodecTests[LabelExtensionProperties].unserializableCodec)
+  checkAll("Codec.LabelExtensionProperties", CodecTests[LabelItemExtension].unserializableCodec)
   checkAll("Codec.LabelMethod", CodecTests[LabelMethod].unserializableCodec)
   checkAll("Codec.LabelOverview", CodecTests[LabelOverview].unserializableCodec)
   checkAll("Codec.LabelProperties", CodecTests[LabelProperties].unserializableCodec)
@@ -52,12 +54,12 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LabelType", CodecTests[LabelType].unserializableCodec)
 
   // Layer extension
-  checkAll("Codec.LayerProperties", CodecTests[LayerProperties].unserializableCodec)
+  checkAll("Codec.LayerProperties", CodecTests[LayerItemExtension].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {
     val link =
       decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
-    link map { _.labelExtAssets } shouldBe Right(List.empty[String])
+    link map { _.extensionFields } shouldBe Right(().asJsonObject)
   }
 }

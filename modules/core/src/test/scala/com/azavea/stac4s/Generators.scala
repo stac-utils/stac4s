@@ -1,10 +1,12 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.asset._
 import cats.data.NonEmptyList
 import cats.implicits._
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
+import io.circe.syntax._
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
@@ -13,7 +15,8 @@ import java.time.Instant
 import com.github.tbouron.SpdxLicense
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
 import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
-import com.azavea.stac4s.extensions.layer.LayerProperties
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
+import eu.timepit.refined.types.string.NonEmptyString
 
 object Generators {
 
@@ -35,6 +38,35 @@ object Generators {
     }).widen
 
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
+
+  private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
+    Gen
+      .mapOf(
+        (nonEmptyStringGen, stacCollectionAssetGen).tupled
+      )
+      .map(AssetCollectionExtension.apply)
+
+  private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    assetCollectionExtensionGen.map(_.asJsonObject)
+  )
+
+  private def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    labelExtensionPropertiesGen map { _.asJsonObject },
+    layerPropertiesGen map { _.asJsonObject }
+  )
+
+  private def labelLinkExtensionGen: Gen[LabelLinkExtension] =
+    Gen
+      .nonEmptyListOf(nonEmptyStringGen)
+      .map(NonEmptyList.fromListUnsafe)
+      .map(LabelLinkExtension.apply)
+
+  private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    labelLinkExtensionGen.map(_.asJsonObject)
+  )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     `image/tiff`,
@@ -124,7 +156,7 @@ object Generators {
       Gen.const(StacLinkType.Self), // self link type is required by TMS reification
       Gen.option(mediaTypeGen),
       Gen.option(nonEmptyStringGen),
-      Gen.nonEmptyListOf[String](arbitrary[String])
+      linkExtensionFields
     ).mapN(StacLink.apply)
 
   private def temporalExtentGen: Gen[TemporalExtent] = {
@@ -154,8 +186,9 @@ object Generators {
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       Gen.option(nonEmptyStringGen),
-      Gen.containerOf[Set, StacAssetRole](assetRoleGen) map { _.toList },
-      Gen.option(mediaTypeGen)
+      Gen.containerOf[Set, StacAssetRole](assetRoleGen),
+      Gen.option(mediaTypeGen),
+      Gen.const(().asJsonObject)
     ) mapN {
       StacItemAsset.apply
     }
@@ -186,7 +219,7 @@ object Generators {
       Gen.nonEmptyListOf(stacLinkGen),
       Gen.nonEmptyMap((nonEmptyStringGen, cogAssetGen).tupled),
       Gen.option(nonEmptyStringGen),
-      Gen.const(JsonObject.fromMap(Map.empty))
+      itemExtensionFieldsGen
     ).mapN(StacItem.apply)
 
   private def stacCatalogGen: Gen[StacCatalog] =
@@ -196,7 +229,8 @@ object Generators {
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
-      Gen.listOf(stacLinkGen)
+      Gen.listOf(stacLinkGen),
+      Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
   private def stacCollectionGen: Gen[StacCollection] =
@@ -210,8 +244,10 @@ object Generators {
       stacLicenseGen,
       Gen.listOf(stacProviderGen),
       stacExtentGen,
+      Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
-      Gen.listOf(stacLinkGen)
+      Gen.listOf(stacLinkGen),
+      collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
   private def itemCollectionGen: Gen[ItemCollection] =
@@ -220,7 +256,8 @@ object Generators {
       Gen.const(StacVersion.unsafeFrom("0.9.0")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
-      Gen.listOf[StacLink](stacLinkGen)
+      Gen.listOf[StacLink](stacLinkGen),
+      Gen.const(().asJsonObject)
     ).mapN(ItemCollection.apply)
 
   private def labelClassNameGen: Gen[LabelClassName] =
@@ -304,10 +341,12 @@ object Generators {
   private def labelPropertiesGen: Gen[LabelProperties] =
     Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
-  private def layerPropertiesGen: Gen[LayerProperties] =
-    Gen.listOf(nonEmptyStringGen).map(LayerProperties.apply)
+  private def layerPropertiesGen: Gen[LayerItemExtension] =
+    Gen
+      .nonEmptyListOf(nonEmptyStringGen)
+      .map(layerIds => LayerItemExtension(NonEmptyList.fromListUnsafe(layerIds map { NonEmptyString.unsafeFrom })))
 
-  private def labelExtensionPropertiesGen: Gen[LabelExtensionProperties] =
+  private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
       labelPropertiesGen,
       Gen.listOf(labelClassGen),
@@ -316,7 +355,7 @@ object Generators {
       Gen.listOf(labelTaskGen),
       Gen.listOf(labelMethodGen),
       Gen.listOf(labelOverviewGen)
-    ).mapN(LabelExtensionProperties.apply)
+    ).mapN(LabelItemExtension.apply)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
@@ -374,6 +413,10 @@ object Generators {
     assetRoleGen
   }
 
+  implicit val arbStacLink: Arbitrary[StacLink] = Arbitrary {
+    stacLinkGen
+  }
+
   implicit val arbLabelClassName: Arbitrary[LabelClassName] = Arbitrary { labelClassNameGen }
 
   implicit val arbLabelClassClasses: Arbitrary[LabelClassClasses] = Arbitrary { labelClassClassesGen }
@@ -394,9 +437,17 @@ object Generators {
 
   implicit val arbLabelProperties: Arbitrary[LabelProperties] = Arbitrary { labelPropertiesGen }
 
-  implicit val arbLabelExtensionProperties: Arbitrary[LabelExtensionProperties] = Arbitrary {
+  implicit val arbLabelExtensionProperties: Arbitrary[LabelItemExtension] = Arbitrary {
     labelExtensionPropertiesGen
   }
 
-  implicit val arbLayerProperties: Arbitrary[LayerProperties] = Arbitrary { layerPropertiesGen }
+  implicit val arbLabelLinkExtension: Arbitrary[LabelLinkExtension] = Arbitrary {
+    labelLinkExtensionGen
+  }
+
+  implicit val arbLayerProperties: Arbitrary[LayerItemExtension] = Arbitrary { layerPropertiesGen }
+
+  implicit val arbAssetExtensionProperties: Arbitrary[AssetCollectionExtension] = Arbitrary {
+    assetCollectionExtensionGen
+  }
 }

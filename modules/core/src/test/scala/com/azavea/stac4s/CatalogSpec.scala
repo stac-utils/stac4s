@@ -26,25 +26,19 @@ class CatalogSpec extends AnyFunSpec with Matchers {
               href = "./catalog.json",
               rel = StacLinkType.Self,
               _type = None,
-              title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              title = None
             ),
             StacLink(
               href = "./catalog.json",
               rel = StacLinkType.StacRoot,
               _type = None,
-              title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              title = None
             ),
             StacLink(
               href = "./landsat-8-l1/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
-              title = None,
-              // should it be an optional thing?
-              labelExtAssets = Nil
+              title = None
             )
           )
         )
@@ -77,6 +71,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             List(TemporalExtent(Instant.parse("2013-06-01T00:56:49.001Z"), Instant.parse("2020-01-01T00:56:49.001Z")))
           )
         ),
+        summaries = ().asJsonObject,
         // properties can be anything
         // it is a part where extensions can be
         // at least EO, Label and potentially the layer extension
@@ -174,29 +169,25 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "../../catalog.json",
             rel = StacLinkType.StacRoot,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           StacLink(
             href = "../../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           StacLink(
             href = "./catalog.json",
             rel = StacLinkType.Self,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           StacLink(
             href = "./2014-153/LC81530252014153LGN00.json",
             rel = StacLinkType.Item,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           )
         )
       )
@@ -267,30 +258,26 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "../../catalog.json",
             rel = StacLinkType.StacRoot,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           StacLink(
             href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           StacLink(
             href = "./LC81530252014153LGN00.json",
             rel = StacLinkType.Self,
             _type = None,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           ),
           //  { "rel":"alternate", "href": "https://landsatonaws.com/L8/153/025/LC81530252014153LGN00", "type": "text/html"},
           StacLink(
             href = "https://landsatonaws.com/L8/153/025/LC81530252014153LGN0",
             rel = StacLinkType.Alternate,
             _type = `text/html`.some,
-            title = None,
-            labelExtAssets = Nil
+            title = None
           )
         ),
         assets = Map(
@@ -299,21 +286,21 @@ class CatalogSpec extends AnyFunSpec with Matchers {
               "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_thumb_large.jpg",
             title = "Thumbnail".some,
             description = "A medium sized thumbnail".some,
-            roles = List(StacAssetRole.Thumbnail),
+            roles = Set(StacAssetRole.Thumbnail),
             _type = `image/jpeg`.some
           ),
           "metadata" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
             title = "Original Metadata".some,
             description = "The original MTL metadata file provided for each Landsat scene".some,
-            roles = List(StacAssetRole.Metadata),
+            roles = Set(StacAssetRole.Metadata),
             _type = VendorMediaType("mtl").some
           ),
           "B1" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
             title = "Coastal Band (B1)".some,
             description = "Coastal Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [0],
           ),
@@ -321,7 +308,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B2.TIF",
             title = "Blue Band (B2)".some,
             description = "Blue Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [1],
           ),
@@ -329,7 +316,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B3.TIF",
             title = "Green Band (B3)".some,
             description = "Green Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [2],
           ),
@@ -337,7 +324,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",
             title = "Red Band (B4)".some,
             description = "Red Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [3],
           ),
@@ -345,7 +332,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B5.TIF",
             title = "NIR Band (B5)".some,
             description = "NIR Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [4],
           ),
@@ -353,7 +340,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B6.TIF",
             title = "SWIR (B6)".some,
             description = "SWIR Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [5],
           ),
@@ -361,7 +348,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B7.TIF",
             title = "SWIR Band (B7)".some,
             description = "SWIR Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [6],
           ),
@@ -369,7 +356,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B8.TIF",
             title = "Panchromatic Band (B8)".some,
             description = "Panchromatic Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [7],
           ),
@@ -377,7 +364,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B9.TIF",
             title = "Cirrus Band (B9)".some,
             description = "Cirrus Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [8],
           ),
@@ -385,7 +372,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B10.TIF",
             title = "LWIR Band (B10)".some,
             description = "LWIR Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [9],
           ),
@@ -393,7 +380,7 @@ class CatalogSpec extends AnyFunSpec with Matchers {
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B11.TIF",
             title = "LWIR Band (B11)".some,
             description = "LWIR Band Top Of the Atmosphere".some,
-            roles = Nil,
+            roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [10],
           )
