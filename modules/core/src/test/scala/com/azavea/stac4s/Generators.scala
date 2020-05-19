@@ -49,6 +49,12 @@ object Generators {
       .map(_.asJsonObject)
   )
 
+  private def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    labelExtensionPropertiesGen map { _.asJsonObject },
+    layerPropertiesGen map { _.asJsonObject }
+  )
+
   private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     Gen
@@ -209,7 +215,7 @@ object Generators {
       Gen.nonEmptyListOf(stacLinkGen),
       Gen.nonEmptyMap((nonEmptyStringGen, cogAssetGen).tupled),
       Gen.option(nonEmptyStringGen),
-      Gen.const(JsonObject.fromMap(Map.empty))
+      itemExtensionFieldsGen
     ).mapN(StacItem.apply)
 
   private def stacCatalogGen: Gen[StacCatalog] =
