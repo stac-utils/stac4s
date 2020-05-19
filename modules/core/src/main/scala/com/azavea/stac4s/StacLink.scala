@@ -3,6 +3,8 @@ package com.azavea.stac4s
 import cats.implicits._
 import io.circe._
 import io.circe.syntax._
+import shapeless.LabelledGeneric
+import shapeless.ops.record.Keys
 
 final case class StacLink(
     href: String,
@@ -14,7 +16,9 @@ final case class StacLink(
 
 object StacLink {
 
-  val linkFields = Set("href", "rel", "type", "title")
+  private val generic = LabelledGeneric[StacLink] 
+  private val keys = Keys[generic.Repr].apply
+  val linkFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val encStacLink: Encoder[StacLink] = new Encoder[StacLink] {
 

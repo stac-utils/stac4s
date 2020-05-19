@@ -5,6 +5,8 @@ import cats.implicits._
 import geotrellis.vector.{io => _}
 import io.circe._
 import io.circe.syntax._
+import shapeless.LabelledGeneric
+import shapeless.ops.record.Keys
 
 final case class StacCollection(
     stacVersion: String,
@@ -24,20 +26,9 @@ final case class StacCollection(
 
 object StacCollection {
 
-  val collectionFields = Set(
-    "stac_version",
-    "stac_extensions",
-    "id",
-    "title",
-    "description",
-    "keywords",
-    "license",
-    "providers",
-    "extent",
-    "summaries",
-    "properties",
-    "links"
-  )
+  private val generic = LabelledGeneric[StacCollection] 
+  private val keys = Keys[generic.Repr].apply
+  val collectionFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 

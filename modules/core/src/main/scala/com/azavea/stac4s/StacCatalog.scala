@@ -4,6 +4,8 @@ import cats.Eq
 import cats.implicits._
 import io.circe._
 import io.circe.syntax._
+import shapeless.LabelledGeneric
+import shapeless.ops.record.Keys
 
 final case class StacCatalog(
     stacVersion: String,
@@ -17,14 +19,9 @@ final case class StacCatalog(
 
 object StacCatalog {
 
-  val catalogFields = Set(
-    "stac_version",
-    "stac_extensions",
-    "id",
-    "title",
-    "description",
-    "links"
-  )
+  private val generic = LabelledGeneric[StacCatalog] 
+  private val keys = Keys[generic.Repr].apply
+  val catalogFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqStacCatalog: Eq[StacCatalog] = Eq.fromUniversalEquals
 

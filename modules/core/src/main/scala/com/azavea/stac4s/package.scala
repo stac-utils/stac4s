@@ -39,4 +39,11 @@ package object stac4s {
 
   implicit val eqTemporalExtent: Eq[TemporalExtent] = Eq.fromUniversalEquals
 
+  def substituteFieldName(fieldName: String): Option[String] = fieldName match {
+    case "_type"           => Some("type")
+    case "stacVersion"     => Some("stac_version")
+    case "stacExtensions"  => Some("stac_extensions")
+    case "extensionFields" => None
+    case s                 => Some(s)
+  }
 }

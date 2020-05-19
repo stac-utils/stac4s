@@ -4,6 +4,8 @@ import cats.Eq
 import cats.implicits._
 import io.circe._
 import io.circe.syntax._
+import shapeless.LabelledGeneric
+import shapeless.ops.record.Keys
 
 final case class StacItemAsset(
     href: String,
@@ -16,13 +18,9 @@ final case class StacItemAsset(
 
 object StacItemAsset {
 
-  val assetFields = Set(
-    "href",
-    "title",
-    "description",
-    "roles",
-    "type"
-  )
+  private val generic = LabelledGeneric[StacItemAsset] 
+  private val keys = Keys[generic.Repr].apply
+  val assetFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
 
   implicit val eqStacItemAsset: Eq[StacItemAsset] = Eq.fromUniversalEquals
 
