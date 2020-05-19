@@ -12,7 +12,7 @@ final case class StacCatalog(
     title: Option[String],
     description: String,
     links: List[StacLink],
-    extensionFields: JsonObject
+    extensionFields: JsonObject = ().asJsonObject
 )
 
 object StacCatalog {

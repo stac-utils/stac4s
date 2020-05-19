@@ -11,7 +11,7 @@ final case class StacItemAsset(
     description: Option[String],
     roles: Set[StacAssetRole],
     _type: Option[StacMediaType],
-    extensionFields: JsonObject
+    extensionFields: JsonObject = ().asJsonObject
 )
 
 object StacItemAsset {

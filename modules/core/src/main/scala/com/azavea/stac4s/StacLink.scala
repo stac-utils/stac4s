@@ -9,7 +9,7 @@ final case class StacLink(
     rel: StacLinkType,
     _type: Option[StacMediaType],
     title: Option[String],
-    extensionFields: JsonObject
+    extensionFields: JsonObject = ().asJsonObject
 )
 
 object StacLink {

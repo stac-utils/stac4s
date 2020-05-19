@@ -12,7 +12,7 @@ final case class ItemCollection(
     stacExtensions: List[String],
     features: List[StacItem],
     links: List[StacLink],
-    extensionFields: JsonObject
+    extensionFields: JsonObject = ().asJsonObject
 )
 
 object ItemCollection {

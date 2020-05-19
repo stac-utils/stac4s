@@ -19,7 +19,7 @@ final case class StacCollection(
     summaries: JsonObject,
     properties: JsonObject,
     links: List[StacLink],
-    extensionFields: JsonObject
+    extensionFields: JsonObject = ().asJsonObject
 )
 
 object StacCollection {

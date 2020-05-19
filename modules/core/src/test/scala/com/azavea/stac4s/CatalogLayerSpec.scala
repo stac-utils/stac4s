@@ -27,39 +27,33 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
               href = "./catalog.json",
               rel = StacLinkType.Self,
               _type = None,
-              title = None,
-              extensionFields = ().asJsonObject
+              title = None
             ),
             StacLink(
               href = "./catalog.json",
               rel = StacLinkType.StacRoot,
               _type = None,
-              title = None,
-              extensionFields = ().asJsonObject
+              title = None
             ),
             StacLink(
               href = "./landsat-8-l1/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
-              title = None,
-              extensionFields = ().asJsonObject
+              title = None
             ),
             StacLink(
               href = "./layers/ca/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
-              title = None,
-              extensionFields = ().asJsonObject
+              title = None
             ),
             StacLink(
               href = "./layers/us/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
-              title = None,
-              extensionFields = ().asJsonObject
+              title = None
             )
-          ),
-          extensionFields = ().asJsonObject
+          )
         )
 
       root.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/catalog.json")
@@ -78,32 +72,27 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             href = "../catalog.json",
             rel = StacLinkType.StacRoot,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           StacLink(
             href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           StacLink(
             href = "./catalog.json",
             rel = StacLinkType.Self,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           StacLink(
             href = "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
             rel = StacLinkType.Item,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           )
-        ),
-        extensionFields = ().asJsonObject
+        )
       )
 
       val layerCA = layerUS.copy(
@@ -185,30 +174,26 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             href = "../../catalog.json",
             rel = StacLinkType.StacRoot,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           StacLink(
             href = "../catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           StacLink(
             href = "./LC81530252014153LGN00.json",
             rel = StacLinkType.Self,
             _type = None,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           ),
           //  { "rel":"alternate", "href": "https://landsatonaws.com/L8/153/025/LC81530252014153LGN00", "type": "text/html"},
           StacLink(
             href = "https://landsatonaws.com/L8/153/025/LC81530252014153LGN0",
             rel = StacLinkType.Alternate,
             _type = `text/html`.some,
-            title = None,
-            extensionFields = ().asJsonObject
+            title = None
           )
         ),
         assets = Map(
@@ -218,24 +203,21 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Thumbnail".some,
             description = "A medium sized thumbnail".some,
             roles = Set(StacAssetRole.Thumbnail),
-            _type = `image/jpeg`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/jpeg`.some
           ),
           "metadata" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
             title = "Original Metadata".some,
             description = "The original MTL metadata file provided for each Landsat scene".some,
             roles = Set(StacAssetRole.Metadata),
-            _type = VendorMediaType("mtl").some,
-            extensionFields = ().asJsonObject
+            _type = VendorMediaType("mtl").some
           ),
           "B1" -> StacItemAsset(
             href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
             title = "Coastal Band (B1)".some,
             description = "Coastal Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [0],
           ),
           "B2" -> StacItemAsset(
@@ -243,8 +225,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Blue Band (B2)".some,
             description = "Blue Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [1],
           ),
           "B3" -> StacItemAsset(
@@ -252,8 +233,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Green Band (B3)".some,
             description = "Green Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [2],
           ),
           "B4" -> StacItemAsset(
@@ -261,8 +241,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Red Band (B4)".some,
             description = "Red Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [3],
           ),
           "B5" -> StacItemAsset(
@@ -270,8 +249,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "NIR Band (B5)".some,
             description = "NIR Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [4],
           ),
           "B6" -> StacItemAsset(
@@ -279,8 +257,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "SWIR (B6)".some,
             description = "SWIR Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [5],
           ),
           "B7" -> StacItemAsset(
@@ -288,8 +265,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "SWIR Band (B7)".some,
             description = "SWIR Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [6],
           ),
           "B8" -> StacItemAsset(
@@ -297,8 +273,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Panchromatic Band (B8)".some,
             description = "Panchromatic Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [7],
           ),
           "B9" -> StacItemAsset(
@@ -306,8 +281,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "Cirrus Band (B9)".some,
             description = "Cirrus Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [8],
           ),
           "B10" -> StacItemAsset(
@@ -315,8 +289,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "LWIR Band (B10)".some,
             description = "LWIR Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [9],
           ),
           "B11" -> StacItemAsset(
@@ -324,8 +297,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
             title = "LWIR Band (B11)".some,
             description = "LWIR Band Top Of the Atmosphere".some,
             roles = Set.empty,
-            _type = `image/tiff`.some,
-            extensionFields = ().asJsonObject
+            _type = `image/tiff`.some
             // "eo:bands": [10],
           )
         ),
