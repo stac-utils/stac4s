@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.ItemExtension
 import com.azavea.stac4s.extensions.layer._
 import cats.data.NonEmptyList
 import cats.implicits._
@@ -304,6 +305,9 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
         collection = collection.id.some
       )
 
+      ItemExtension[LayerItemExtension].getExtensionFields(item) shouldBe LayerItemExtension(
+        NonEmptyList.fromListUnsafe(List("layer-us", "layer-ca") map { NonEmptyString.unsafeFrom })
+      ).valid
       item.asJson.deepDropNullValues shouldBe getJson(
         "/catalogs/landsat-stac-layers/landsat-8-l1/2014-153/LC81530252014153LGN00.json"
       )
