@@ -7,7 +7,7 @@ import io.circe.syntax._
 
 // typeclass trait for anything that is an extension of item properties
 trait ItemExtension[T] {
-  def getProperties(item: StacItem): ExtensionResult[T]
+  def getExtensionFields(item: StacItem): ExtensionResult[T]
   def extend(item: StacItem, properties: T): StacItem
 }
 
@@ -19,7 +19,7 @@ object ItemExtension {
   def instance[T](implicit decoder: Decoder[T], objectEncoder: Encoder.AsObject[T]): ItemExtension[T] =
     new ItemExtension[T] {
 
-      def getProperties(item: StacItem): ExtensionResult[T] =
+      def getExtensionFields(item: StacItem): ExtensionResult[T] =
         decoder.decodeAccumulating(
           item.properties.asJson.hcursor
         )

@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 
 trait ItemCollectionExtension[T] {
-  def getProperties(itemCollection: ItemCollection): ExtensionResult[T]
+  def getExtensionFields(itemCollection: ItemCollection): ExtensionResult[T]
   def extend(itemCollection: ItemCollection, properties: T): ItemCollection
 }
 
@@ -16,12 +16,12 @@ object ItemExtensionCollection {
   def instance[T](implicit decoder: Decoder[T], objectEncoder: Encoder.AsObject[T]): ItemCollectionExtension[T] =
     new ItemCollectionExtension[T] {
 
-      def getProperties(itemCollection: ItemCollection): ExtensionResult[T] =
+      def getExtensionFields(itemCollection: ItemCollection): ExtensionResult[T] =
         decoder.decodeAccumulating(
           itemCollection.extensionFields.asJson.hcursor
         )
 
-      def extend(itemCollection: ItemCollection, extensionProperties: T) =
+      def extend(itemCollection: ItemCollection, extensionProperties: T): ItemCollection =
         itemCollection.copy(extensionFields =
           itemCollection.extensionFields.deepMerge(objectEncoder.encodeObject(extensionProperties))
         )

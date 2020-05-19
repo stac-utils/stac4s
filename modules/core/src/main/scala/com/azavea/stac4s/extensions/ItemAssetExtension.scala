@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 
 trait ItemAssetExtension[T] {
-  def getProperties(asset: StacItemAsset): ExtensionResult[T]
+  def getExtensionFields(asset: StacItemAsset): ExtensionResult[T]
   def extend(asset: StacItemAsset, extensionFields: T): StacItemAsset
 }
 
@@ -16,7 +16,7 @@ object ItemAssetExtension {
   def instance[T](implicit decoder: Decoder[T], objectEncoder: Encoder.AsObject[T]) =
     new ItemAssetExtension[T] {
 
-      def getProperties(asset: StacItemAsset): ExtensionResult[T] =
+      def getExtensionFields(asset: StacItemAsset): ExtensionResult[T] =
         decoder.decodeAccumulating(asset.extensionFields.asJson.hcursor)
 
       def extend(asset: StacItemAsset, extensionFields: T): StacItemAsset =

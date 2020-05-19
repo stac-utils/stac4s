@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 
 trait LinkExtension[T] {
-  def getProperties(link: StacLink): ExtensionResult[T]
+  def getExtensionFields(link: StacLink): ExtensionResult[T]
 
   def extend(link: StacLink, extensionFields: T): StacLink
 }
@@ -17,7 +17,7 @@ object LinkExtension {
   def instance[T](implicit decoder: Decoder[T], objectEncoder: Encoder.AsObject[T]) =
     new LinkExtension[T] {
 
-      def getProperties(link: StacLink): ExtensionResult[T] =
+      def getExtensionFields(link: StacLink): ExtensionResult[T] =
         decoder.decodeAccumulating(link.extensionFields.asJson.hcursor)
 
       def extend(link: StacLink, extensionFields: T): StacLink =
