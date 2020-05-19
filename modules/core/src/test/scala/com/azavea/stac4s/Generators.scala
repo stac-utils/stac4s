@@ -126,8 +126,11 @@ object Generators {
     Host
   )
 
+  private def finiteDoubleGen: Gen[Double] =
+    arbitrary[Double].filter((n: Double) => !n.isNaN)
+
   private def twoDimBboxGen: Gen[TwoDimBbox] =
-    (arbitrary[Double], arbitrary[Double], arbitrary[Double], arbitrary[Double])
+    (finiteDoubleGen, finiteDoubleGen, finiteDoubleGen, finiteDoubleGen)
       .mapN(TwoDimBbox.apply)
 
   private def spdxGen: Gen[SPDX] =
@@ -139,12 +142,12 @@ object Generators {
 
   private def threeDimBboxGen: Gen[ThreeDimBbox] =
     (
-      arbitrary[Double],
-      arbitrary[Double],
-      arbitrary[Double],
-      arbitrary[Double],
-      arbitrary[Double],
-      arbitrary[Double]
+      finiteDoubleGen,
+      finiteDoubleGen,
+      finiteDoubleGen,
+      finiteDoubleGen,
+      finiteDoubleGen,
+      finiteDoubleGen
     ).mapN(ThreeDimBbox.apply)
 
   private def bboxGen: Gen[Bbox] =
@@ -293,7 +296,7 @@ object Generators {
   private def labelStatsGen: Gen[LabelStats] =
     (
       nonEmptyStringGen,
-      arbitrary[Double]
+      finiteDoubleGen
     ).mapN(LabelStats.apply)
 
   private def labelOverviewWithCounts: Gen[LabelOverview] =
