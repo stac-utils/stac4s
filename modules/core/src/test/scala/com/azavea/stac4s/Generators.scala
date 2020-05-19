@@ -39,14 +39,16 @@ object Generators {
 
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
-  private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
-    Gen.const(().asJsonObject),
+  private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     Gen
       .mapOf(
         (nonEmptyStringGen, stacCollectionAssetGen).tupled
       )
       .map(AssetCollectionExtension.apply)
-      .map(_.asJsonObject)
+
+  private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    assetCollectionExtensionGen.map(_.asJsonObject)
   )
 
   private def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
@@ -55,13 +57,15 @@ object Generators {
     layerPropertiesGen map { _.asJsonObject }
   )
 
-  private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
-    Gen.const(().asJsonObject),
+  private def labelLinkExtensionGen: Gen[LabelLinkExtension] =
     Gen
       .nonEmptyListOf(nonEmptyStringGen)
       .map(NonEmptyList.fromListUnsafe)
       .map(LabelLinkExtension.apply)
-      .map(_.asJsonObject)
+
+  private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    labelLinkExtensionGen.map(_.asJsonObject)
   )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
@@ -409,6 +413,10 @@ object Generators {
     assetRoleGen
   }
 
+  implicit val arbStacLink: Arbitrary[StacLink] = Arbitrary {
+    stacLinkGen
+  }
+
   implicit val arbLabelClassName: Arbitrary[LabelClassName] = Arbitrary { labelClassNameGen }
 
   implicit val arbLabelClassClasses: Arbitrary[LabelClassClasses] = Arbitrary { labelClassClassesGen }
@@ -433,5 +441,13 @@ object Generators {
     labelExtensionPropertiesGen
   }
 
+  implicit val arbLabelLinkExtension: Arbitrary[LabelLinkExtension] = Arbitrary {
+    labelLinkExtensionGen
+  }
+
   implicit val arbLayerProperties: Arbitrary[LayerItemExtension] = Arbitrary { layerPropertiesGen }
+
+  implicit val arbAssetExtensionProperties: Arbitrary[AssetCollectionExtension] = Arbitrary {
+    assetCollectionExtensionGen
+  }
 }
