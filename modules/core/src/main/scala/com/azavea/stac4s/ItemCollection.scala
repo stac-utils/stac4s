@@ -5,8 +5,6 @@ import cats.implicits._
 import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
-import shapeless.LabelledGeneric
-import shapeless.ops.record.Keys
 
 final case class ItemCollection(
     _type: String = "FeatureCollection",
@@ -19,9 +17,7 @@ final case class ItemCollection(
 
 object ItemCollection {
 
-  private val generic      = LabelledGeneric[ItemCollection]
-  private val keys         = Keys[generic.Repr].apply
-  val itemCollectionFields = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
+  val itemCollectionFields = productFieldNames[ItemCollection]
 
   implicit val eqItemCollection: Eq[ItemCollection] = Eq.fromUniversalEquals
 

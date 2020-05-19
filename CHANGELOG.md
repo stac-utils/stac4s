@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Reduce boilerplate in fieldnames derivation [#90](https://github.com/azavea/stac4s/issues/90)
+
 ### Deprecated
 
 ### Removed

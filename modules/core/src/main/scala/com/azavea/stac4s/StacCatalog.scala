@@ -4,8 +4,6 @@ import cats.Eq
 import cats.implicits._
 import io.circe._
 import io.circe.syntax._
-import shapeless.LabelledGeneric
-import shapeless.ops.record.Keys
 
 final case class StacCatalog(
     stacVersion: String,
@@ -19,29 +17,24 @@ final case class StacCatalog(
 
 object StacCatalog {
 
-  private val generic = LabelledGeneric[StacCatalog]
-  private val keys    = Keys[generic.Repr].apply
-  val catalogFields   = keys.toList.flatMap(field => substituteFieldName(field.name)).toSet
+  val catalogFields = productFieldNames[StacCatalog]
 
   implicit val eqStacCatalog: Eq[StacCatalog] = Eq.fromUniversalEquals
 
-  implicit val encCatalog: Encoder[StacCatalog] = new Encoder[StacCatalog] {
-
-    def apply(catalog: StacCatalog): Json = {
-      val baseEncoder: Encoder[StacCatalog] =
-        Encoder.forProduct6("stac_version", "stac_extensions", "id", "title", "description", "links")(catalog =>
-          (
-            catalog.stacVersion,
-            catalog.stacExtensions,
-            catalog.id,
-            catalog.title,
-            catalog.description,
-            catalog.links
-          )
+  implicit val encCatalog: Encoder[StacCatalog] = { catalog =>
+    val baseEncoder: Encoder[StacCatalog] =
+      Encoder.forProduct6("stac_version", "stac_extensions", "id", "title", "description", "links")(catalog =>
+        (
+          catalog.stacVersion,
+          catalog.stacExtensions,
+          catalog.id,
+          catalog.title,
+          catalog.description,
+          catalog.links
         )
+      )
 
-      baseEncoder(catalog).deepMerge(catalog.extensionFields.asJson)
-    }
+    baseEncoder(catalog).deepMerge(catalog.extensionFields.asJson)
   }
 
   implicit val decCatalog: Decoder[StacCatalog] = { c: HCursor =>
