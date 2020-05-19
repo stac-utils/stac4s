@@ -8,7 +8,7 @@ import io.circe.syntax._
 trait LinkExtension[T] {
   def getExtensionFields(link: StacLink): ExtensionResult[T]
 
-  def extend(link: StacLink, extensionFields: T): StacLink
+  def addExtensionFields(link: StacLink, extensionFields: T): StacLink
 }
 
 object LinkExtension {
@@ -20,7 +20,7 @@ object LinkExtension {
       def getExtensionFields(link: StacLink): ExtensionResult[T] =
         decoder.decodeAccumulating(link.extensionFields.asJson.hcursor)
 
-      def extend(link: StacLink, extensionFields: T): StacLink =
+      def addExtensionFields(link: StacLink, extensionFields: T): StacLink =
         link.copy(extensionFields =
           link.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields))
         )

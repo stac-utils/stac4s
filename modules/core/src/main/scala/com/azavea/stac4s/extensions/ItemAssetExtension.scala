@@ -7,7 +7,7 @@ import io.circe.syntax._
 
 trait ItemAssetExtension[T] {
   def getExtensionFields(asset: StacItemAsset): ExtensionResult[T]
-  def extend(asset: StacItemAsset, extensionFields: T): StacItemAsset
+  def addExtensionFields(asset: StacItemAsset, extensionFields: T): StacItemAsset
 }
 
 object ItemAssetExtension {
@@ -19,7 +19,7 @@ object ItemAssetExtension {
       def getExtensionFields(asset: StacItemAsset): ExtensionResult[T] =
         decoder.decodeAccumulating(asset.extensionFields.asJson.hcursor)
 
-      def extend(asset: StacItemAsset, extensionFields: T): StacItemAsset =
+      def addExtensionFields(asset: StacItemAsset, extensionFields: T): StacItemAsset =
         asset.copy(extensionFields = asset.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields)))
     }
 }

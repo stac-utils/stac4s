@@ -8,7 +8,7 @@ import io.circe.syntax._
 // typeclass trait for anything that is an extension of item properties
 trait ItemExtension[T] {
   def getExtensionFields(item: StacItem): ExtensionResult[T]
-  def extend(item: StacItem, properties: T): StacItem
+  def addExtensionFields(item: StacItem, properties: T): StacItem
 }
 
 object ItemExtension {
@@ -24,7 +24,7 @@ object ItemExtension {
           item.properties.asJson.hcursor
         )
 
-      def extend(item: StacItem, extensionProperties: T) =
+      def addExtensionFields(item: StacItem, extensionProperties: T) =
         item.copy(properties = item.properties.deepMerge(objectEncoder.encodeObject(extensionProperties)))
     }
 }

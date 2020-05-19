@@ -7,7 +7,7 @@ import io.circe.syntax._
 
 trait CatalogExtension[T] {
   def getExtensionFields(catalog: StacCatalog): ExtensionResult[T]
-  def extend(catalog: StacCatalog, extensionFields: T): StacCatalog
+  def addExtensionFields(catalog: StacCatalog, extensionFields: T): StacCatalog
 }
 
 object CatalogExtension {
@@ -19,7 +19,7 @@ object CatalogExtension {
       def getExtensionFields(catalog: StacCatalog): ExtensionResult[T] =
         decoder.decodeAccumulating(catalog.extensionFields.asJson.hcursor)
 
-      def extend(catalog: StacCatalog, extensionFields: T): StacCatalog =
+      def addExtensionFields(catalog: StacCatalog, extensionFields: T): StacCatalog =
         catalog.copy(extensionFields = catalog.extensionFields.deepMerge(objectEncoder.encodeObject(extensionFields)))
     }
 }
