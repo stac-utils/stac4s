@@ -26,7 +26,7 @@ object Generators extends NumericInstances {
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
 
   private def nonEmptyAlphaRefinedStringGen: Gen[NonEmptyString] =
-    nonEmptyStringGen map NonEmptyString.unsafeFrom 
+    nonEmptyStringGen map NonEmptyString.unsafeFrom
 
   private def nonEmptyListGen[T](g: Gen[T]): Gen[NonEmptyList[T]] =
     Gen.nonEmptyListOf(g) map { NonEmptyList.fromListUnsafe }
@@ -377,19 +377,21 @@ object Generators extends NumericInstances {
       Gen.listOf(labelOverviewGen)
     ).mapN(LabelItemExtension.apply)
 
-  private def bandGen: Gen[Band] = (
-    nonEmptyAlphaRefinedStringGen,
-    nonEmptyAlphaRefinedStringGen,
-    nonEmptyAlphaRefinedStringGen,
-    arbitrary[Int],
-    arbitrary[Int]
-  ).mapN(Band.apply)
+  private def bandGen: Gen[Band] =
+    (
+      nonEmptyAlphaRefinedStringGen,
+      nonEmptyAlphaRefinedStringGen,
+      nonEmptyAlphaRefinedStringGen,
+      arbitrary[Int],
+      arbitrary[Int]
+    ).mapN(Band.apply)
 
-  private def eoItemExtensionGen: Gen[EOItemExtension] = (
-    arbitrary[Int] map { _.toDouble }, // to avoid non-finite doubles
-    nonEmptyListGen(bandGen),
-    Gen.option(arbitrary[Percentage])
-  ).mapN(EOItemExtension.apply)
+  private def eoItemExtensionGen: Gen[EOItemExtension] =
+    (
+      arbitrary[Int] map { _.toDouble }, // to avoid non-finite doubles
+      nonEmptyListGen(bandGen),
+      Gen.option(arbitrary[Percentage])
+    ).mapN(EOItemExtension.apply)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
