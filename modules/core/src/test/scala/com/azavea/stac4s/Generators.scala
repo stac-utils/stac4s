@@ -77,10 +77,10 @@ object Generators extends NumericInstances {
   private def eoAssetExtensionGen: Gen[EOAssetExtension] =
     nonEmptyListGen(arbitrary[BandRange]).map(EOAssetExtension.apply)
 
-  // private def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
-  //   Gen.const(().asJsonObject),
-  //   eoAssetExtensionGen.map(_.asJsonObject)
-  // )
+  private def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    eoAssetExtensionGen.map(_.asJsonObject)
+  )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     `image/tiff`,
@@ -205,7 +205,7 @@ object Generators extends NumericInstances {
       Gen.option(nonEmptyStringGen),
       Gen.containerOf[Set, StacAssetRole](assetRoleGen),
       Gen.option(mediaTypeGen),
-      Gen.const(().asJsonObject)
+      assetExtensionFieldsGen
     ) mapN {
       StacItemAsset.apply
     }
