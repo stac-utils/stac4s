@@ -15,6 +15,7 @@ import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import java.time.Instant
 
 import com.azavea.stac4s.extensions.layer.LayerItemExtension
+import com.azavea.stac4s.extensions.eo.EOItemExtension
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
@@ -55,6 +56,9 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
 
   // Layer extension
   checkAll("Codec.LayerProperties", CodecTests[LayerItemExtension].unserializableCodec)
+
+  // eo extension
+  checkAll("Codec.EO", CodecTests[EOItemExtension].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {
