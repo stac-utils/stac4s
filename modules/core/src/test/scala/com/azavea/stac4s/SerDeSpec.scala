@@ -1,7 +1,9 @@
 package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.asset._
+import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.layer._
 import com.azavea.stac4s.meta._
 import Generators._
 import geotrellis.vector.Geometry
@@ -13,9 +15,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import java.time.Instant
-
-import com.azavea.stac4s.extensions.layer.LayerItemExtension
-import com.azavea.stac4s.extensions.eo.EOItemExtension
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
@@ -58,7 +57,9 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.LayerProperties", CodecTests[LayerItemExtension].unserializableCodec)
 
   // eo extension
-  checkAll("Codec.EO", CodecTests[EOItemExtension].unserializableCodec)
+  checkAll("Codec.EOBand", CodecTests[Band].unserializableCodec)
+  checkAll("Codec.EOItemExtension", CodecTests[EOItemExtension].unserializableCodec)
+  checkAll("Codec.EOAssetExtension", CodecTests[EOAssetExtension].unserializableCodec)
 
   // unit tests
   test("ignore optional fields") {

@@ -486,6 +486,10 @@ object Generators extends NumericInstances {
     eoItemExtensionGen
   }
 
+  implicit val arbBand: Arbitrary[Band] = Arbitrary {
+    bandGen
+  }
+
   implicit val arbEOAssetExtension: Arbitrary[EOAssetExtension] = Arbitrary {
     eoAssetExtensionGen
   }

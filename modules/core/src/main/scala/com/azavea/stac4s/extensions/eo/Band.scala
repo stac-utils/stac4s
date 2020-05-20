@@ -1,5 +1,6 @@
 package com.azavea.stac4s.extensions.eo
 
+import cats.Eq
 import eu.timepit.refined.types.string.NonEmptyString
 import io.circe._
 import io.circe.refined._
@@ -13,6 +14,8 @@ case class Band(
 )
 
 object Band {
+
+  implicit val eqBand: Eq[Band] = Eq.fromUniversalEquals
 
   implicit val encBand: Encoder[Band] = Encoder.forProduct5(
     "name",
