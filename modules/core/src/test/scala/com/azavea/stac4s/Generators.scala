@@ -1,9 +1,16 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.label.LabelClassClasses._
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
+import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
 import cats.implicits._
+import eu.timepit.refined.types.numeric.PosInt
+import eu.timepit.refined.types.string.NonEmptyString
+import eu.timepit.refined.scalacheck.NumericInstances
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
 import io.circe.syntax._
@@ -12,16 +19,16 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 
-import com.github.tbouron.SpdxLicense
-import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
-import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
-import com.azavea.stac4s.extensions.layer.LayerItemExtension
-import eu.timepit.refined.types.string.NonEmptyString
-
-object Generators {
+object Generators extends NumericInstances {
 
   private def nonEmptyStringGen: Gen[String] =
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
+
+  private def nonEmptyAlphaRefinedStringGen: Gen[NonEmptyString] =
+    nonEmptyStringGen map NonEmptyString.unsafeFrom
+
+  private def nonEmptyListGen[T](g: Gen[T]): Gen[NonEmptyList[T]] =
+    Gen.nonEmptyListOf(g) map { NonEmptyList.fromListUnsafe }
 
   private def rectangleGen: Gen[Geometry] =
     (for {
@@ -54,18 +61,24 @@ object Generators {
   private def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     labelExtensionPropertiesGen map { _.asJsonObject },
-    layerPropertiesGen map { _.asJsonObject }
+    layerPropertiesGen map { _.asJsonObject },
+    eoItemExtensionGen map { _.asJsonObject }
   )
 
   private def labelLinkExtensionGen: Gen[LabelLinkExtension] =
-    Gen
-      .nonEmptyListOf(nonEmptyStringGen)
-      .map(NonEmptyList.fromListUnsafe)
-      .map(LabelLinkExtension.apply)
+    nonEmptyListGen(nonEmptyStringGen).map(LabelLinkExtension.apply)
 
   private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     labelLinkExtensionGen.map(_.asJsonObject)
+  )
+
+  private def eoAssetExtensionGen: Gen[EOAssetExtension] =
+    nonEmptyListGen(arbitrary[BandRange]).map(EOAssetExtension.apply)
+
+  private def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+    Gen.const(().asJsonObject),
+    eoAssetExtensionGen.map(_.asJsonObject)
   )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
@@ -191,7 +204,7 @@ object Generators {
       Gen.option(nonEmptyStringGen),
       Gen.containerOf[Set, StacAssetRole](assetRoleGen),
       Gen.option(mediaTypeGen),
-      Gen.const(().asJsonObject)
+      assetExtensionFieldsGen
     ) mapN {
       StacItemAsset.apply
     }
@@ -270,10 +283,10 @@ object Generators {
     }
 
   private def namedLabelClassesGen: Gen[LabelClassClasses] =
-    Gen.nonEmptyListOf(nonEmptyStringGen) map { names => NamedLabelClasses(NonEmptyList.fromListUnsafe(names)) }
+    nonEmptyListGen(nonEmptyStringGen) map { NamedLabelClasses.apply }
 
   private def numberedLabelClassesGen: Gen[LabelClassClasses] =
-    Gen.nonEmptyListOf(arbitrary[Int]) map { indices => NumberedLabelClasses(NonEmptyList.fromListUnsafe(indices)) }
+    nonEmptyListGen(arbitrary[Int]) map { NumberedLabelClasses.apply }
 
   private def labelClassClassesGen: Gen[LabelClassClasses] =
     Gen.oneOf(
@@ -345,9 +358,7 @@ object Generators {
     Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
   private def layerPropertiesGen: Gen[LayerItemExtension] =
-    Gen
-      .nonEmptyListOf(nonEmptyStringGen)
-      .map(layerIds => LayerItemExtension(NonEmptyList.fromListUnsafe(layerIds map { NonEmptyString.unsafeFrom })))
+    nonEmptyListGen(nonEmptyAlphaRefinedStringGen) map { LayerItemExtension.apply }
 
   private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
@@ -359,6 +370,22 @@ object Generators {
       Gen.listOf(labelMethodGen),
       Gen.listOf(labelOverviewGen)
     ).mapN(LabelItemExtension.apply)
+
+  private def bandGen: Gen[Band] =
+    (
+      nonEmptyAlphaRefinedStringGen,
+      Gen.option(nonEmptyAlphaRefinedStringGen),
+      Gen.option(nonEmptyAlphaRefinedStringGen),
+      Gen.option(arbitrary[PosInt]),
+      Gen.option(arbitrary[PosInt])
+    ).mapN(Band.apply)
+
+  private def eoItemExtensionGen: Gen[EOItemExtension] =
+    (
+      arbitrary[Int] map { _.toDouble }, // to avoid non-finite doubles
+      nonEmptyListGen(bandGen),
+      Gen.option(arbitrary[Percentage])
+    ).mapN(EOItemExtension.apply)
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
@@ -452,5 +479,17 @@ object Generators {
 
   implicit val arbAssetExtensionProperties: Arbitrary[AssetCollectionExtension] = Arbitrary {
     assetCollectionExtensionGen
+  }
+
+  implicit val arbEOItemExtension: Arbitrary[EOItemExtension] = Arbitrary {
+    eoItemExtensionGen
+  }
+
+  implicit val arbBand: Arbitrary[Band] = Arbitrary {
+    bandGen
+  }
+
+  implicit val arbEOAssetExtension: Arbitrary[EOAssetExtension] = Arbitrary {
+    eoAssetExtensionGen
   }
 }

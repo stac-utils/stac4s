@@ -3,6 +3,7 @@
 ### Added
 
 - Created typeclasses for linking extensions to the items they extend [#85](https://github.com/azavea/stac4s/pull/85)
+- Created extension data model for EO Extension [#92](https://github.com/azavea/stac4s/pull/92)
 
 ### Changed
 

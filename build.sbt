@@ -112,6 +112,7 @@ val coreDependencies = Seq(
   "io.circe"                    %% "circe-testing"       % Versions.CirceVersion % "test",
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
   "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
+  "eu.timepit"                  %% "refined-scalacheck"  % Versions.RefinedVersion % "test",
   "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion % Test,
   "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion % Test,
   "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
