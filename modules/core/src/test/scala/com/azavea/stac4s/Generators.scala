@@ -2,9 +2,14 @@ package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.label.LabelClassClasses._
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
+import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
 import cats.implicits._
+import eu.timepit.refined.types.numeric.PosInt
+import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
@@ -13,12 +18,6 @@ import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
-
-import com.github.tbouron.SpdxLicense
-import com.azavea.stac4s.extensions.label.LabelClassClasses.NamedLabelClasses
-import com.azavea.stac4s.extensions.label.LabelClassClasses.NumberedLabelClasses
-import com.azavea.stac4s.extensions.layer.LayerItemExtension
-import eu.timepit.refined.types.string.NonEmptyString
 
 object Generators extends NumericInstances {
 
@@ -375,10 +374,10 @@ object Generators extends NumericInstances {
   private def bandGen: Gen[Band] =
     (
       nonEmptyAlphaRefinedStringGen,
-      nonEmptyAlphaRefinedStringGen,
-      nonEmptyAlphaRefinedStringGen,
-      arbitrary[Int],
-      arbitrary[Int]
+      Gen.option(nonEmptyAlphaRefinedStringGen),
+      Gen.option(nonEmptyAlphaRefinedStringGen),
+      Gen.option(arbitrary[PosInt]),
+      Gen.option(arbitrary[PosInt])
     ).mapN(Band.apply)
 
   private def eoItemExtensionGen: Gen[EOItemExtension] =

@@ -2,15 +2,16 @@ package com.azavea.stac4s.extensions.eo
 
 import cats.Eq
 import eu.timepit.refined.types.string.NonEmptyString
+import eu.timepit.refined.types.numeric.PosInt
 import io.circe._
 import io.circe.refined._
 
 case class Band(
     name: NonEmptyString,
-    commonName: NonEmptyString,
-    description: NonEmptyString,
-    centerWavelength: Int,
-    fullWidthHalfMax: Int
+    commonName: Option[NonEmptyString],
+    description: Option[NonEmptyString],
+    centerWavelength: Option[PosInt],
+    fullWidthHalfMax: Option[PosInt]
 )
 
 object Band {
