@@ -32,6 +32,7 @@ object StacLinkType {
   case object LatestVersion      extends StacLinkType("latest-version")
   case object PredecessorVersion extends StacLinkType("predecessor-version")
   case object SuccessorVersion   extends StacLinkType("successor-version")
+  case object DerivedFrom        extends StacLinkType("derived_from")
 
   final case class VendorLinkType(underlying: String) extends StacLinkType("vendor") {
     override def toString = s"$repr-$underlying"
@@ -58,6 +59,7 @@ object StacLinkType {
     case "latest-version"      => LatestVersion
     case "predecessor-version" => PredecessorVersion
     case "successor-version"   => SuccessorVersion
+    case "derived_from"        => DerivedFrom
     case s                     => VendorLinkType(s)
   }
 

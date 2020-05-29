@@ -121,6 +121,7 @@ object Generators extends NumericInstances {
     StacLinkType.LatestVersion,
     StacLinkType.PredecessorVersion,
     StacLinkType.SuccessorVersion,
+    StacLinkType.DerivedFrom,
     StacLinkType.VendorLinkType("test-link")
   )
 
