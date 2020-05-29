@@ -10,10 +10,11 @@ sealed abstract class StacLinkType(val repr: String) {
 
 object StacLinkType {
 
-  implicit def eqStacLinkType: Eq[StacLinkType] = Eq[String].imap(fromString)({
-    case VendorLinkType(s) => s
-    case fixedLinkType => fixedLinkType.repr
-  })
+  implicit def eqStacLinkType: Eq[StacLinkType] =
+    Eq[String].imap(fromString)({
+      case VendorLinkType(s) => s
+      case fixedLinkType     => fixedLinkType.repr
+    })
 
   case object Self               extends StacLinkType("self")
   case object StacRoot           extends StacLinkType("root")

@@ -82,55 +82,55 @@ object Generators extends NumericInstances {
   )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
-    `image/tiff`,
-    `image/vnd.stac.geotiff`,
-    `image/cog`,
-    `image/jp2`,
-    `image/png`,
-    `image/jpeg`,
-    `text/xml`,
-    `text/html`,
-    `application/xml`,
-    `application/json`,
-    `text/plain`,
-    `application/geo+json`,
-    `application/geopackage+sqlite3`,
-    `application/x-hdf5`,
-    `application/x-hdf`,
-    VendorMediaType("test-media-type")
+    Gen.const(`image/tiff`),
+    Gen.const(`image/vnd.stac.geotiff`),
+    Gen.const(`image/cog`),
+    Gen.const(`image/jp2`),
+    Gen.const(`image/png`),
+    Gen.const(`image/jpeg`),
+    Gen.const(`text/xml`),
+    Gen.const(`text/html`),
+    Gen.const(`application/xml`),
+    Gen.const(`application/json`),
+    Gen.const(`text/plain`),
+    Gen.const(`application/geo+json`),
+    Gen.const(`application/geopackage+sqlite3`),
+    Gen.const(`application/x-hdf5`),
+    Gen.const(`application/x-hdf`),
+    nonEmptyStringGen map VendorMediaType.apply
   )
 
   private def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
-    StacLinkType.Self,
-    StacLinkType.StacRoot,
-    StacLinkType.Parent,
-    StacLinkType.Child,
-    StacLinkType.Item,
-    StacLinkType.Items,
-    StacLinkType.Source,
-    StacLinkType.Collection,
-    StacLinkType.License,
-    StacLinkType.Alternate,
-    StacLinkType.DescribedBy,
-    StacLinkType.Next,
-    StacLinkType.Prev,
-    StacLinkType.ServiceDesc,
-    StacLinkType.ServiceDoc,
-    StacLinkType.Conformance,
-    StacLinkType.Data,
-    StacLinkType.LatestVersion,
-    StacLinkType.PredecessorVersion,
-    StacLinkType.SuccessorVersion,
-    StacLinkType.DerivedFrom,
-    StacLinkType.VendorLinkType("test-link")
+    Gen.const(StacLinkType.Self),
+    Gen.const(StacLinkType.StacRoot),
+    Gen.const(StacLinkType.Parent),
+    Gen.const(StacLinkType.Child),
+    Gen.const(StacLinkType.Item),
+    Gen.const(StacLinkType.Items),
+    Gen.const(StacLinkType.Source),
+    Gen.const(StacLinkType.Collection),
+    Gen.const(StacLinkType.License),
+    Gen.const(StacLinkType.Alternate),
+    Gen.const(StacLinkType.DescribedBy),
+    Gen.const(StacLinkType.Next),
+    Gen.const(StacLinkType.Prev),
+    Gen.const(StacLinkType.ServiceDesc),
+    Gen.const(StacLinkType.ServiceDoc),
+    Gen.const(StacLinkType.Conformance),
+    Gen.const(StacLinkType.Data),
+    Gen.const(StacLinkType.LatestVersion),
+    Gen.const(StacLinkType.PredecessorVersion),
+    Gen.const(StacLinkType.SuccessorVersion),
+    Gen.const(StacLinkType.DerivedFrom),
+    nonEmptyStringGen map StacLinkType.VendorLinkType.apply
   )
 
   private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
-    StacAssetRole.Thumbnail,
-    StacAssetRole.Overview,
-    StacAssetRole.Data,
-    StacAssetRole.Metadata,
-    StacAssetRole.VendorAsset("test-asset")
+    Gen.const(StacAssetRole.Thumbnail),
+    Gen.const(StacAssetRole.Overview),
+    Gen.const(StacAssetRole.Data),
+    Gen.const(StacAssetRole.Metadata),
+    nonEmptyStringGen map StacAssetRole.VendorAsset.apply
   )
 
   private def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
@@ -330,22 +330,20 @@ object Generators extends NumericInstances {
     labelOverviewWithStats
   )
 
-  private def labelTaskGen: Gen[LabelTask] = Gen.oneOf(
+  private def labelTaskGen: Gen[LabelTask] =
     Gen.oneOf(
-      LabelTask.Classification,
-      LabelTask.Detection,
-      LabelTask.Regression,
-      LabelTask.Segmentation,
-      LabelTask.VendorTask("test-label-task")
-    ),
-    nonEmptyStringGen map { s => LabelTask.VendorTask(s.toLowerCase) }
-  )
+      Gen.const(LabelTask.Classification),
+      Gen.const(LabelTask.Detection),
+      Gen.const(LabelTask.Regression),
+      Gen.const(LabelTask.Segmentation),
+      nonEmptyStringGen map LabelTask.VendorTask.apply
+    )
 
   private def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
     Gen.oneOf(
-      LabelMethod.Automatic,
-      LabelMethod.Manual,
-      LabelMethod.VendorMethod("test-label-vendor-method")
+      Gen.const(LabelMethod.Automatic),
+      Gen.const(LabelMethod.Manual),
+      nonEmptyStringGen map LabelMethod.VendorMethod.apply
     ),
     nonEmptyStringGen map LabelMethod.fromString
   )

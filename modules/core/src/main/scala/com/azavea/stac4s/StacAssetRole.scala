@@ -10,13 +10,17 @@ sealed abstract class StacAssetRole(val repr: String) {
 
 object StacAssetRole {
 
-  implicit def eqStacAssetRole: Eq[StacAssetRole] = Eq[String].imap(fromString _)(_.repr)
+  implicit def eqStacAssetRole: Eq[StacAssetRole] =
+    Eq[String].imap(fromString _)({
+      case VendorAsset(s) => s
+      case fixedRole      => fixedRole.repr
+    })
 
   case object Thumbnail                   extends StacAssetRole("thumbnail")
   case object Overview                    extends StacAssetRole("overview")
   case object Data                        extends StacAssetRole("data")
   case object Metadata                    extends StacAssetRole("metadata")
-  final case class VendorAsset(s: String) extends StacAssetRole(s)
+  final case class VendorAsset(s: String) extends StacAssetRole("vendor")
 
   private def fromString(s: String): StacAssetRole = s.toLowerCase match {
     case "thumbnail" => Thumbnail

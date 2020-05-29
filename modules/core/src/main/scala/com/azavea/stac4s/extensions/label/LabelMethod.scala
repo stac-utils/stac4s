@@ -11,9 +11,12 @@ sealed abstract class LabelMethod(val repr: String) {
 object LabelMethod {
   case object Manual                          extends LabelMethod("manual")
   case object Automatic                       extends LabelMethod("automatic")
-  case class VendorMethod(methodName: String) extends LabelMethod(methodName)
+  case class VendorMethod(methodName: String) extends LabelMethod("vendor")
 
-  implicit def eqLabelMethod: Eq[LabelMethod] = Eq[String].imap(fromString _)(_.repr)
+  implicit def eqLabelMethod: Eq[LabelMethod] = Eq[String].imap(fromString _)({
+    case VendorMethod(s) => s
+    case fixedMethod => fixedMethod.repr
+  })
 
   implicit val decLabelMethod: Decoder[LabelMethod] = Decoder[String].map(fromString _)
   implicit val encLabelMethod: Encoder[LabelMethod] = Encoder[String].contramap(_.repr)
