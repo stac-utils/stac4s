@@ -11,36 +11,30 @@ sealed abstract class StacLinkType(val repr: String) {
 object StacLinkType {
 
   implicit def eqStacLinkType: Eq[StacLinkType] =
-    Eq[String].imap(fromString)({
-      case VendorLinkType(s) => s
-      case fixedLinkType     => fixedLinkType.repr
-    })
+    Eq[String].imap(fromString)(_.repr)
 
-  case object Self               extends StacLinkType("self")
-  case object StacRoot           extends StacLinkType("root")
-  case object Parent             extends StacLinkType("parent")
-  case object Child              extends StacLinkType("child")
-  case object Item               extends StacLinkType("item")
-  case object Items              extends StacLinkType("items")
-  case object Source             extends StacLinkType("source")
-  case object Collection         extends StacLinkType("collection")
-  case object License            extends StacLinkType("license")
-  case object Alternate          extends StacLinkType("alternate")
-  case object DescribedBy        extends StacLinkType("describedBy")
-  case object Next               extends StacLinkType("next")
-  case object Prev               extends StacLinkType("prev")
-  case object ServiceDesc        extends StacLinkType("service-desc")
-  case object ServiceDoc         extends StacLinkType("service-doc")
-  case object Conformance        extends StacLinkType("conformance")
-  case object Data               extends StacLinkType("data")
-  case object LatestVersion      extends StacLinkType("latest-version")
-  case object PredecessorVersion extends StacLinkType("predecessor-version")
-  case object SuccessorVersion   extends StacLinkType("successor-version")
-  case object DerivedFrom        extends StacLinkType("derived_from")
-
-  final case class VendorLinkType(underlying: String) extends StacLinkType("vendor") {
-    override def toString = s"$repr-$underlying"
-  }
+  case object Self                                    extends StacLinkType("self")
+  case object StacRoot                                extends StacLinkType("root")
+  case object Parent                                  extends StacLinkType("parent")
+  case object Child                                   extends StacLinkType("child")
+  case object Item                                    extends StacLinkType("item")
+  case object Items                                   extends StacLinkType("items")
+  case object Source                                  extends StacLinkType("source")
+  case object Collection                              extends StacLinkType("collection")
+  case object License                                 extends StacLinkType("license")
+  case object Alternate                               extends StacLinkType("alternate")
+  case object DescribedBy                             extends StacLinkType("describedBy")
+  case object Next                                    extends StacLinkType("next")
+  case object Prev                                    extends StacLinkType("prev")
+  case object ServiceDesc                             extends StacLinkType("service-desc")
+  case object ServiceDoc                              extends StacLinkType("service-doc")
+  case object Conformance                             extends StacLinkType("conformance")
+  case object Data                                    extends StacLinkType("data")
+  case object LatestVersion                           extends StacLinkType("latest-version")
+  case object PredecessorVersion                      extends StacLinkType("predecessor-version")
+  case object SuccessorVersion                        extends StacLinkType("successor-version")
+  case object DerivedFrom                             extends StacLinkType("derived_from")
+  final case class VendorLinkType(underlying: String) extends StacLinkType(underlying)
 
   private def fromString(s: String): StacLinkType = s.toLowerCase match {
     case "self"                => Self
@@ -64,7 +58,7 @@ object StacLinkType {
     case "predecessor-version" => PredecessorVersion
     case "successor-version"   => SuccessorVersion
     case "derived_from"        => DerivedFrom
-    case s                     => VendorLinkType(s)
+    case _                     => VendorLinkType(s)
   }
 
   implicit val encStacLinkType: Encoder[StacLinkType] =
