@@ -10,6 +10,9 @@
 
 ### Fixed
 
+- Vendor enum (link types, media types, etc.) representations no longer prefix `vendor-` in serialization [#94](https://github.com/azavea/stac4s/pull/94)
+- Missing `derived_from` link type was included [#94](https://github.com/azavea/stac4s/pull/94)
+
 ### Security
 
 

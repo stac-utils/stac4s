@@ -26,6 +26,6 @@ object LabelTask {
     case "segmentation"   => Segmentation
     case "detection"      => Detection
     case "classification" => Classification
-    case s                => VendorTask(s)
+    case _                => VendorTask(s)
   }
 }
