@@ -10,12 +10,15 @@
 
 ### Fixed
 
+### Security
+
+## [0.0.9](https://github.com/azavea/stac4s/tree/0.0.9)
+
+### Fixed
+
 - Vendor enum (link types, media types, etc.) representations no longer prefix `vendor-` in serialization [#94](https://github.com/azavea/stac4s/pull/94)
 - Missing `derived_from` link type was included [#94](https://github.com/azavea/stac4s/pull/94)
 - Decoding collections from json does not require the `properties` field [#97](https://github.com/azavea/stac4s/pull/97)
-
-### Security
-
 
 ## [0.0.8](https://github.com/azavea/stac4s/tree/0.0.8)
 
