@@ -73,7 +73,7 @@ object StacCollection {
       c.get[Option[List[StacProvider]]]("providers"),
       c.get[StacExtent]("extent"),
       c.get[Option[JsonObject]]("summaries"),
-      c.get[JsonObject]("properties"),
+      c.get[Option[JsonObject]]("properties"),
       c.get[List[StacLink]]("links"),
       c.value.as[JsonObject]
     ).mapN(
@@ -88,7 +88,7 @@ object StacCollection {
           providers: Option[List[StacProvider]],
           extent: StacExtent,
           summaries: Option[JsonObject],
-          properties: JsonObject,
+          properties: Option[JsonObject],
           links: List[StacLink],
           extensionFields: JsonObject
       ) =>
@@ -103,7 +103,7 @@ object StacCollection {
           providers getOrElse List.empty,
           extent,
           summaries getOrElse JsonObject.fromMap(Map.empty),
-          properties,
+          properties getOrElse JsonObject.fromMap(Map.empty),
           links,
           extensionFields.filter({
             case (k, _) => !collectionFields.contains(k)
