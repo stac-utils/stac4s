@@ -43,7 +43,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
               title = None
             ),
             StacLink(
-              href = "./layers/ca/catalog.json",
+              href = "./layers/pa/catalog.json",
               rel = StacLinkType.Child,
               _type = None,
               title = None
@@ -62,57 +62,85 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
     }
 
     it("Create LC8 Layer Catalog") {
+
+      val baseLinkItems = List(
+        StacLink(
+          href = "../../catalog.json",
+          rel = StacLinkType.StacRoot,
+          _type = None,
+          title = None
+        ),
+        StacLink(
+          href = "../../catalog.json",
+          rel = StacLinkType.Parent,
+          _type = None,
+          title = None
+        ),
+        StacLink(
+          href = "./catalog.json",
+          rel = StacLinkType.Self,
+          _type = None,
+          title = None
+        )
+      )
+
+      val paLinkItems = List(
+        StacLink(
+          href = "../../landsat-8-l1/LC80140332018022LGN00.json",
+          rel = StacLinkType.Item,
+          _type = None,
+          title = None
+        ),
+        StacLink(
+          href = "../../landsat-8-l1/LC80150322018029LGN00.json",
+          rel = StacLinkType.Item,
+          _type = None,
+          title = None
+        ),
+        StacLink(
+          href = "../../landsat-8-l1/LC80150332018029LGN00.json",
+          rel = StacLinkType.Item,
+          _type = None,
+          title = None
+        )
+      )
+
+      val usLinkItems = List(
+        StacLink(
+          href = "../../landsat-8-l1/LC80140332018006LGN00.json",
+          rel = StacLinkType.Item,
+          _type = None,
+          title = None
+        )
+      ) ++ paLinkItems
+
       val layerUS = StacCatalog(
         stacVersion = "0.9.0",
         stacExtensions = List("eo", "view", "https://example.com/stac/landsat-extension/1.0/schema.json"),
         id = "layer-us",
         title = "Landsat 8 L1".some,
         description = "US STAC Layer",
-        links = List(
-          StacLink(
-            href = "../catalog.json",
-            rel = StacLinkType.StacRoot,
-            _type = None,
-            title = None
-          ),
-          StacLink(
-            href = "../catalog.json",
-            rel = StacLinkType.Parent,
-            _type = None,
-            title = None
-          ),
-          StacLink(
-            href = "./catalog.json",
-            rel = StacLinkType.Self,
-            _type = None,
-            title = None
-          ),
-          StacLink(
-            href = "../../landsat-8-l1/2014-153/LC81530252014153LGN00.json",
-            rel = StacLinkType.Item,
-            _type = None,
-            title = None
-          )
-        )
+        links = baseLinkItems ++ usLinkItems
       )
 
-      val layerCA = layerUS.copy(
-        id = "layer-ca",
-        description = "CA STAC Layer"
+      val layerPA = layerUS.copy(
+        id = "layer-pa",
+        description = "PA STAC Layer",
+        links = baseLinkItems ++ paLinkItems
       )
 
       layerUS.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/layers/us/catalog.json")
       layerUS.asJson.as[StacCatalog].valueOr(throw _) shouldBe layerUS
 
-      layerCA.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/layers/ca/catalog.json")
-      layerCA.asJson.as[StacCatalog].valueOr(throw _) shouldBe layerCA
+      layerPA.asJson.deepDropNullValues shouldBe getJson("/catalogs/landsat-stac-layers/layers/pa/catalog.json")
+      layerPA.asJson.as[StacCatalog].valueOr(throw _) shouldBe layerPA
     }
 
     it("Create LC8 Layer Item") {
       val collection =
         getJson("/catalogs/landsat-stac-layers/landsat-8-l1/catalog.json").as[StacCollection].valueOr(throw _)
       val layerUS = getJson("/catalogs/landsat-stac-layers/layers/us/catalog.json").as[StacCatalog].valueOr(throw _)
-      val layerCA = getJson("/catalogs/landsat-stac-layers/layers/ca/catalog.json").as[StacCatalog].valueOr(throw _)
+      val layerPA = getJson("/catalogs/landsat-stac-layers/layers/pa/catalog.json").as[StacCatalog].valueOr(throw _)
 
       val item = StacItem(
         id = "LC81530252014153LGN00",
@@ -168,7 +196,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
           "landsat:geometric_rmse_verify"        -> 5.364.asJson,
           "landsat:image_quality_oli"            -> 9.asJson
         ).asJsonObject.deepMerge(
-          LayerItemExtension(NonEmptyList.of(layerUS.id, layerCA.id) map { NonEmptyString.unsafeFrom }).asJsonObject
+          LayerItemExtension(NonEmptyList.of(layerUS.id, layerPA.id) map { NonEmptyString.unsafeFrom }).asJsonObject
         ), // layer extension
         links = List(
           StacLink(
@@ -306,10 +334,10 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
       )
 
       ItemExtension[LayerItemExtension].getExtensionFields(item) shouldBe LayerItemExtension(
-        NonEmptyList.fromListUnsafe(List("layer-us", "layer-ca") map { NonEmptyString.unsafeFrom })
+        NonEmptyList.fromListUnsafe(List("layer-us", "layer-pa") map { NonEmptyString.unsafeFrom })
       ).valid
       item.asJson.deepDropNullValues shouldBe getJson(
-        "/catalogs/landsat-stac-layers/landsat-8-l1/2014-153/LC81530252014153LGN00.json"
+        "/catalogs/landsat-stac-layers/landsat-8-l1/LC80150332018029LGN00.json"
       )
       item.asJson.as[StacItem].valueOr(throw _) shouldBe item
     }
