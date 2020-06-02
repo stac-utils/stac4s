@@ -10,6 +10,8 @@
 
 ### Fixed
 
+- Decoding collections from json does not require the `properties` field [#97](https://github.com/azavea/stac4s/pull/97)
+
 ### Security
 
 
