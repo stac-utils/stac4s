@@ -22,10 +22,6 @@
       "rel" : "self"
     },
     {
-      "href" : "../../landsat-8-l1/LC80140332018006LGN00.json",
-      "rel" : "item"
-    },
-    {
       "href" : "../../landsat-8-l1/LC80140332018022LGN00.json",
       "rel" : "item"
     },
@@ -35,6 +31,10 @@
     },
     {
       "href" : "../../landsat-8-l1/LC80150332018029LGN00.json",
+      "rel" : "item"
+    },
+    {
+      "href" : "../../landsat-8-l1/LC81422102018023LGN00.json",
       "rel" : "item"
     }
   ]

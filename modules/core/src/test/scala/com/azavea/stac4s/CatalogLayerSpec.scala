@@ -105,14 +105,14 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
         )
       )
 
-      val usLinkItems = List(
+      val usLinkItems = paLinkItems ++ List(
         StacLink(
-          href = "../../landsat-8-l1/LC80140332018006LGN00.json",
+          href = "../../landsat-8-l1/LC81422102018023LGN00.json",
           rel = StacLinkType.Item,
           _type = None,
           title = None
         )
-      ) ++ paLinkItems
+      )
 
       val layerUS = StacCatalog(
         stacVersion = "0.9.0",
@@ -140,191 +140,198 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
       val collection =
         getJson("/catalogs/landsat-stac-layers/landsat-8-l1/catalog.json").as[StacCollection].valueOr(throw _)
       val layerUS = getJson("/catalogs/landsat-stac-layers/layers/us/catalog.json").as[StacCatalog].valueOr(throw _)
-      val layerPA = getJson("/catalogs/landsat-stac-layers/layers/pa/catalog.json").as[StacCatalog].valueOr(throw _)
 
       val item = StacItem(
-        id = "LC81530252014153LGN00",
+        id = "LC81422102018023LGN00",
         stacVersion = "0.9.0",
         stacExtensions = List("eo", "view", "layers", "https://example.com/stac/landsat-extension/1.0/schema.json"),
         geometry = """
-                     |{
+                     | {
                      |    "type": "Polygon",
                      |    "coordinates": [
                      |      [
                      |        [
-                     |          51.33855,
-                     |          72.27502
+                     |          -125.04277,
+                     |          38.51378
                      |        ],
                      |        [
-                     |          51.36812,
-                     |          75.70821
+                     |          -122.39997,
+                     |          38.53006
                      |        ],
                      |        [
-                     |          49.19092,
-                     |          75.67662
+                     |          -122.4166,
+                     |          36.42097
                      |        ],
                      |        [
-                     |          49.16354,
-                     |          72.39640
+                     |          -124.9862,
+                     |          36.40587
                      |        ],
                      |        [
-                     |          51.33855,
-                     |          72.27502
+                     |          -125.04277,
+                     |          38.51378
                      |        ]
                      |      ]
                      |    ]
                      |  }""".stripMargin.parseGeoJson[Polygon],
-        bbox = TwoDimBbox(49.16354, 72.27502, 51.36812, 75.67662),
+        bbox = TwoDimBbox(-125.04277, 36.40587, -122.39997, 38.53006),
         properties = Map(
-          "collection"                           -> "landsat-8-l1".asJson,
-          "datetime"                             -> "2014-06-02T09:22:02Z".asJson,
-          "eo:gsd"                               -> 15.asJson,
-          "eo:cloud_cover"                       -> 10.asJson,
-          "view:off_nadir"                       -> 0.asJson,
-          "view:sun_azimuth"                     -> 149.01607154.asJson,
-          "view:sun_elevation"                   -> 59.21424700.asJson,
-          "view:azimuth"                         -> 0.asJson,
-          "landsat:wrs_path"                     -> 153.asJson,
-          "landsat:wrs_row"                      -> 25.asJson,
-          "landsat:earth_sun_distance"           -> 1.0141560.asJson,
-          "landsat:ground_control_points_verify" -> 114.asJson,
-          "landsat:geometric_rmse_model"         -> 7.562.asJson,
-          "landsat:image_quality_tirs"           -> 9.asJson,
-          "landsat:ground_control_points_model"  -> 313.asJson,
-          "landsat:geometric_rmse_model_x"       -> 5.96.asJson,
-          "landsat:geometric_rmse_model_y"       -> 4.654.asJson,
-          "landsat:geometric_rmse_verify"        -> 5.364.asJson,
-          "landsat:image_quality_oli"            -> 9.asJson
+          "collection"               -> "landsat-8-l1".asJson,
+          "datetime"                 -> "2018-01-23T06:01:57Z".asJson,
+          "eo:sun_azimuth"           -> -70.322.asJson,
+          "eo:sun_elevation"         -> -53.777.asJson,
+          "eo:cloud_cover"           -> -1.asJson,
+          "eo:row"                   -> "210".asJson,
+          "eo:col"                   -> "142".asJson,
+          "landsat:product_id"       -> "LC08_L1GT_142210_20180123_20180123_01_RT".asJson,
+          "landsat:scene_id"         -> "LC81422102018023LGN00".asJson,
+          "landsat:processing_level" -> "L1GT".asJson,
+          "landsat:tier"             -> "RT".asJson,
+          "eo:epsg"                  -> 32610.asJson,
+          "eo:instrument"            -> "OLI_TIRS".asJson,
+          "eo:off_nadir"             -> 0.asJson,
+          "eo:platform"              -> "landsat-8".asJson,
+          "eo:gsd"                   -> 15.asJson
         ).asJsonObject.deepMerge(
-          LayerItemExtension(NonEmptyList.of(layerUS.id, layerPA.id) map { NonEmptyString.unsafeFrom }).asJsonObject
+          LayerItemExtension(NonEmptyList.of(layerUS.id) map { NonEmptyString.unsafeFrom }).asJsonObject
         ), // layer extension
         links = List(
           StacLink(
-            href = "../../catalog.json",
-            rel = StacLinkType.StacRoot,
+            href = "./LC81422102018023LGN00.json",
+            rel = StacLinkType.Self,
             _type = None,
             title = None
           ),
           StacLink(
-            href = "../catalog.json",
+            href = "./catalog.json",
             rel = StacLinkType.Parent,
             _type = None,
             title = None
           ),
           StacLink(
-            href = "./LC81530252014153LGN00.json",
-            rel = StacLinkType.Self,
+            href = "./catalog.json",
+            rel = StacLinkType.Collection,
             _type = None,
             title = None
           ),
-          //  { "rel":"alternate", "href": "https://landsatonaws.com/L8/153/025/LC81530252014153LGN00", "type": "text/html"},
           StacLink(
-            href = "https://landsatonaws.com/L8/153/025/LC81530252014153LGN0",
-            rel = StacLinkType.Alternate,
-            _type = `text/html`.some,
+            href = "../catalog.json",
+            rel = StacLinkType.StacRoot,
+            _type = None,
             title = None
           )
         ),
         assets = Map(
+          "index" -> StacItemAsset(
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/index.html",
+            title = "HTML index page".some,
+            description = None,
+            roles = Set.empty,
+            _type = `text/html`.some
+          ),
           "thumbnail" -> StacItemAsset(
             href =
-              "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_thumb_large.jpg",
-            title = "Thumbnail".some,
-            description = "A medium sized thumbnail".some,
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_thumb_large.jpg",
+            title = "Thumbnail image".some,
+            description = None,
             roles = Set(StacAssetRole.Thumbnail),
             _type = `image/jpeg`.some
           ),
-          "metadata" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
-            title = "Original Metadata".some,
-            description = "The original MTL metadata file provided for each Landsat scene".some,
-            roles = Set(StacAssetRole.Metadata),
-            _type = VendorMediaType("mtl").some
-          ),
           "B1" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
-            title = "Coastal Band (B1)".some,
-            description = "Coastal Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B1.TIF",
+            title = "Band 1 (coastal)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [0],
           ),
           "B2" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B2.TIF",
-            title = "Blue Band (B2)".some,
-            description = "Blue Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B2.TIF",
+            title = "Band 2 (blue)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [1],
           ),
           "B3" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B3.TIF",
-            title = "Green Band (B3)".some,
-            description = "Green Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B3.TIF",
+            title = "Band 3 (green)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [2],
           ),
           "B4" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",
-            title = "Red Band (B4)".some,
-            description = "Red Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B4.TIF",
+            title = "Band 4 (red)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [3],
           ),
           "B5" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B5.TIF",
-            title = "NIR Band (B5)".some,
-            description = "NIR Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B5.TIF",
+            title = "Band 5 (nir)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [4],
           ),
           "B6" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B6.TIF",
-            title = "SWIR (B6)".some,
-            description = "SWIR Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B6.TIF",
+            title = "Band 6 (swir16)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [5],
           ),
           "B7" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B7.TIF",
-            title = "SWIR Band (B7)".some,
-            description = "SWIR Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B7.TIF",
+            title = "Band 7 (swir22)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [6],
           ),
           "B8" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B8.TIF",
-            title = "Panchromatic Band (B8)".some,
-            description = "Panchromatic Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B8.TIF",
+            title = "Band 8 (pan)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [7],
           ),
           "B9" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B9.TIF",
-            title = "Cirrus Band (B9)".some,
-            description = "Cirrus Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B9.TIF",
+            title = "Band 9 (cirrus)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [8],
           ),
           "B10" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B10.TIF",
-            title = "LWIR Band (B10)".some,
-            description = "LWIR Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B10.TIF",
+            title = "Band 10 (lwir)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [9],
           ),
           "B11" -> StacItemAsset(
-            href = "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B11.TIF",
-            title = "LWIR Band (B11)".some,
-            description = "LWIR Band Top Of the Atmosphere".some,
+            href =
+              "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8/142/210/LC08_L1GT_142210_20180123_20180123_01_RT/LC08_L1GT_142210_20180123_20180123_01_RT_B11.TIF",
+            title = "Band 11 (lwir)".some,
+            description = None,
             roles = Set.empty,
             _type = `image/tiff`.some
             // "eo:bands": [10],
@@ -334,10 +341,10 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
       )
 
       ItemExtension[LayerItemExtension].getExtensionFields(item) shouldBe LayerItemExtension(
-        NonEmptyList.fromListUnsafe(List("layer-us", "layer-pa") map { NonEmptyString.unsafeFrom })
+        NonEmptyList.fromListUnsafe(List("layer-us") map { NonEmptyString.unsafeFrom })
       ).valid
       item.asJson.deepDropNullValues shouldBe getJson(
-        "/catalogs/landsat-stac-layers/landsat-8-l1/LC80150332018029LGN00.json"
+        "/catalogs/landsat-stac-layers/landsat-8-l1/LC81422102018023LGN00.json"
       )
       item.asJson.as[StacItem].valueOr(throw _) shouldBe item
     }
