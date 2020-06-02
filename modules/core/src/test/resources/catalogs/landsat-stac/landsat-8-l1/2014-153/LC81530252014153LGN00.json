@@ -132,7 +132,7 @@
       "roles" : [
         "metadata"
       ],
-      "type" : "vendor-mtl"
+      "type" : "mtl"
     },
     "B4" : {
       "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",

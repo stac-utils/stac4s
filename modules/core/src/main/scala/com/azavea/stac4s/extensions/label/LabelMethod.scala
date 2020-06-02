@@ -21,6 +21,6 @@ object LabelMethod {
   def fromString(s: String): LabelMethod = s.toLowerCase match {
     case "manual"    => Manual
     case "automatic" => Automatic
-    case s           => VendorMethod(s)
+    case _           => VendorMethod(s)
   }
 }
