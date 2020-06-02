@@ -5,9 +5,9 @@
     "view",
     "https://example.com/stac/landsat-extension/1.0/schema.json"
   ],
-  "id" : "layer-us",
+  "id" : "layer-pa",
   "title" : "Landsat 8 L1",
-  "description" : "US STAC Layer",
+  "description" : "PA STAC Layer",
   "links" : [
     {
       "href" : "../../catalog.json",
@@ -31,10 +31,6 @@
     },
     {
       "href" : "../../landsat-8-l1/LC80150332018029LGN00.json",
-      "rel" : "item"
-    },
-    {
-      "href" : "../../landsat-8-l1/LC81422102018023LGN00.json",
       "rel" : "item"
     }
   ]

@@ -37,8 +37,8 @@
     "temporal" : {
       "interval" : [
         [
-          "2013-06-01T00:56:49.001Z",
-          "2020-01-01T00:56:49.001Z"
+          "2018-01-01T00:00:00Z",
+          "2018-02-01T00:00:00Z"
         ]
       ]
     }
@@ -134,11 +134,11 @@
   },
   "links" : [
     {
-      "href" : "../../catalog.json",
+      "href" : "../catalog.json",
       "rel" : "root"
     },
     {
-      "href" : "../../catalog.json",
+      "href" : "../catalog.json",
       "rel" : "parent"
     },
     {
@@ -146,7 +146,19 @@
       "rel" : "self"
     },
     {
-      "href" : "./2014-153/LC81530252014153LGN00.json",
+      "href" : "./LC80140332018022LGN00.json",
+      "rel" : "item"
+    },
+    {
+      "href" : "./LC80150322018029LGN00.json",
+      "rel" : "item"
+    },
+    {
+      "href" : "./LC80150332018029LGN00.json",
+      "rel" : "item"
+    },
+    {
+      "href" : "./LC81422102018023LGN00.json",
       "rel" : "item"
     }
   ]
