@@ -59,6 +59,8 @@ workflows:
               only:
                 - /^(.*)$/
             branches:
+              only:
+                - feature/cek/receive-gpg-key
               ignore:
                 - /^(.*)$/
 
