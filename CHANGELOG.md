@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Receive GPG key while publishing artifacts [#101](https://github.com/azavea/stac4s/pull/101)
+
 ### Deprecated
 
 ### Removed
