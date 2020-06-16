@@ -400,6 +400,10 @@ object Generators extends NumericInstances {
     providerRoleGen
   }
 
+  implicit val arbStacProvider: Arbitrary[StacProvider] = Arbitrary {
+    stacProviderGen
+  }
+
   implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
@@ -437,6 +441,8 @@ object Generators extends NumericInstances {
   }
 
   implicit val arbSPDX: Arbitrary[SPDX] = Arbitrary { spdxGen }
+
+  implicit val arbStacLicense: Arbitrary[StacLicense] = Arbitrary { stacLicenseGen }
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
     itemCollectionGen
