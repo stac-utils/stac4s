@@ -117,12 +117,19 @@ val coreDependencies = Seq(
 )
 
 val testingDependencies = Seq(
-  "eu.timepit"        %% "refined-scalacheck" % Versions.RefinedVersion,
-  "io.chrisdavenport" %% "cats-scalacheck"    % Versions.scalacheckCatsVersion,
-  "io.circe"          %% "circe-testing"      % Versions.CirceVersion,
-  "org.scalacheck"    %% "scalacheck"         % Versions.scalacheckVersion,
-  "org.scalatest"     %% "scalatest"          % Versions.scalatestVersion,
-  "org.scalatestplus" %% "scalacheck-1-14"    % Versions.ScalatestPlusScalacheck
+  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
+  "eu.timepit"                  %% "refined-scalacheck"  % Versions.RefinedVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
+  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion,
+  "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
+  "io.circe"                    %% "circe-testing"       % Versions.CirceVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
+  "org.locationtech.jts"        % "jts-core"             % Versions.jts,
+  "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion,
+  "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion,
+  "org.scalatestplus"           %% "scalacheck-1-14"     % Versions.ScalatestPlusScalacheck,
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion
 )
 
 lazy val root = project
