@@ -2,6 +2,8 @@
 
 ### Added
 
+- Publication of `testing` module, which includes `scalacheck` generators for STAC base and extension types [#104](https://github.com/azavea/stac4s/pull/104)
+
 ### Changed
 
 - Receive GPG key while publishing artifacts [#101](https://github.com/azavea/stac4s/pull/101)
