@@ -123,13 +123,16 @@ val testingDependencies = Seq(
   "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
   "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
-  "io.circe"                    %% "circe-testing"       % Versions.CirceVersion,
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
   "org.locationtech.jts"        % "jts-core"             % Versions.jts,
   "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion,
-  "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion,
-  "org.scalatestplus"           %% "scalacheck-1-14"     % Versions.ScalatestPlusScalacheck,
   "org.typelevel"               %% "cats-core"           % Versions.CatsVersion
+)
+
+val testRunnerDependencies = Seq(
+  "io.circe"          %% "circe-testing"   % Versions.CirceVersion,
+  "org.scalatest"     %% "scalatest"       % Versions.scalatestVersion,
+  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck
 )
 
 lazy val root = project
@@ -161,5 +164,6 @@ lazy val coreTest = (project in file("modules/core-test"))
   .dependsOn(testing % Test)
   .settings(commonSettings)
   .settings(noPublishSettings)
+  .settings(libraryDependencies ++= testRunnerDependencies map { _ % Test })
 
 lazy val coreTestRef = LocalProject("modules/core-test")
