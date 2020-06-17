@@ -5,7 +5,7 @@ import com.azavea.stac4s.extensions._
 import com.azavea.stac4s.extensions.asset._
 import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
-import Generators._
+import com.azavea.stac4s.testing._
 import cats.implicits._
 import io.circe.syntax._
 import org.scalatest.funsuite.AnyFunSuite

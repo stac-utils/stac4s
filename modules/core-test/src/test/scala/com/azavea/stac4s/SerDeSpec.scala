@@ -5,7 +5,7 @@ import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer._
 import com.azavea.stac4s.meta._
-import Generators._
+import com.azavea.stac4s.testing._
 import geotrellis.vector.Geometry
 import io.circe.syntax._
 import io.circe.parser._

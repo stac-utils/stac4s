@@ -19,13 +19,19 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 
-object Generators extends NumericInstances {
+package object testing extends NumericInstances {
 
   private def nonEmptyStringGen: Gen[String] =
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
 
   private def nonEmptyAlphaRefinedStringGen: Gen[NonEmptyString] =
     nonEmptyStringGen map NonEmptyString.unsafeFrom
+
+  private def possiblyEmptyListGen[T](g: Gen[T]) =
+    Gen.choose(0, 10) flatMap { count => Gen.listOfN(count, g) }
+
+  private def possiblyEmptyMapGen[T, U](g: Gen[(T, U)]) =
+    Gen.choose(0, 10) flatMap { count => Gen.mapOfN(count, g) }
 
   private def nonEmptyListGen[T](g: Gen[T]): Gen[NonEmptyList[T]] =
     Gen.nonEmptyListOf(g) map { NonEmptyList.fromListUnsafe }
@@ -47,11 +53,9 @@ object Generators extends NumericInstances {
   private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
   private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
-    Gen
-      .mapOf(
-        (nonEmptyStringGen, stacCollectionAssetGen).tupled
-      )
-      .map(AssetCollectionExtension.apply)
+    possiblyEmptyMapGen(
+      (nonEmptyStringGen, stacCollectionAssetGen).tupled
+    ).map(AssetCollectionExtension.apply)
 
   private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
@@ -194,7 +198,7 @@ object Generators extends NumericInstances {
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
-      Gen.listOf(providerRoleGen),
+      possiblyEmptyListGen(providerRoleGen),
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply)
 
@@ -233,7 +237,7 @@ object Generators extends NumericInstances {
       Gen.const("Feature"),
       rectangleGen,
       twoDimBboxGen,
-      Gen.nonEmptyListOf(stacLinkGen),
+      nonEmptyListGen(stacLinkGen) map { _.toList },
       Gen.nonEmptyMap((nonEmptyStringGen, cogAssetGen).tupled),
       Gen.option(nonEmptyStringGen),
       itemExtensionFieldsGen
@@ -242,28 +246,28 @@ object Generators extends NumericInstances {
   private def stacCatalogGen: Gen[StacCatalog] =
     (
       nonEmptyStringGen,
-      Gen.listOf(nonEmptyStringGen),
+      possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
-      Gen.listOf(stacLinkGen),
+      possiblyEmptyListGen(stacLinkGen),
       Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
   private def stacCollectionGen: Gen[StacCollection] =
     (
       nonEmptyStringGen,
-      Gen.listOf(nonEmptyStringGen),
+      possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
-      Gen.listOf(nonEmptyStringGen),
+      possiblyEmptyListGen(nonEmptyStringGen),
       stacLicenseGen,
-      Gen.listOf(stacProviderGen),
+      possiblyEmptyListGen(stacProviderGen),
       stacExtentGen,
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
-      Gen.listOf(stacLinkGen),
+      possiblyEmptyListGen(stacLinkGen),
       collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
@@ -316,13 +320,13 @@ object Generators extends NumericInstances {
   private def labelOverviewWithCounts: Gen[LabelOverview] =
     (
       nonEmptyStringGen,
-      Gen.listOf(labelCountGen)
+      possiblyEmptyListGen(labelCountGen)
     ).mapN((key: String, counts: List[LabelCount]) => LabelOverview(key, counts, Nil))
 
   private def labelOverviewWithStats: Gen[LabelOverview] =
     (
       nonEmptyStringGen,
-      Gen.listOf(labelStatsGen)
+      possiblyEmptyListGen(labelStatsGen)
     ).mapN((key: String, stats: List[LabelStats]) => LabelOverview(key, Nil, stats))
 
   private def labelOverviewGen: Gen[LabelOverview] = Gen.oneOf(
@@ -354,7 +358,7 @@ object Generators extends NumericInstances {
   )
 
   private def labelPropertiesGen: Gen[LabelProperties] =
-    Gen.option(Gen.listOf(nonEmptyStringGen)).map(LabelProperties.fromOption)
+    Gen.option(possiblyEmptyListGen(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
   private def layerPropertiesGen: Gen[LayerItemExtension] =
     nonEmptyListGen(nonEmptyAlphaRefinedStringGen) map { LayerItemExtension.apply }
@@ -362,12 +366,12 @@ object Generators extends NumericInstances {
   private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
       labelPropertiesGen,
-      Gen.listOf(labelClassGen),
+      possiblyEmptyListGen(labelClassGen),
       nonEmptyStringGen,
       labelTypeGen,
-      Gen.listOf(labelTaskGen),
-      Gen.listOf(labelMethodGen),
-      Gen.listOf(labelOverviewGen)
+      possiblyEmptyListGen(labelTaskGen),
+      possiblyEmptyListGen(labelMethodGen),
+      possiblyEmptyListGen(labelOverviewGen)
     ).mapN(LabelItemExtension.apply)
 
   private def bandGen: Gen[Band] =
@@ -394,6 +398,10 @@ object Generators extends NumericInstances {
 
   implicit val arbProviderRole: Arbitrary[StacProviderRole] = Arbitrary {
     providerRoleGen
+  }
+
+  implicit val arbStacProvider: Arbitrary[StacProvider] = Arbitrary {
+    stacProviderGen
   }
 
   implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
@@ -433,6 +441,8 @@ object Generators extends NumericInstances {
   }
 
   implicit val arbSPDX: Arbitrary[SPDX] = Arbitrary { spdxGen }
+
+  implicit val arbStacLicense: Arbitrary[StacLicense] = Arbitrary { stacLicenseGen }
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
     itemCollectionGen
