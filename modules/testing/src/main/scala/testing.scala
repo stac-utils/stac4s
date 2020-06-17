@@ -19,7 +19,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 
-object Generators extends NumericInstances {
+package object testing extends NumericInstances {
 
   private def nonEmptyStringGen: Gen[String] =
     Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
