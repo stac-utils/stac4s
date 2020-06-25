@@ -13,10 +13,10 @@ object AssetCollectionExtension {
 
   implicit val encAssetCollectionExtension: Encoder.AsObject[AssetCollectionExtension] = Encoder
     .AsObject[Map[String, Json]]
-    .contramapObject((extensionFields: AssetCollectionExtension) => Map("assets" -> extensionFields.assets.asJson))
+    .contramapObject((extensionFields: AssetCollectionExtension) => Map("item_assets" -> extensionFields.assets.asJson))
 
   implicit val decAssetCollectionExtension: Decoder[AssetCollectionExtension] =
-    Decoder.forProduct1("assets")(AssetCollectionExtension.apply)
+    Decoder.forProduct1("item_assets")(AssetCollectionExtension.apply)
 
   implicit val collectionExtension: CollectionExtension[AssetCollectionExtension] =
     CollectionExtension.instance

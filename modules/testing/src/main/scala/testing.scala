@@ -385,7 +385,6 @@ package object testing extends NumericInstances {
 
   private def eoItemExtensionGen: Gen[EOItemExtension] =
     (
-      arbitrary[Int] map { _.toDouble }, // to avoid non-finite doubles
       nonEmptyListGen(bandGen),
       Gen.option(arbitrary[Percentage])
     ).mapN(EOItemExtension.apply)
