@@ -8,7 +8,7 @@ import com.azavea.stac4s.extensions.asset._
 import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
 import cats.implicits._
-import eu.timepit.refined.types.numeric.PosInt
+import eu.timepit.refined.types.numeric.PosDouble
 import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances
 import geotrellis.vector.{Geometry, Point, Polygon}
@@ -78,7 +78,7 @@ package object testing extends NumericInstances {
   )
 
   private def eoAssetExtensionGen: Gen[EOAssetExtension] =
-    nonEmptyListGen(arbitrary[BandRange]).map(EOAssetExtension.apply)
+    nonEmptyListGen(bandGen).map(EOAssetExtension.apply)
 
   private def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
@@ -379,8 +379,8 @@ package object testing extends NumericInstances {
       nonEmptyAlphaRefinedStringGen,
       Gen.option(nonEmptyAlphaRefinedStringGen),
       Gen.option(nonEmptyAlphaRefinedStringGen),
-      Gen.option(arbitrary[PosInt]),
-      Gen.option(arbitrary[PosInt])
+      Gen.option(arbitrary[PosDouble]),
+      Gen.option(arbitrary[PosDouble])
     ).mapN(Band.apply)
 
   private def eoItemExtensionGen: Gen[EOItemExtension] =
