@@ -2,6 +2,8 @@
 
 ### Added
 
+- STAC 1.0.0-beta.1 support [#116](https://github.com/azavea/stac4s/pull/116)
+
 ### Changed
 
 ### Deprecated

@@ -1,45 +1,292 @@
 {
+  "type" : "Feature",
   "id" : "LC81530252014153LGN00",
-  "stac_version" : "0.9.0",
+  "stac_version" : "1.0.0-beta.1",
   "stac_extensions" : [
     "eo",
     "view",
+    "proj",
     "https://example.com/stac/landsat-extension/1.0/schema.json"
   ],
-  "type" : "Feature",
-  "geometry" : {
-    "type" : "Polygon",
-    "coordinates" : [
+  "bbox": [
+    72.27502,
+    49.16354,
+    75.70821,
+    51.36812
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
       [
         [
-          51.33855,
-          72.27502
+          72.41047929658137,
+          49.7177153248036
         ],
         [
-          51.36812,
-          75.70821
+          72.4099,
+          49.7178
         ],
         [
-          49.19092,
-          75.67662
+          72.42304462193712,
+          49.7506571512844
         ],
         [
-          49.16354,
-          72.3964
+          72.43942174696257,
+          49.79159447737395
         ],
         [
-          51.33855,
-          72.27502
+          72.97737644295803,
+          51.13630099803396
+        ],
+        [
+          72.99109436013279,
+          51.1705911953537
+        ],
+        [
+          73.0069,
+          51.2101
+        ],
+        [
+          73.00767938517399,
+          51.209985918418724
+        ],
+        [
+          75.5702,
+          50.8349
+        ],
+        [
+          75.55241658634094,
+          50.79567530937191
+        ],
+        [
+          74.91339206721759,
+          49.386185570959974
+        ],
+        [
+          74.8988,
+          49.354
+        ],
+        [
+          72.41047929658137,
+          49.7177153248036
         ]
       ]
     ]
   },
-  "bbox" : [
-    49.16354,
-    72.27502,
-    51.36812,
-    75.67662
-  ],
+  "assets" : {
+    "B5" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B5.TIF",
+      "title" : "NIR Band (B5)",
+      "description" : "NIR Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B5",
+          "full_width_half_max" : 0.03,
+          "center_wavelength" : 0.86,
+          "common_name" : "nir"
+        }
+      ]
+    },
+    "B9" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B9.TIF",
+      "title" : "Cirrus Band (B9)",
+      "description" : "Cirrus Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B9",
+          "full_width_half_max" : 0.02,
+          "center_wavelength" : 1.37,
+          "common_name" : "cirrus"
+        }
+      ]
+    },
+    "B6" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B6.TIF",
+      "title" : "SWIR (B6)",
+      "description" : "SWIR Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B6",
+          "full_width_half_max" : 0.08,
+          "center_wavelength" : 1.6,
+          "common_name" : "swir16"
+        }
+      ]
+    },
+    "thumbnail" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_thumb_large.jpg",
+      "title" : "Thumbnail",
+      "description" : "A medium sized thumbnail",
+      "roles" : [
+        "thumbnail"
+      ],
+      "type" : "image/jpeg"
+    },
+    "B3" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B3.TIF",
+      "title" : "Green Band (B3)",
+      "description" : "Green Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B3",
+          "full_width_half_max" : 0.06,
+          "center_wavelength" : 0.56,
+          "common_name" : "green"
+        }
+      ]
+    },
+    "B7" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B7.TIF",
+      "title" : "SWIR Band (B7)",
+      "description" : "SWIR Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B7",
+          "full_width_half_max" : 0.22,
+          "center_wavelength" : 2.2,
+          "common_name" : "swir22"
+        }
+      ]
+    },
+    "B10" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B10.TIF",
+      "title" : "LWIR Band (B10)",
+      "description" : "LWIR Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B10",
+          "full_width_half_max" : 0.8,
+          "center_wavelength" : 10.9,
+          "common_name" : "lwir11"
+        }
+      ]
+    },
+    "B2" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B2.TIF",
+      "title" : "Blue Band (B2)",
+      "description" : "Blue Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B2",
+          "full_width_half_max" : 0.06,
+          "center_wavelength" : 0.48,
+          "common_name" : "blue"
+        }
+      ]
+    },
+    "metadata" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
+      "title" : "Original Metadata",
+      "description" : "The original MTL metadata file provided for each Landsat scene",
+      "roles" : [
+        "metadata"
+      ],
+      "type" : "mtl"
+    },
+    "B4" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",
+      "title" : "Red Band (B4)",
+      "description" : "Red Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B4",
+          "full_width_half_max" : 0.04,
+          "center_wavelength" : 0.65,
+          "common_name" : "red"
+        }
+      ]
+    },
+    "B1" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
+      "title" : "Coastal Band (B1)",
+      "description" : "Coastal Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B1",
+          "full_width_half_max" : 0.02,
+          "center_wavelength" : 0.44,
+          "common_name" : "coastal"
+        }
+      ]
+    },
+    "B8" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B8.TIF",
+      "title" : "Panchromatic Band (B8)",
+      "description" : "Panchromatic Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B8",
+          "full_width_half_max" : 0.18,
+          "center_wavelength" : 0.59,
+          "common_name" : "pan"
+        }
+      ]
+    },
+    "B11" : {
+      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B11.TIF",
+      "title" : "LWIR Band (B11)",
+      "description" : "LWIR Band Top Of the Atmosphere",
+      "roles" : [
+      ],
+      "type" : "image/tiff",
+      "eo:bands": [
+        {
+          "name" : "B11",
+          "full_width_half_max" : 1,
+          "center_wavelength" : 12,
+          "common_name" : "lwir2"
+        }
+      ]
+    }
+  },
+  "collection" : "landsat-8-l1",
+  "properties" : {
+    "collection" : "landsat-8-l1",
+    "datetime": "2014-06-02T09:22:02Z",
+    "view:sun_azimuth": 149.01607154,
+    "view:sun_elevation": 59.214247,
+    "eo:cloud_cover": 10,
+    "landsat:row": "025",
+    "landsat:column": "153",
+    "landsat:scene_id": "LC81530252014153LGN00",
+    "landsat:processing_level": "L1T",
+    "landsat:tier": "pre-collection",
+    "proj:epsg": 32643,
+    "instruments": ["OLI_TIRS"],
+    "view:off_nadir": 0,
+    "platform": "landsat-8",
+    "gsd": 15
+  },
   "links" : [
     {
       "href" : "../../catalog.json",
@@ -58,135 +305,5 @@
       "rel" : "alternate",
       "type" : "text/html"
     }
-  ],
-  "assets" : {
-    "B5" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B5.TIF",
-      "title" : "NIR Band (B5)",
-      "description" : "NIR Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B9" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B9.TIF",
-      "title" : "Cirrus Band (B9)",
-      "description" : "Cirrus Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B6" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B6.TIF",
-      "title" : "SWIR (B6)",
-      "description" : "SWIR Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "thumbnail" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_thumb_large.jpg",
-      "title" : "Thumbnail",
-      "description" : "A medium sized thumbnail",
-      "roles" : [
-        "thumbnail"
-      ],
-      "type" : "image/jpeg"
-    },
-    "B3" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B3.TIF",
-      "title" : "Green Band (B3)",
-      "description" : "Green Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B7" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B7.TIF",
-      "title" : "SWIR Band (B7)",
-      "description" : "SWIR Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B10" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B10.TIF",
-      "title" : "LWIR Band (B10)",
-      "description" : "LWIR Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B2" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B2.TIF",
-      "title" : "Blue Band (B2)",
-      "description" : "Blue Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "metadata" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_MTL.txt",
-      "title" : "Original Metadata",
-      "description" : "The original MTL metadata file provided for each Landsat scene",
-      "roles" : [
-        "metadata"
-      ],
-      "type" : "mtl"
-    },
-    "B4" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B4.TIF",
-      "title" : "Red Band (B4)",
-      "description" : "Red Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B1" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B1.TIF",
-      "title" : "Coastal Band (B1)",
-      "description" : "Coastal Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B8" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B8.TIF",
-      "title" : "Panchromatic Band (B8)",
-      "description" : "Panchromatic Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    },
-    "B11" : {
-      "href" : "http://landsat-pds.s3.amazonaws.com/L8/153/025/LC81530252014153LGN00/LC81530252014153LGN00_B11.TIF",
-      "title" : "LWIR Band (B11)",
-      "description" : "LWIR Band Top Of the Atmosphere",
-      "roles" : [
-      ],
-      "type" : "image/tiff"
-    }
-  },
-  "collection" : "landsat-8-l1",
-  "properties" : {
-    "collection" : "landsat-8-l1",
-    "landsat:image_quality_oli" : 9,
-    "datetime" : "2014-06-02T09:22:02Z",
-    "landsat:ground_control_points_verify" : 114,
-    "view:sun_azimuth" : 149.01607154,
-    "landsat:wrs_path" : 153,
-    "landsat:ground_control_points_model" : 313,
-    "landsat:wrs_row" : 25,
-    "eo:cloud_cover" : 10,
-    "landsat:image_quality_tirs" : 9,
-    "landsat:geometric_rmse_model" : 7.562,
-    "landsat:earth_sun_distance" : 1.014156,
-    "landsat:geometric_rmse_model_y" : 4.654,
-    "view:off_nadir" : 0,
-    "landsat:geometric_rmse_verify" : 5.364,
-    "landsat:geometric_rmse_model_x" : 5.96,
-    "view:azimuth" : 0,
-    "eo:gsd" : 15,
-    "view:sun_elevation" : 59.214247
-  }
+  ]
 }
