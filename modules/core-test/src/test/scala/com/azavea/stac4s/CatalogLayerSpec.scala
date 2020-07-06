@@ -322,7 +322,7 @@ class CatalogLayerSpec extends AnyFunSpec with Matchers {
         id = "LC80300332018166LGN00",
         stacVersion = "1.0.0-beta.1",
         stacExtensions =
-          List("eo", "view", "proj", "layers", "https://example.com/stac/landsat-extension/1.0/schema.json"),
+          List("eo", "view", "proj", "layer", "https://example.com/stac/landsat-extension/1.0/schema.json"),
         geometry = """
                      | {
                      |    "type": "Polygon",
