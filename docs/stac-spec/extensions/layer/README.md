@@ -4,10 +4,11 @@
 - **Identifier: layer**
 - **Field Name Prefix: layer**
 - **Scope: Item**
+- **Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/blob/master/extensions/README.md#extension-maturity): Proposal**
 
-This document explains the fields of the STAC Layer Extension to a STAC Item. [STAC Items](https://github.com/radiantearth/stac-spec/tree/master/item-spec) can only have reference to a single [STAC Collection](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). To group items into some collection without this extension is only possible by creating full items copy (with new identifiers) that are linked to the same, new collection which we can use as a new layer or group.
+This document explains the fields of the STAC Layer Extension to a STAC Item. [STAC Items](https://github.com/radiantearth/stac-spec/tree/master/item-spec) can only have a reference to a single [STAC Collection](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). To group items into some other collection without this extension is only possible by creating full items copy (with new identifiers) that are linked to the same, new collection, which can be used as a new layer or group.
 
-This extension allows to overcome this limitation and allows items to have references to multiple named catalogs which can be used to group items by the same (layer) name. Items in such layers can belong to the same or to different collections.
+STAC Layer extension allows to overcome this limitation and allows items to have references to multiple named catalogs which can be used to group items by the same (layer) name. Items in such layers can belong to the same or to different collections.
 
 Extensions proposes `item.properties` field definition as well as the static STAC Layers representation (as [STAC Catalogs](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec)).
 
@@ -58,13 +59,13 @@ Extensions proposes `item.properties` field definition as well as the static STA
 
 ## The Static Layer representation
 
-The static catalog representation is a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec) with `links` to items that belong to such `layer`. The `id` of such catalog is a `Layer Name`.
+The static catalog representation is a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec) with `links` to items that belong to such `layer`.
 
 ### Static Layers example
 
 STAC Layers catalog can be decribed as a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec). The example of such catalog defintion is located [here](examples/landsat-stac-layers/layers/catalog.json).
 
-Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). `Geometry` represents the combined footprint of all items that belong to such Layer and the bounding box is the extent of the entire layer. `properties` can optionally contain the Layer temporal metadata according to the [JSON Schema](json-schema/layer-schema.json)
+Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). `Geometry` represents the combined footprint of all items that belong to such STAC Layer and the bounding box is the extent of the entire layer. `properties` can optionally contain the Layer temporal metadata according to the [JSON Schema](json-schema/layer-schema.json). The `id` of each GeoJSON Feature (STAC Layer) is a `Layer Name`.
 
 ```javascript
 {
@@ -148,15 +149,15 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
 
 ## Implementations
 
-[GeoTrellis Server](https://github.com/geotrellis/geotrellis-server/) can use the [STAC API](https://github.com/radiantearth/stac-api-spec) server (it was tested with [Franklin](https://github.com/azavea/franklin)) as an input source of rasters. It uses [STAC Layer Extension](./) to retrieve items that belong to a certain OGC Layer.
+[GeoTrellis Server](https://github.com/geotrellis/geotrellis-server/) can use the [STAC API](https://github.com/radiantearth/stac-api-spec) server (it was tested with [Franklin](https://github.com/azavea/franklin)) as the input source of rasters. It uses [STAC Layer Extension](./) to retrieve items that belong to a certain OGC Layer.
 
-[Franklin](https://github.com/azavea/franklin) implements the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) which allows an efficient search by the `item.properties` fields.
+[Franklin](https://github.com/azavea/franklin) implements the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) which allows an efficient search by the `item.properties` fields. In particular this allows to perform search by the `propeties.layer:ids` field.
 
 [STAC4S](https://github.com/azavea/stac4s) simplifies [reading/writing](https://github.com/azavea/stac4s/blob/master/modules/core/src/main/scala/com/azavea/stac4s/extensions/layer/LayerItemExtension.scala) STAC Items that follow this extension.
 
 ## Extensions
 
 This extension doesn't require any other extensions usages. However, to use it with [STAC API](https://github.com/radiantearth/stac-api-spec/)
-it would be required to use its implementation with the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) support.
+it would be required to use STAC API implementation with the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) support.
 
-Optionally [STAC API Layer extension](../../../stac-api-spec/extensions/layer/README.md) can be implement to retrieve available STAC Layers metadata, and to use the advantage of [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
+Optionally, [STAC API Layer extension](../../../stac-api-spec/extensions/layer/README.md) can be implemented to retrieve available STAC Layers metadata, and to use the advantage of [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json).

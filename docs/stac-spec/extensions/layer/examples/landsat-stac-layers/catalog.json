@@ -18,11 +18,7 @@
       "rel": "child"
     },
     {
-      "href": "./layers/pa/catalog.json",
-      "rel": "child"
-    },
-    {
-      "href": "./layers/us/catalog.json",
+      "href": "./layers/catalog.json",
       "rel": "child"
     }
   ]

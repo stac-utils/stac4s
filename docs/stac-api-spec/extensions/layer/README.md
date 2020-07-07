@@ -1,6 +1,6 @@
 # STAC API Layer Extension
 
-**Extension Maturity Classification: Proposal**
+**Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/blob/master/extensions/README.md#extension-maturity): Proposal**
 
 This API extension defines the API resources and semantics for retrieving [STAC Layers](../../../stac-spec/extensions/layer/README.md)
 information defined for available STAC Items.
@@ -9,8 +9,8 @@ information defined for available STAC Items.
 
 | Path                    | Content-Type Header                                                                                         | Description                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `GET /layers/`          | [Catalog](https://github.com/radiantearth/stac-api-spec/blob/master/stac-spec/catalog-spec/catalog-spec.md) | Catalog wiht links to layers                                                      |
-| `GET /layers/{layerID}` | [`GeoJSON` (`Feature`)](https://github.com/azavea/stac4s/blob/4aba9c6691fde1d5235f165454ceaef6c6b3e165/docs/stac-spec/extensions/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
+| `GET /layers/`          | [Catalog](https://github.com/radiantearth/stac-api-spec/blob/master/stac-spec/catalog-spec/catalog-spec.md) | Catalog with links to layers.                                                      |
+| `GET /layers/{layerID}` | [`GeoJSON Feature`](https://github.com/azavea/stac4s/blob/4aba9c6691fde1d5235f165454ceaef6c6b3e165/docs/stac-spec/extensions/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
 
 ## Schema
 
@@ -32,37 +32,33 @@ Request to `GET /layers`:
 
 ```javascript
 {
-  "stac_version": "1.0.0-beta.1",
-  "stac_extensions": [],
-  "id": "landsat-stac-layers",
-  "title": "STAC for Landsat data",
-  "description": "STAC for Landsat data",
-  "links": [
-    {
-      "href": "./catalog.json",
-      "rel": "self"
-    },
-    {
-      "href": "./catalog.json",
-      "rel": "root"
-    },
-    {
-      "href": "./landsat-8-l1/catalog.json",
-      "rel": "child"
-    },
-    {
-      "href": "./layers/pa/catalog.json",
-      "rel": "child"
-    },
-    {
-      "href": "./layers/us/catalog.json",
-      "rel": "child"
-    }
-  ]
+    "stac_version": "1.0.0-beta.1",
+    "stac_extensions": [],
+    "id": "layer-us-global",
+    "title": "Landsat 8 L1",
+    "description": "US STAC Layers, a STAC Catalog that represents a list of STAC Layers",
+    "links": [
+        {
+            "href": "/",
+            "rel": "root"
+        },
+        {
+            "href": "/layers",
+            "rel": "self"
+        },
+        {
+            "href": "/layers/layer-pa",
+            "rel": "item"
+        },
+        {
+            "href": "/layers/layer-us",
+            "rel": "item"
+        }
+    ]
 }
 ```
 
-Request to `GET /layers/some-layer-name`:
+Request to `GET /layers/layer-us`:
 
 ```javascript
 {
@@ -114,30 +110,30 @@ Request to `GET /layers/some-layer-name`:
     "links": [
         {
             "rel": "self",
-            "href": "./self.json"
+            "href": "/layers/layer-us"
         },
         {
             "rel": "parent",
-            "href": "catalog.json"
+            "href": "/layers"
         },
         {
             "rel": "root",
-            "href": "catalog.json"
+            "href": "/"
         },
         {
-            "href": "item-1.json",
+            "href": "/collections/landsat-8-l1/items/item-1",
             "rel": "item"
         },
         {
-            "href": "item-2.json",
+            "href": "/collections/landsat-8-l1/items/item-2",
             "rel": "item"
         },
         {
-            "href": "item-3.json",
+            "href": "/collections/landsat-8-l1/items/item-3",
             "rel": "item"
         },
         {
-            "href": "item-4.json",
+            "href": "/collections/landsat-8-l1/items/item-4",
             "rel": "item"
         }
     ]
