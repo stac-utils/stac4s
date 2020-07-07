@@ -15,8 +15,8 @@ Extensions proposes `item.properties` field definition as well as the static STA
 
 ## Examples
 
-- [Landsat 8 Layer catalog](examples/landsat-stac-layers/catalog.json)
-- [Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
+- [Landsat 8 STAC Layer catalog](examples/landsat-stac-layers/catalog.json)
+- [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
 
 ## Schema
 
@@ -151,3 +151,6 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
 
 This extension doesn't require any other extensions usages. However, to use it with [STAC API](https://github.com/radiantearth/stac-api-spec/)
 it would be required to use its implementation with the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) support.
+
+Optionally [STAC API Layer extension](../../../stac-api-spec/extensions/layer/README.md) can be implement to retrieve available STAC Layer metadata,
+and to use the advantage of [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
