@@ -16,7 +16,7 @@ Extensions proposes `item.properties` field definition as well as the static STA
 ## Examples
 
 - [Landsat 8 Layer catalog](examples/landsat-stac-layers/catalog.json)
-- [Layers static representation](examples/landsat-stac-layers/layers)
+- [Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
 
 ## Schema
 
@@ -63,26 +63,77 @@ The static catalog representation is a [STAC Catalog](https://github.com/radiant
 
 ### Static Layers example
 
+STAC Layers can be decribed as a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec). The example of such catalog defintion is located [here](examples/landsat-stac-layers/layers/catalog.json).
+Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). Geometry represents the combined footprint of all items that belong to such Layer and the bounding box is the extent of the entire layer.
+
 ```javascript
 {
-    // ...
-    "id" : "example-layer-name",
-    // ...
-    "links" : [
-        // ...
-        // items that belong to the catalog
-        // ...
+    "type": "Feature",
+    "id": "layer-us",
+    // ... 
+    // bbox and geometry that cover all items that belong to the layer
+    "bbox": [
+        -101.40824987104652,
+        37.79718802132125,
+        -73.94863288954222,
+        41.41061537114088
+    ],
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -101.40824987104652,
+                    37.79718802132125
+                ],
+                [
+                    -101.40824987104652,
+                    41.41061537114088
+                ],
+                [
+                    -73.94863288954222,
+                    41.41061537114088
+                ],
+                [
+                    -73.94863288954222,
+                    37.79718802132125
+                ],
+                [
+                    -101.40824987104652,
+                    37.79718802132125
+                ]
+            ]
+        ]
+    },
+    "properties": null,
+    "links": [
         {
-            "href" : "item-1.json",
-            "rel" : "item"
+            "rel": "self",
+            "href": "./self.json"
         },
         {
-            "href" : "item-2.json",
-            "rel" : "item"
+            "rel": "parent",
+            "href": "catalog.json"
         },
         {
-            "href" : "item-3.json",
-            "rel" : "item"
+            "rel": "root",
+            "href": "catalog.json"
+        },
+        {
+            "href": "item-1.json",
+            "rel": "item"
+        },
+        {
+            "href": "item-2.json",
+            "rel": "item"
+        },
+        {
+            "href": "item-3.json",
+            "rel": "item"
+        },
+        {
+            "href": "item-4.json",
+            "rel": "item"
         }
     ]
 }
