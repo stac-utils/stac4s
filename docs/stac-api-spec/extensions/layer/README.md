@@ -10,7 +10,11 @@ information defined for available STAC Items.
 | Path                    | Content-Type Header                                                                                         | Description                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `GET /layers/`          | [Catalog](https://github.com/radiantearth/stac-api-spec/blob/master/stac-spec/catalog-spec/catalog-spec.md) | Catalog wiht links to layers                                                      |
-| `GET /layers/{layerID}` | `GeoJSON` (`Feature`)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
+| `GET /layers/{layerID}` | [`GeoJSON` (`Feature`)](https://github.com/azavea/stac4s/blob/4aba9c6691fde1d5235f165454ceaef6c6b3e165/docs/stac-spec/extensions/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
+
+## Schema
+
+- [JSON Static Layer Schema](../../../stac-spec/extensions/layer/json-schema/layer-schema.json)
 
 ## How It Works
 
@@ -64,7 +68,10 @@ Request to `GET /layers/some-layer-name`:
 {
     "type": "Feature",
     "id": "layer-us",
-    // ...
+    "stac_extensions": [
+        "layer"
+    ],
+    // ... 
     // bbox and geometry that cover all items that belong to the layer
     "bbox": [
         -101.40824987104652,
@@ -99,7 +106,11 @@ Request to `GET /layers/some-layer-name`:
             ]
         ]
     },
-    "properties": null,
+    // properties can optionally contain layer temporal information
+    "properties": {
+        "start_datetime": "2018-05-01T00:00:00Z",
+        "start_datetime": "2018-08-01T00:00:00Z"
+    },
     "links": [
         {
             "rel": "self",

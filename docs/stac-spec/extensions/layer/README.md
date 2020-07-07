@@ -5,11 +5,9 @@
 - **Field Name Prefix: layer**
 - **Scope: Item**
 
-This document explains the fields of the STAC Layer Extension to a STAC Item. [STAC Items](https://github.com/radiantearth/stac-spec/tree/master/item-spec) can only have reference to a single [STAC Collection](https://github.com/radiantearth/stac-spec/tree/master/collection-spec).
+This document explains the fields of the STAC Layer Extension to a STAC Item. [STAC Items](https://github.com/radiantearth/stac-spec/tree/master/item-spec) can only have reference to a single [STAC Collection](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). To group items into some collection without this extension is only possible by creating full items copy (with new identifiers) that are linked to the same, new collection which we can use as a new layer or group.
 
-To group items into some collection without this extension is only possible by creating full items copy (with new identifiers) that are linked to the same, new collection which we can use as a new layer or group.
-
-This extension allows to overcome this limitation and allows items to have references to multiple named catalogs which can be used to group items by the same (layer) name. Such items can belong to a single or to multiple collections.
+This extension allows to overcome this limitation and allows items to have references to multiple named catalogs which can be used to group items by the same (layer) name. Items in such layers can belong to the same or to different collections.
 
 Extensions proposes `item.properties` field definition as well as the static STAC Layers representation (as [STAC Catalogs](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec)).
 
@@ -20,7 +18,8 @@ Extensions proposes `item.properties` field definition as well as the static STA
 
 ## Schema
 
-- [JSON Schema](json-schema/schema.json)
+- [JSON Item Schema](json-schema/item-schema.json)
+- [JSON Static Layer Schema](json-schema/layer-schema.json)
 
 ## Item fields
 
@@ -63,13 +62,17 @@ The static catalog representation is a [STAC Catalog](https://github.com/radiant
 
 ### Static Layers example
 
-STAC Layers can be decribed as a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec). The example of such catalog defintion is located [here](examples/landsat-stac-layers/layers/catalog.json).
-Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). Geometry represents the combined footprint of all items that belong to such Layer and the bounding box is the extent of the entire layer.
+STAC Layers catalog can be decribed as a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec). The example of such catalog defintion is located [here](examples/landsat-stac-layers/layers/catalog.json).
+
+Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). `Geometry` represents the combined footprint of all items that belong to such Layer and the bounding box is the extent of the entire layer. `properties` can optionally contain the Layer temporal metadata according to the [JSON Schema](json-schema/layer-schema.json)
 
 ```javascript
 {
     "type": "Feature",
     "id": "layer-us",
+    "stac_extensions": [
+        "layer"
+    ],
     // ... 
     // bbox and geometry that cover all items that belong to the layer
     "bbox": [
@@ -105,7 +108,11 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
             ]
         ]
     },
-    "properties": null,
+    // properties can optionally contain layer temporal information
+    "properties": {
+        "start_datetime": "2018-05-01T00:00:00Z",
+        "start_datetime": "2018-08-01T00:00:00Z"
+    },
     "links": [
         {
             "rel": "self",
@@ -152,5 +159,4 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
 This extension doesn't require any other extensions usages. However, to use it with [STAC API](https://github.com/radiantearth/stac-api-spec/)
 it would be required to use its implementation with the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query) support.
 
-Optionally [STAC API Layer extension](../../../stac-api-spec/extensions/layer/README.md) can be implement to retrieve available STAC Layer metadata,
-and to use the advantage of [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json)
+Optionally [STAC API Layer extension](../../../stac-api-spec/extensions/layer/README.md) can be implement to retrieve available STAC Layers metadata, and to use the advantage of [STAC Layers static representation](examples/landsat-stac-layers/layers/catalog.json)

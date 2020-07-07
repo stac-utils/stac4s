@@ -2,7 +2,9 @@
     "type": "Feature",
     "id": "layer-pa",
     "stac_version": "1.0.0-beta.1",
-    "stac_extensions": [],
+    "stac_extensions": [
+        "layer"
+    ],
     "bbox": [
         -78.32015745740821,
         37.79447027981874,
@@ -36,7 +38,10 @@
             ]
         ]
     },
-    "properties": null,
+    "properties": {
+        "start_datetime": "2018-05-01T00:00:00Z",
+        "start_datetime": "2018-08-01T00:00:00Z"
+    },
     "links": [
         {
             "rel": "self",
