@@ -12,6 +12,8 @@
 
 ### Fixed
 
+- STAC Catalogs do not require the `stac_extensions` field [#127](https://github.com/azavea/stac4s/pull/127)
+
 ### Security
 
 ## [0.0.10](https://github.com/azavea/stac4s/tree/0.0.10)
