@@ -40,7 +40,7 @@ object StacCatalog {
   implicit val decCatalog: Decoder[StacCatalog] = { c: HCursor =>
     (
       c.get[String]("stac_version"),
-      c.get[List[String]]("stac_extensions"),
+      c.get[Option[List[String]]]("stac_extensions"),
       c.get[String]("id"),
       c.get[Option[String]]("title"),
       c.get[String]("description"),
@@ -49,7 +49,7 @@ object StacCatalog {
     ).mapN(
       (
           version: String,
-          extensions: List[String],
+          extensions: Option[List[String]],
           id: String,
           title: Option[String],
           description: String,
@@ -58,7 +58,7 @@ object StacCatalog {
       ) =>
         StacCatalog.apply(
           version,
-          extensions,
+          extensions getOrElse Nil,
           id,
           title,
           description,
