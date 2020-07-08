@@ -5,12 +5,19 @@
 This API extension defines the API resources and semantics for retrieving [STAC Layers](../../../stac-spec/extensions/layer/README.md)
 information defined for available STAC Items.
 
+[STAC Items](https://github.com/radiantearth/stac-spec/tree/master/item-spec) can only have a reference to a single [STAC Collection](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). To group items into some other collection without this extension is only possible by creating full items copy (with new identifiers) that are linked to the same, new collection, which can be used as a new layer or group.
+
+STAC Layer extension allows to overcome this limitation and allows items to have references to multiple named catalogs which can be used to group items by the same (layer) name. Items in such layers can belong to the same or to different collections.
+
 ## Methods
 
 | Path                    | Content-Type Header                                                                                         | Description                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `GET /layers/`          | [Catalog](https://github.com/radiantearth/stac-api-spec/blob/master/stac-spec/catalog-spec/catalog-spec.md) | Catalog with links to layers.                                                      |
 | `GET /layers/{layerID}` | [`GeoJSON Feature`](https://github.com/azavea/stac4s/blob/4aba9c6691fde1d5235f165454ceaef6c6b3e165/docs/stac-spec/extensions/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
+
+**!IMPORTANT** 
+To query items by `layer` identifiers it is required to use the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query). See [STAC Layer Extension description](../../../stac-spec/extensions/layer/README.md#item-fields) to clarify how STAC Items property fields are defined to follow [STAC Layer Extension](../../../stac-spec/extensions/layer/README.md).
 
 ## Schema
 
