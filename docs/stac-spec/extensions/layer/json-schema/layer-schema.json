@@ -6,6 +6,9 @@
     "allOf": [
         {
             "$ref": "https://geojson.org/schema/Feature.json"
+        },
+        {
+            "$ref": "#/definitions/layer"
         }
     ],
     "definitions": {
@@ -23,7 +26,7 @@
                     }
                 },
                 "properties": {
-                    "$ref": "https://github.com/radiantearth/stac-spec/blob/dev/item-spec/json-schema/datetime.json"
+                    "$ref": "https://raw.githubusercontent.com/radiantearth/stac-spec/dev/item-spec/json-schema/datetime.json"
                 }
             }
         }

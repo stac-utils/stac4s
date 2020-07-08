@@ -65,7 +65,7 @@ The static catalog representation is a [STAC Catalog](https://github.com/radiant
 
 STAC Layers catalog can be decribed as a [STAC Catalog](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec). The example of such catalog defintion is located [here](examples/landsat-stac-layers/layers/catalog.json).
 
-Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). `Geometry` represents the combined footprint of all items that belong to such STAC Layer and the bounding box is the extent of the entire layer. `properties` can optionally contain the Layer temporal metadata according to the [JSON Schema](json-schema/layer-schema.json). The `id` of each GeoJSON Feature (STAC Layer) is a `Layer Name`.
+Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/Feature.json). `Geometry` represents the combined footprint of all items that belong to such STAC Layer and the bounding box is the extent of the entire layer. `properties` should contain the Layer temporal metadata according to the [JSON Schema](json-schema/layer-schema.json), it is done according to the [STAC Spec](https://github.com/radiantearth/stac-spec/blob/dev/item-spec/item-spec.md#properties-object) ([Datetime JSON Schema]("https://github.com/radiantearth/stac-spec/blob/dev/item-spec/json-schema/datetime.json)). The `id` of each GeoJSON Feature (STAC Layer) is a `Layer Name`.
 
 ```javascript
 {
@@ -109,8 +109,9 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
             ]
         ]
     },
-    // properties can optionally contain layer temporal information
+    // properties should contain the datetime information
     "properties": {
+        "datetime": null,
         "start_datetime": "2018-05-01T00:00:00Z",
         "start_datetime": "2018-08-01T00:00:00Z"
     },

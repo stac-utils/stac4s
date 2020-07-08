@@ -39,6 +39,7 @@
         ]
     },
     "properties": {
+        "datetime": null,
         "start_datetime": "2018-05-01T00:00:00Z",
         "start_datetime": "2018-08-01T00:00:00Z"
     },
