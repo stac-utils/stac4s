@@ -109,10 +109,11 @@ Request to `GET /layers/layer-us`:
             ]
         ]
     },
-    // properties can optionally contain layer temporal information
+    // properties can contain the layer temporal information
     "properties": {
+        "datetime": null,
         "start_datetime": "2018-05-01T00:00:00Z",
-        "start_datetime": "2018-08-01T00:00:00Z"
+        "end_datetime": "2018-08-01T00:00:00Z"
     },
     "links": [
         {
