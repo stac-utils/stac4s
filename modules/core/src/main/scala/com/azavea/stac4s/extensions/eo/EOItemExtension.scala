@@ -8,7 +8,6 @@ import io.circe.syntax._
 import com.azavea.stac4s.extensions.ItemExtension
 
 case class EOItemExtension(
-    gsd: Double,
     bands: NonEmptyList[Band],
     cloudCover: Option[Percentage]
 )
@@ -19,12 +18,9 @@ object EOItemExtension {
 
   implicit val encEOItemExtension: Encoder.AsObject[EOItemExtension] = Encoder
     .AsObject[Map[String, Json]]
-    .contramapObject(band =>
-      Map("eo:gsd" -> band.gsd.asJson, "eo:bands" -> band.bands.asJson, "eo:cloud_cover" -> band.cloudCover.asJson)
-    )
+    .contramapObject(band => Map("eo:bands" -> band.bands.asJson, "eo:cloud_cover" -> band.cloudCover.asJson))
 
-  implicit val decEOItemExtension: Decoder[EOItemExtension] = Decoder.forProduct3(
-    "eo:gsd",
+  implicit val decEOItemExtension: Decoder[EOItemExtension] = Decoder.forProduct2(
     "eo:bands",
     "eo:cloud_cover"
   )(EOItemExtension.apply)

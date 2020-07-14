@@ -5,11 +5,10 @@ import com.azavea.stac4s.extensions.ItemAssetExtension
 import cats.Eq
 import cats.data.NonEmptyList
 import io.circe._
-import io.circe.refined._
 import io.circe.syntax._
 
 case class EOAssetExtension(
-    bands: NonEmptyList[BandRange]
+    bands: NonEmptyList[Band]
 )
 
 object EOAssetExtension {

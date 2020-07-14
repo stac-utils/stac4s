@@ -2,13 +2,20 @@
 
 ### Added
 
+- STAC 1.0.0-beta.1 support [#116](https://github.com/azavea/stac4s/pull/116)
+- STAC Layer extension spec [#126](https://github.com/azavea/stac4s/pull/126)
+
 ### Changed
 
 ### Deprecated
 
 ### Removed
 
+- Remove STAC Catalof specs against manually created catalogs from tests [#126](https://github.com/azavea/stac4s/pull/126)
+
 ### Fixed
+
+- STAC Catalogs do not require the `stac_extensions` field [#127](https://github.com/azavea/stac4s/pull/127)
 
 ### Security
 

@@ -2,7 +2,7 @@ package com.azavea.stac4s.extensions.eo
 
 import cats.Eq
 import eu.timepit.refined.types.string.NonEmptyString
-import eu.timepit.refined.types.numeric.PosInt
+import eu.timepit.refined.types.numeric.PosDouble
 import io.circe._
 import io.circe.refined._
 
@@ -10,8 +10,8 @@ case class Band(
     name: NonEmptyString,
     commonName: Option[NonEmptyString],
     description: Option[NonEmptyString],
-    centerWavelength: Option[PosInt],
-    fullWidthHalfMax: Option[PosInt]
+    centerWavelength: Option[PosDouble],
+    fullWidthHalfMax: Option[PosDouble]
 )
 
 object Band {
