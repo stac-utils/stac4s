@@ -14,7 +14,7 @@ object StacMediaType {
     Eq[String].imap(fromString)(_.repr)
 
   private def fromString(s: String): StacMediaType = s match {
-    case "image/tiff; application=geotiff"                          => `image/tiff`
+    case "image/tiff; application=geotiff"                          => `image/geotiff`
     case "image/tiff; application=geotiff; profile=cloud-optimized" => `image/cog`
     case "image/jp2"                                                => `image/jp2`
     case "image/png"                                                => `image/png`
@@ -38,7 +38,7 @@ object StacMediaType {
     Decoder.decodeString.emap { str => Either.catchNonFatal(fromString(str)).leftMap(_ => "StacLinkType") }
 }
 
-case object `image/tiff`                             extends StacMediaType("image/tiff; application=geotiff")
+case object `image/geotiff`                          extends StacMediaType("image/tiff; application=geotiff")
 case object `image/cog`                              extends StacMediaType("image/tiff; application=geotiff; profile=cloud-optimized")
 case object `image/jp2`                              extends StacMediaType("image/jp2")
 case object `image/png`                              extends StacMediaType("image/png")
