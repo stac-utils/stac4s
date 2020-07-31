@@ -86,8 +86,7 @@ package object testing extends NumericInstances {
   )
 
   private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
-    Gen.const(`image/tiff`),
-    Gen.const(`image/vnd.stac.geotiff`),
+    Gen.const(`image/geotiff`),
     Gen.const(`image/cog`),
     Gen.const(`image/jp2`),
     Gen.const(`image/png`),

@@ -14,22 +14,21 @@ object StacMediaType {
     Eq[String].imap(fromString)(_.repr)
 
   private def fromString(s: String): StacMediaType = s match {
-    case "image/tiff"                                   => `image/tiff`
-    case "image/vnd.stac.geotiff"                       => `image/vnd.stac.geotiff`
-    case "image/vnd.stac.geotiff; cloud-optimized=true" => `image/cog`
-    case "image/jp2"                                    => `image/jp2`
-    case "image/png"                                    => `image/png`
-    case "image/jpeg"                                   => `image/jpeg`
-    case "text/xml"                                     => `text/xml`
-    case "text/html"                                    => `text/html`
-    case "application/xml"                              => `application/xml`
-    case "application/json"                             => `application/json`
-    case "text/plain"                                   => `text/plain`
-    case "application/geo+json"                         => `application/geo+json`
-    case "application/geopackage+sqlite3"               => `application/geopackage+sqlite3`
-    case "application/x-hdf5"                           => `application/x-hdf5`
-    case "application/x-hdf"                            => `application/x-hdf`
-    case _                                              => VendorMediaType(s)
+    case "image/tiff; application=geotiff"                          => `image/geotiff`
+    case "image/tiff; application=geotiff; profile=cloud-optimized" => `image/cog`
+    case "image/jp2"                                                => `image/jp2`
+    case "image/png"                                                => `image/png`
+    case "image/jpeg"                                               => `image/jpeg`
+    case "text/xml"                                                 => `text/xml`
+    case "text/html"                                                => `text/html`
+    case "application/xml"                                          => `application/xml`
+    case "application/json"                                         => `application/json`
+    case "text/plain"                                               => `text/plain`
+    case "application/geo+json"                                     => `application/geo+json`
+    case "application/geopackage+sqlite3"                           => `application/geopackage+sqlite3`
+    case "application/x-hdf5"                                       => `application/x-hdf5`
+    case "application/x-hdf"                                        => `application/x-hdf`
+    case _                                                          => VendorMediaType(s)
   }
 
   implicit val encMediaType: Encoder[StacMediaType] =
@@ -39,9 +38,8 @@ object StacMediaType {
     Decoder.decodeString.emap { str => Either.catchNonFatal(fromString(str)).leftMap(_ => "StacLinkType") }
 }
 
-case object `image/tiff`                             extends StacMediaType("image/tiff")
-case object `image/vnd.stac.geotiff`                 extends StacMediaType("image/vnd.stac.geotiff")
-case object `image/cog`                              extends StacMediaType("image/vnd.stac.geotiff; cloud-optimized=true")
+case object `image/geotiff`                          extends StacMediaType("image/tiff; application=geotiff")
+case object `image/cog`                              extends StacMediaType("image/tiff; application=geotiff; profile=cloud-optimized")
 case object `image/jp2`                              extends StacMediaType("image/jp2")
 case object `image/png`                              extends StacMediaType("image/png")
 case object `image/jpeg`                             extends StacMediaType("image/jpeg")
