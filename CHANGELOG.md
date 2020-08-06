@@ -1,4 +1,18 @@
-## [Unreleased]
+## Unreleased
+
+### Changed
+
+### Added
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.0.14](https://github.com/azavea/stac4s/tree/0.0.14)
 
 ### Changed
 
