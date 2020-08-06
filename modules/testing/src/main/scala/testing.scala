@@ -147,8 +147,17 @@ package object testing extends NumericInstances {
     arbitrary[Double].filter(java.lang.Double.isFinite)
 
   private def twoDimBboxGen: Gen[TwoDimBbox] =
-    (finiteDoubleGen, finiteDoubleGen, finiteDoubleGen, finiteDoubleGen)
-      .mapN(TwoDimBbox.apply)
+    (for {
+      lowerX <- finiteDoubleGen
+      lowerY <- finiteDoubleGen
+    } yield {
+      TwoDimBbox(
+        lowerX,
+        lowerY,
+        lowerX + 100,
+        lowerY + 100
+      )
+    })
 
   private def spdxGen: Gen[SPDX] =
     arbitrary[SpdxLicense] map (license => SPDX(SpdxId.unsafeFrom(license.id)))
@@ -158,14 +167,20 @@ package object testing extends NumericInstances {
   private def stacLicenseGen: Gen[StacLicense] = Gen.oneOf(spdxGen, proprietaryGen)
 
   private def threeDimBboxGen: Gen[ThreeDimBbox] =
-    (
-      finiteDoubleGen,
-      finiteDoubleGen,
-      finiteDoubleGen,
-      finiteDoubleGen,
-      finiteDoubleGen,
-      finiteDoubleGen
-    ).mapN(ThreeDimBbox.apply)
+    (for {
+      lowerX <- finiteDoubleGen
+      lowerY <- finiteDoubleGen
+      lowerZ <- finiteDoubleGen
+    } yield {
+      ThreeDimBbox(
+        lowerX,
+        lowerY,
+        lowerZ,
+        lowerX + 100,
+        lowerY + 100,
+        lowerZ + 100
+      )
+    })
 
   private def bboxGen: Gen[Bbox] =
     Gen.oneOf(twoDimBboxGen.widen, threeDimBboxGen.widen)

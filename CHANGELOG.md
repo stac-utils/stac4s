@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Changed
+
+- Generators for bboxes now always generate valid bboxes [#135](https://github.com/azavea/stac4s/pull/135)
+
 ## [0.0.13](https://github.com/azavea/stac4s/tree/0.0.13)
 
 ### Added
