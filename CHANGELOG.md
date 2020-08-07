@@ -1,16 +1,43 @@
-## [Unreleased]
-
-### Added
-
-- STAC 1.0.0-beta.1 support [#116](https://github.com/azavea/stac4s/pull/116)
+## Unreleased
 
 ### Changed
+
+### Added
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+### Security
+
+## [0.0.14](https://github.com/azavea/stac4s/tree/0.0.14)
+
+### Changed
+
+- Generators for bboxes now always generate valid bboxes [#135](https://github.com/azavea/stac4s/pull/135)
+
+## [0.0.13](https://github.com/azavea/stac4s/tree/0.0.13)
+
+### Added
+
+- STAC 1.0.0-beta.1 support [#116](https://github.com/azavea/stac4s/pull/116)
+- STAC Layer extension spec [#126](https://github.com/azavea/stac4s/pull/126)
+
+### Changed
+
+- Update `StacMediaType` for `geotiff` and `cog` in 1.0.0-beta.1 spec [#132](https://github.com/azavea/stac4s/pull/132)
+
+### Deprecated
+
+### Removed
+
+- Remove STAC Catalof specs against manually created catalogs from tests [#126](https://github.com/azavea/stac4s/pull/126)
+
+### Fixed
+
+- STAC Catalogs do not require the `stac_extensions` field [#127](https://github.com/azavea/stac4s/pull/127)
 
 ### Security
 
@@ -50,21 +77,27 @@
 ## [0.0.4]
 
 ### Added
+
 - Added ability to transform `Bbox` to `Extent` [\#5](https://github.com/azavea/stac4s/pull/5)
 
 ### Changed
+
 - Updated to GeoTrellis 3.2 [\#5](https://github.com/azavea/stac4s/pull/5)
 
 ### Removed
+
 - Removed `core` from package naming [\#5](https://github.com/azavea/stac4s/pull/5)
 
 ## [0.0.3]
 
 ### Added
+
 - Added ability to transform `Bbox` to `Extent` [\#5](https://github.com/azavea/stac4s/pull/5)
 
 ### Changed
+
 - Updated to GeoTrellis 3.2 [\#5](https://github.com/azavea/stac4s/pull/5)
 
 ### Removed
+
 - Removed `core` from package naming [\#5](https://github.com/azavea/stac4s/pull/5)

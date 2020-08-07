@@ -1,0 +1,47 @@
+  
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "item-schema.json#",
+    "title": "Layer Extension",
+    "description": "STAC Layer Item Extension Spec",
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/radiantearth/stac-spec/dev/item-spec/json-schema/item.json"
+        },
+        {
+            "$ref": "#/definitions/layer"
+        }
+    ],
+    "definitions": {
+        "layer": {
+            "type": "object",
+            "required": [
+                "stac_extensions",
+                "properties"
+            ],
+            "properties": {
+                "stac_extensions": {
+                    "type": "array",
+                    "contains": {
+                        "const": "layer"
+                    }
+                },
+                "properties": {
+                    "type": "object",
+                    "required": [
+                        "layer:ids"
+                    ],
+                    "properties": {
+                        "layer:ids": {
+                            "title": "Layer Names",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+  }
