@@ -19,7 +19,7 @@ case class SearchFilters(
     collections: List[String] = Nil,
     items: List[String] = Nil,
     limit: Option[NonNegInt] = None,
-    query: JsonObject = JsonObject.empty,
+    query: Map[String, List[Query]] = Map.empty,
     next: Option[PaginationToken] = None
 )
 
@@ -80,7 +80,7 @@ object SearchFilters {
       collectionsOption <- c.downField("collections").as[Option[List[String]]]
       itemsOption       <- c.downField("items").as[Option[List[String]]]
       limit             <- c.downField("limit").as[Option[NonNegInt]]
-      query             <- c.get[Option[JsonObject]]("query")
+      query             <- c.get[Option[Map[String, List[Query]]]]("query")
       paginationToken   <- c.get[Option[PaginationToken]]("next")
     } yield {
       SearchFilters(
@@ -90,7 +90,7 @@ object SearchFilters {
         collectionsOption.getOrElse(Nil),
         itemsOption.getOrElse(Nil),
         limit,
-        query.getOrElse(JsonObject.empty),
+        query getOrElse Map.empty,
         paginationToken
       )
     }
