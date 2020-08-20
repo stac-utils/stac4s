@@ -200,3 +200,23 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
+lazy val coreTestRef = LocalProject("modules/core-test")
+
+lazy val client = (project in file("modules/client"))
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(libraryDependencies ++= coreDependencies)
+  .settings(
+    libraryDependencies ++= Seq(
+      "co.fs2"            %% "fs2-core"            % "2.4.2",
+      "org.http4s"        %% "http4s-blaze-client" % "0.21.7",
+      "org.http4s"        %% "http4s-circe"        % "0.21.7",
+      "org.http4s"        %% "http4s-client"       % "0.21.7",
+      "org.http4s"        %% "http4s-core"         % "0.21.7",
+      "org.typelevel"     %% "cats-effect"         % "2.1.4",
+      "org.typelevel"     %% "cats-effect"         % "2.1.4",
+      "io.chrisdavenport" %% "vault"               % "2.0.0",
+      "io.chrisdavenport" %% "log4cats-core"       % "1.1.1"
+    )
+  )
