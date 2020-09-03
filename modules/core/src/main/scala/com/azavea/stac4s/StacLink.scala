@@ -1,6 +1,4 @@
 package com.azavea.stac4s
-
-import cats.implicits._
 import io.circe._
 import io.circe.syntax._
 

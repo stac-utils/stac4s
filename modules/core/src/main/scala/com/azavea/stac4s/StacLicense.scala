@@ -1,7 +1,6 @@
 package com.azavea.stac4s
 
 import cats.Eq
-import cats.implicits._
 import eu.timepit.refined.api.RefType
 import io.circe._
 import io.circe.syntax._

@@ -3,7 +3,6 @@ package com.azavea.stac4s.extensions.label
 import com.azavea.stac4s.extensions.ItemExtension
 
 import cats.Eq
-import cats.implicits._
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import io.circe.syntax._
 

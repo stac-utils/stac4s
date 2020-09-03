@@ -1,7 +1,6 @@
 package com.azavea.stac4s
 
 import cats.Eq
-import cats.implicits._
 import io.circe._
 
 sealed abstract class StacProviderRole(val repr: String) {
