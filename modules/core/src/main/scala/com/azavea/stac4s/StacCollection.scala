@@ -1,6 +1,7 @@
 package com.azavea.stac4s
 
 import cats.Eq
+import cats.syntax.apply._
 import geotrellis.vector.{io => _}
 import io.circe._
 import io.circe.syntax._

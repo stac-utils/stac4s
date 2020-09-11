@@ -1,6 +1,8 @@
 package com.azavea.stac4s
 
 import cats.Eq
+import cats.syntax.either._
+import cats.syntax.invariant._
 import io.circe._
 
 sealed abstract class StacLinkType(val repr: String) {

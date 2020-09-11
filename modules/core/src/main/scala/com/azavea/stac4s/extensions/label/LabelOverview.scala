@@ -1,6 +1,7 @@
 package com.azavea.stac4s.extensions.label
 
 import cats.Eq
+import cats.syntax.apply._
 import io.circe.{Decoder, Encoder, HCursor}
 
 case class LabelOverview(

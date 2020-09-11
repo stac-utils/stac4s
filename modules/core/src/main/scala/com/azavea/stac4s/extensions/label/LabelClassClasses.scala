@@ -2,6 +2,7 @@ package com.azavea.stac4s.extensions.label
 
 import cats.data.NonEmptyList
 import cats.Eq
+import cats.syntax.functor._
 import io.circe._
 import io.circe.syntax._
 
