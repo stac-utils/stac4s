@@ -1,7 +1,8 @@
 package com.azavea.stac4s
 
 import cats.Eq
-import cats.implicits._
+import cats.syntax.either._
+import cats.syntax.functor._
 import geotrellis.vector.{Extent, ExtentRangeError}
 import io.circe._
 import io.circe.syntax._

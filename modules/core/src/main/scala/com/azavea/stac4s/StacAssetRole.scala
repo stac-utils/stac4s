@@ -1,7 +1,8 @@
 package com.azavea.stac4s
 
 import cats.Eq
-import cats.implicits._
+import cats.syntax.either._
+import cats.syntax.invariant._
 import io.circe.{Decoder, Encoder}
 
 sealed abstract class StacAssetRole(val repr: String) {

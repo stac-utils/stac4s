@@ -7,7 +7,8 @@ import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
 import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
-import cats.implicits._
+import cats.syntax.apply._
+import cats.syntax.functor._
 import eu.timepit.refined.types.numeric.PosDouble
 import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances

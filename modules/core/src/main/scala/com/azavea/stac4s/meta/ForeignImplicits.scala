@@ -3,7 +3,7 @@ package com.azavea.stac4s.meta
 import com.azavea.stac4s.TemporalExtent
 
 import cats.Eq
-import cats.implicits._
+import cats.syntax.either._
 import eu.timepit.refined.api.RefType
 import geotrellis.vector.Geometry
 import io.circe._
