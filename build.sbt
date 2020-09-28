@@ -124,6 +124,7 @@ val testingDependencies = Seq(
   "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
   "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.ScalacheckCatsVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
+  "joda-time"                   % "joda-time"            % Versions.JodaTime,
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
   "org.locationtech.jts"        % "jts-core"             % Versions.Jts,
   "org.scalacheck"              %% "scalacheck"          % Versions.ScalacheckVersion,
