@@ -8,7 +8,7 @@ import eu.timepit.refined.api.{Refined, RefinedTypeOps}
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
 
-import java.time.ZonedDateTime
+import org.joda.time.Instant
 
 package object stac4s {
 
@@ -19,20 +19,20 @@ package object stac4s {
   object StacVersion extends RefinedTypeOps[StacVersion, String]
 
   type TemporalExtent =
-    List[Option[ZonedDateTime]] Refined And[
+    List[Option[Instant]] Refined And[
       And[MinSize[W.`2`.T], MaxSize[W.`2`.T]],
       Exists[HasInstant]
     ]
 
-  object TemporalExtent extends RefinedTypeOps[TemporalExtent, List[Option[ZonedDateTime]]] {
+  object TemporalExtent extends RefinedTypeOps[TemporalExtent, List[Option[Instant]]] {
 
-    def apply(start: ZonedDateTime, end: Option[ZonedDateTime]): TemporalExtent =
+    def apply(start: Instant, end: Option[Instant]): TemporalExtent =
       TemporalExtent.unsafeFrom(List(Some(start), end))
 
-    def apply(start: Option[ZonedDateTime], end: ZonedDateTime): TemporalExtent =
+    def apply(start: Option[Instant], end: Instant): TemporalExtent =
       TemporalExtent.unsafeFrom(List(start, Some(end)))
 
-    def apply(start: ZonedDateTime, end: ZonedDateTime): TemporalExtent =
+    def apply(start: Instant, end: Instant): TemporalExtent =
       TemporalExtent.unsafeFrom(List(Some(start), Some(end)))
 
   }

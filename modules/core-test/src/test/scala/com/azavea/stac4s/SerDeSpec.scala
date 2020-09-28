@@ -10,18 +10,18 @@ import geotrellis.vector.Geometry
 import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
+import org.joda.time.Instant
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
-import java.time.ZonedDateTime
 
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
   // core
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
   checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
-  checkAll("Codec.ZonedDateTime", CodecTests[ZonedDateTime].unserializableCodec)
+  checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
   checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
   checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
   checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)

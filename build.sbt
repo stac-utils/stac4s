@@ -103,35 +103,36 @@ lazy val credentialSettings = Seq(
 )
 
 val coreDependencies = Seq(
-  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
-  "org.typelevel"               %% "cats-kernel"         % Versions.CatsVersion,
+  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.SpdxCheckerVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
   "io.circe"                    %% "circe-generic"       % Versions.CirceVersion,
   "io.circe"                    %% "circe-parser"        % Versions.CirceVersion,
   "io.circe"                    %% "circe-refined"       % Versions.CirceVersion,
+  "joda-time"                   % "joda-time"            % Versions.JodaTime,
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
-  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
-  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
-  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
-  "org.locationtech.jts"        % "jts-core"             % Versions.jts
+  "org.locationtech.jts"        % "jts-core"             % Versions.Jts,
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "org.typelevel"               %% "cats-kernel"         % Versions.CatsVersion
 )
 
 val testingDependencies = Seq(
   "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
-  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.SpdxCheckerVersion,
   "eu.timepit"                  %% "refined-scalacheck"  % Versions.RefinedVersion,
   "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
-  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion,
+  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.ScalacheckCatsVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
-  "org.locationtech.jts"        % "jts-core"             % Versions.jts,
-  "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion,
+  "org.locationtech.jts"        % "jts-core"             % Versions.Jts,
+  "org.scalacheck"              %% "scalacheck"          % Versions.ScalacheckVersion,
   "org.typelevel"               %% "cats-core"           % Versions.CatsVersion
 )
 
 val testRunnerDependencies = Seq(
   "io.circe"          %% "circe-testing"   % Versions.CirceVersion,
-  "org.scalatest"     %% "scalatest"       % Versions.scalatestVersion,
+  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion,
   "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck
 )
 
