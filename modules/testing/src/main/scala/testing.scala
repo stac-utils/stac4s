@@ -18,7 +18,8 @@ import io.circe.syntax._
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
-import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 package object testing extends NumericInstances {
 
@@ -51,7 +52,9 @@ package object testing extends NumericInstances {
       )
     }).widen
 
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
+  private def instantGen: Gen[ZonedDateTime] = arbitrary[Int] map { x =>
+    ZonedDateTime.now.plus(x.toLong, ChronoUnit.SECONDS)
+  }
 
   private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     possiblyEmptyMapGen(
@@ -196,7 +199,7 @@ package object testing extends NumericInstances {
     ).mapN(StacLink.apply)
 
   private def temporalExtentGen: Gen[TemporalExtent] = {
-    (arbitrary[Instant], arbitrary[Instant]).tupled
+    (arbitrary[ZonedDateTime], arbitrary[ZonedDateTime]).tupled
       .map {
         case (start, end) =>
           TemporalExtent(start, end)
@@ -418,7 +421,7 @@ package object testing extends NumericInstances {
     stacProviderGen
   }
 
-  implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
+  implicit val arbInstant: Arbitrary[ZonedDateTime] = Arbitrary { instantGen }
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
 
