@@ -3,7 +3,7 @@ object Versions {
   val CirceVersion            = "0.13.0"
   val GeoTrellisVersion       = "3.5.0"
   val JodaTime                = "2.10.6"
-  val Jts                     = "1.16.1"
+  val Jts                     = "1.17.1"
   val RefinedVersion          = "0.9.17"
   val ScalacheckCatsVersion   = "0.3.0"
   val ScalacheckVersion       = "1.14.3"
