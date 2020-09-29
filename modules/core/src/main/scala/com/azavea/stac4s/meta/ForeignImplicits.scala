@@ -22,6 +22,7 @@ trait ForeignImplicits {
   // circe codecs
   // A more flexible alternative to DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS[xxx][xx][X]")
   // https://tools.ietf.org/html/rfc3339
+  // Warning: This formatter is good only for parsing
   val RFC3339formatter =
     new DateTimeFormatterBuilder()
       .append(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
