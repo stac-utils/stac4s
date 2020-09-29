@@ -90,6 +90,6 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   }
 
   test("Instant decodes timestrings with -00 format timezone") {
-    getTimeDecodeTest("2018-01-01T00:00:00+00")
+    getTimeDecodeTest("2018-01-01T00:00:00-00")
   }
 }
