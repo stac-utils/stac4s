@@ -9,8 +9,9 @@ import geotrellis.vector.Geometry
 import io.circe._
 import io.circe.parser.decode
 import io.circe.syntax._
+import org.joda.time.Instant
 
-import java.time.Instant
+import scala.util.Try
 
 trait ForeignImplicits {
 
@@ -19,14 +20,11 @@ trait ForeignImplicits {
   implicit val eqGeometry: Eq[Geometry] = Eq.fromUniversalEquals
 
   // circe codecs
-  implicit val decodeInstant: Decoder[Instant] = Decoder.decodeString.emap { str =>
-    Either
-      .catchNonFatal(Instant.parse(str))
-      .leftMap(_ => "Instant")
-  }
 
-  implicit val encodeInstant: Encoder[Instant] =
-    Encoder.encodeString.contramap[Instant](_.toString)
+  implicit val encodeJodaInstant: Encoder[Instant] = Encoder[String].contramap(_.toString)
+
+  implicit val decodeJodaInstant: Decoder[Instant] =
+    Decoder[String].emap(s => Either.fromTry(Try(Instant.parse(s))).leftMap(_ => s"$s was not a valid string format"))
 
   implicit val encodeTemporalExtent: Encoder[TemporalExtent] = _.value.map(x => x.asJson).asJson
 
