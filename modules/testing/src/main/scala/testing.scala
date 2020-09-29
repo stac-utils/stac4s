@@ -7,7 +7,8 @@ import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
 import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
-import cats.implicits._
+import cats.syntax.apply._
+import cats.syntax.functor._
 import eu.timepit.refined.types.numeric.PosDouble
 import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances
@@ -17,7 +18,7 @@ import io.circe.syntax._
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
-import java.time.Instant
+import org.joda.time.Instant
 
 package object testing extends NumericInstances {
 
@@ -50,7 +51,7 @@ package object testing extends NumericInstances {
       )
     }).widen
 
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
+  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => new Instant(x.toLong) }
 
   private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     possiblyEmptyMapGen(

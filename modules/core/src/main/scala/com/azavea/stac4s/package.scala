@@ -8,7 +8,7 @@ import eu.timepit.refined.api.{Refined, RefinedTypeOps}
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
 
-import java.time.Instant
+import org.joda.time.Instant
 
 package object stac4s {
 

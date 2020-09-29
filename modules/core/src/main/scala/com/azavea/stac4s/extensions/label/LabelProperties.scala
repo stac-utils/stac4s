@@ -1,7 +1,7 @@
 package com.azavea.stac4s.extensions.label
 
 import cats.Eq
-import cats.implicits._
+import cats.syntax.invariant._
 import io.circe.{Decoder, Encoder}
 
 sealed abstract class LabelProperties(val repr: String) {
