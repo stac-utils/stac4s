@@ -2,8 +2,6 @@
 
 ### Changed
 
-- All implicit imports from cats are moved to specific `cats.syntax.foo` imports [#146](https://github.com/azavea/stac4s/pull/146)
-- Time types are derived from `org.joda.time.Instant` instead of stock `java` time types [#152](https://github.com/azavea/stac4s/pull/152)
 - Remove joda time [#153](https://github.com/azavea/stac4s/pull/153)
 
 ### Added
@@ -15,6 +13,13 @@
 ### Fixed
 
 ### Security
+
+## [0.0.15](https://github.com/azavea/stac4s/tree/0.0.15)
+
+### Changed
+
+- All implicit imports from cats are moved to specific `cats.syntax.foo` imports [#146](https://github.com/azavea/stac4s/pull/146)
+- Time types are derived from `org.joda.time.Instant` instead of stock `java` time types [#152](https://github.com/azavea/stac4s/pull/152)
 
 ## [0.0.14](https://github.com/azavea/stac4s/tree/0.0.14)
 
@@ -32,8 +37,6 @@
 ### Changed
 
 - Update `StacMediaType` for `geotiff` and `cog` in 1.0.0-beta.1 spec [#132](https://github.com/azavea/stac4s/pull/132)
-
-### Deprecated
 
 ### Removed
 
