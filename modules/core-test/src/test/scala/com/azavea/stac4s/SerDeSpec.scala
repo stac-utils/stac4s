@@ -10,7 +10,8 @@ import geotrellis.vector.Geometry
 import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
-import org.joda.time.Instant
+import java.time.{Instant, OffsetDateTime}
+
 import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -71,7 +72,7 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
 
   // timezone parsing unit tests
   private def getTimeDecodeTest(timestring: String): Assertion =
-    timestring.asJson.as[Instant] shouldBe (Right(Instant.parse(timestring)))
+    timestring.asJson.as[Instant] shouldBe Right(OffsetDateTime.parse(timestring, RFC3339formatter).toInstant)
 
   test("Instant decodes timestrings with +0x:00 timezones") {
     getTimeDecodeTest("2018-01-01T00:00:00+05:00")
@@ -91,5 +92,17 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
 
   test("Instant decodes timestrings with -00 format timezone") {
     getTimeDecodeTest("2018-01-01T00:00:00-00")
+  }
+
+  test("Instant decodes timestring with Z format timezone") {
+    getTimeDecodeTest("2020-04-03T11:32:26Z")
+  }
+
+  test("Instant decodes timestring with 1e3 Z format timezone") {
+    getTimeDecodeTest("2018-04-03T11:32:26.553Z")
+  }
+
+  test("Instant decodes timestring with 1e9 Z format timezone") {
+    getTimeDecodeTest("2018-04-03T11:32:26.553955473Z")
   }
 }
