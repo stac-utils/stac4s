@@ -11,6 +11,7 @@ import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
 import org.joda.time.Instant
+import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
@@ -66,5 +67,29 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
     val link =
       decode[StacLink]("""{"href":"s3://foo/item.json","rel":"item"}""")
     link map { _.extensionFields } shouldBe Right(().asJsonObject)
+  }
+
+  // timezone parsing unit tests
+  private def getTimeDecodeTest(timestring: String): Assertion =
+    timestring.asJson.as[Instant] shouldBe (Right(Instant.parse(timestring)))
+
+  test("Instant decodes timestrings with +0x:00 timezones") {
+    getTimeDecodeTest("2018-01-01T00:00:00+05:00")
+  }
+
+  test("Instant decodes timestrings with -0x:00 timezones") {
+    getTimeDecodeTest("2018-01-01T00:00:00-09:00")
+  }
+
+  test("Instant decodes timestrings with 0000 format timezone") {
+    getTimeDecodeTest("2018-01-01T00:00:00+0000")
+  }
+
+  test("Instant decodes timestrings with +00 format timezone") {
+    getTimeDecodeTest("2018-01-01T00:00:00+00")
+  }
+
+  test("Instant decodes timestrings with -00 format timezone") {
+    getTimeDecodeTest("2018-01-01T00:00:00+00")
   }
 }
