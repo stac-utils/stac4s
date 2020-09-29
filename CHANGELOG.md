@@ -2,9 +2,6 @@
 
 ### Changed
 
-- All implicit imports from cats are moved to specific `cats.syntax.foo` imports [#146](https://github.com/azavea/stac4s/pull/146)
-- Time types are derived from `org.joda.time.Instant` instead of stock `java` time types [#152](https://github.com/azavea/stac4s/pull/152)
-
 ### Added
 
 ### Deprecated
@@ -14,6 +11,13 @@
 ### Fixed
 
 ### Security
+
+## [0.0.15](https://github.com/azavea/stac4s/tree/0.0.15)
+
+### Changed
+
+- All implicit imports from cats are moved to specific `cats.syntax.foo` imports [#146](https://github.com/azavea/stac4s/pull/146)
+- Time types are derived from `org.joda.time.Instant` instead of stock `java` time types [#152](https://github.com/azavea/stac4s/pull/152)
 
 ## [0.0.14](https://github.com/azavea/stac4s/tree/0.0.14)
 
