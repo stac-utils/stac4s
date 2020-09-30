@@ -1,7 +1,6 @@
 package com.azavea.stac4s.meta
 
 import com.azavea.stac4s.TemporalExtent
-
 import cats.Eq
 import cats.syntax.either._
 import eu.timepit.refined.api.RefType
@@ -9,7 +8,8 @@ import geotrellis.vector.Geometry
 import io.circe._
 import io.circe.parser.decode
 import io.circe.syntax._
-import org.joda.time.Instant
+import java.time.{Instant, OffsetDateTime}
+import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 
 import scala.util.Try
 
@@ -20,11 +20,31 @@ trait ForeignImplicits {
   implicit val eqGeometry: Eq[Geometry] = Eq.fromUniversalEquals
 
   // circe codecs
+  // A more flexible alternative to DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS[xxx][xx][X]")
+  // https://tools.ietf.org/html/rfc3339
+  // Warning: This formatter is good only for parsing
+  val RFC3339formatter =
+    new DateTimeFormatterBuilder()
+      .append(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+      .optionalStart()
+      .appendOffset("+HH:MM", "+00:00")
+      .optionalEnd()
+      .optionalStart()
+      .appendOffset("+HHMM", "+0000")
+      .optionalEnd()
+      .optionalStart()
+      .appendOffset("+HH", "Z")
+      .optionalEnd()
+      .toFormatter()
 
-  implicit val encodeJodaInstant: Encoder[Instant] = Encoder[String].contramap(_.toString)
+  implicit val encodeInstant: Encoder[Instant] = Encoder[String].contramap(_.toString)
 
-  implicit val decodeJodaInstant: Decoder[Instant] =
-    Decoder[String].emap(s => Either.fromTry(Try(Instant.parse(s))).leftMap(_ => s"$s was not a valid string format"))
+  implicit val decodeInstant: Decoder[Instant] =
+    Decoder[String].emap(s =>
+      Either
+        .fromTry(Try(OffsetDateTime.parse(s, RFC3339formatter).toInstant))
+        .leftMap(_ => s"$s was not a valid string format")
+    )
 
   implicit val encodeTemporalExtent: Encoder[TemporalExtent] = _.value.map(x => x.asJson).asJson
 

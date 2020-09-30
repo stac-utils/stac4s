@@ -18,7 +18,7 @@ import io.circe.syntax._
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
-import org.joda.time.Instant
+import java.time.Instant
 
 package object testing extends NumericInstances {
 
@@ -51,7 +51,7 @@ package object testing extends NumericInstances {
       )
     }).widen
 
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => new Instant(x.toLong) }
+  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
 
   private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     possiblyEmptyMapGen(
