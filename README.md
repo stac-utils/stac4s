@@ -27,12 +27,17 @@ Contributions can be made via [pull requests](https://github.com/azavea/stac4s/p
 
 ### Deployments, Releases, and Maintenance
 
-`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release make an annotated tag and push it to the repository:
+`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release, rotate changelog entries into a section for the version you're releasing, then make an annotated tag and push it to the repository:
 
 ```
-git tag -a <version> -m "Release version <version>
+git tag -s -a <version> -m "Release version <version>
 git push origin --tags
 ```
+
+After you've pushed the tag, navigate to [Releases](https://github.com/azavea/stac4s/releases) and
+choose "Draft a new release". Choose your tag version, title the release for your tag version,
+and then copy the changelog section for this release into the description (leaving out the heading for
+the version).
 
 Active development and backports for a particular _minor_ version of `stac4s` will be tracked and maintained on a branch for that series (e.g. `series/0.1.x`, `series/0.2.x`, etc). Pull requests to backport a fix, feature, or other change should be made to that series' respective branch.
 
