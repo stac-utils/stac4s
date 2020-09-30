@@ -2,8 +2,6 @@
 
 ### Changed
 
-- Remove joda time [#153](https://github.com/azavea/stac4s/pull/153)
-
 ### Added
 
 ### Deprecated
@@ -13,6 +11,12 @@
 ### Fixed
 
 ### Security
+
+## [0.0.16](https://github.com/azavea/stac4s/tree/0.0.16)
+
+### Changed
+
+- Remove joda time [#153](https://github.com/azavea/stac4s/pull/153)
 
 ## [0.0.15](https://github.com/azavea/stac4s/tree/0.0.15)
 
