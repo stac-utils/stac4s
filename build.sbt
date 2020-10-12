@@ -143,19 +143,23 @@ lazy val root = project
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(core, testing, coreTest)
+  .aggregate(coreJvm, testing, coreTest)
 
-lazy val core = (project in file("modules/core"))
+lazy val core = crossProject(JSPlatform, JVMPlatform)
+  .in(file("modules/core"))
   .settings(commonSettings)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= coreDependencies
   })
 
+lazy val coreJvm = core.jvm
+lazy val coreJs  = core.js
+
 lazy val coreRef = LocalProject("modules/core")
 
 lazy val testing = (project in file("modules/testing"))
-  .dependsOn(core)
+  .dependsOn(coreJvm)
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(libraryDependencies ++= testingDependencies)
