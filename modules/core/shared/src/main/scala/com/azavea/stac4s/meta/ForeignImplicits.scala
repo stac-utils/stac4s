@@ -4,7 +4,6 @@ import com.azavea.stac4s.TemporalExtent
 import cats.Eq
 import cats.syntax.either._
 import eu.timepit.refined.api.RefType
-import geotrellis.vector.Geometry
 import io.circe._
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -16,8 +15,7 @@ import scala.util.Try
 trait ForeignImplicits {
 
   // cats.Eq
-  implicit val eqInstant: Eq[Instant]   = Eq.fromUniversalEquals
-  implicit val eqGeometry: Eq[Geometry] = Eq.fromUniversalEquals
+  implicit val eqInstant: Eq[Instant] = Eq.fromUniversalEquals
 
   // circe codecs
   // A more flexible alternative to DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS[xxx][xx][X]")
@@ -70,3 +68,5 @@ trait ForeignImplicits {
   }
 
 }
+
+object ForeignImplicits extends ForeignImplicits {}
