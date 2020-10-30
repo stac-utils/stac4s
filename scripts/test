@@ -25,7 +25,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             scapegoat; \
             undeclaredCompileDependenciesTest; \
             unusedCompileDependenciesTest; \
-            test \
+            test; \
+            coreTestJS/test
         "
     fi
 fi
