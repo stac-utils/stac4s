@@ -131,10 +131,10 @@ val testingDependencies = Seq(
   "org.typelevel"               %% "cats-core"             % Versions.CatsVersion
 )
 
-val testRunnerDependencies = Seq(
-  "io.circe"          %% "circe-testing"   % Versions.CirceVersion,
-  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion,
-  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck
+val testRunnerDependenciesJVM = Seq(
+  "io.circe"          %% "circe-testing"   % Versions.CirceVersion            % Test,
+  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion        % Test,
+  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
 lazy val root = project
@@ -170,6 +170,16 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(testing % Test)
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .settings(libraryDependencies ++= testRunnerDependencies map { _ % Test })
+  .settings(libraryDependencies ++= testRunnerDependenciesJVM)
+  .jvmSettings(
+    libraryDependencies ++= testRunnerDependenciesJVM
+  )
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.circe"          %%% "circe-testing"   % Versions.CirceVersion            % Test,
+      "org.scalatest"     %%% "scalatest"       % Versions.ScalatestVersion        % Test,
+      "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
+    )
+  )
 
 lazy val coreTestJvm = coreTest.jvm
