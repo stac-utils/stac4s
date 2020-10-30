@@ -44,7 +44,11 @@ object Geometry {
   private def multiPolygonFromArray(arr: List[List[List[Double]]]): Either[String, MultiPolygon] =
     arr traverse { polygonFromArray } map { MultiPolygon }
 
-  implicit val eqPoint2d: Eq[Point2d] = Eq.fromUniversalEquals
+  implicit val eqPoint2d: Eq[Point2d]           = Eq.fromUniversalEquals
+  implicit val eqPolygon: Eq[Polygon]           = Eq.fromUniversalEquals
+  implicit val eqMultiPolygon: Eq[MultiPolygon] = Eq.fromUniversalEquals
+
+  implicit val eqGeometry: Eq[Geometry] = Eq.fromUniversalEquals
 
   implicit val encPoint2d: Encoder[Point2d] = new Encoder[Point2d] {
 

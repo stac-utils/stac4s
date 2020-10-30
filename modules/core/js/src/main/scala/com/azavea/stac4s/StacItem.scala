@@ -2,13 +2,14 @@ package com.azavea.stac4s
 
 import cats.Eq
 import io.circe._
+import com.azavea.stac4s.geometry.Geometry
 
 final case class StacItem(
     id: String,
     stacVersion: String,
     stacExtensions: List[String],
     _type: String = "Feature",
-    geometry: Json,
+    geometry: Geometry,
     bbox: TwoDimBbox,
     links: List[StacLink],
     assets: Map[String, StacItemAsset],
@@ -69,7 +70,7 @@ object StacItem {
         stacVersion: String,
         stacExtensions: Option[List[String]],
         _type: String,
-        geometry: Json,
+        geometry: Geometry,
         bbox: TwoDimBbox,
         links: List[StacLink],
         assets: Map[String, StacItemAsset],
