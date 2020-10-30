@@ -1,5 +1,6 @@
-package com.azavea.stac4s
+package com.azavea.stac4s.testing
 
+import com.azavea.stac4s._
 import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
@@ -10,9 +11,7 @@ import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
 import eu.timepit.refined.types.numeric.PosDouble
-import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances
-import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
 import io.circe.syntax._
 import org.scalacheck._
@@ -20,73 +19,42 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import java.time.Instant
 
-package object testing extends NumericInstances {
+trait TestInstances extends NumericInstances {
 
-  private def nonEmptyStringGen: Gen[String] =
-    Gen.listOfN(30, Gen.alphaChar) map { _.mkString }
-
-  private def nonEmptyAlphaRefinedStringGen: Gen[NonEmptyString] =
-    nonEmptyStringGen map NonEmptyString.unsafeFrom
-
-  private def possiblyEmptyListGen[T](g: Gen[T]) =
-    Gen.choose(0, 10) flatMap { count => Gen.listOfN(count, g) }
-
-  private def possiblyEmptyMapGen[T, U](g: Gen[(T, U)]) =
-    Gen.choose(0, 10) flatMap { count => Gen.mapOfN(count, g) }
-
-  private def nonEmptyListGen[T](g: Gen[T]): Gen[NonEmptyList[T]] =
-    Gen.nonEmptyListOf(g) map { NonEmptyList.fromListUnsafe }
-
-  private def rectangleGen: Gen[Geometry] =
-    (for {
-      lowerX <- Gen.choose(0.0, 1000.0)
-      lowerY <- Gen.choose(0.0, 1000.0)
-    } yield {
-      Polygon(
-        Point(lowerX, lowerY),
-        Point(lowerX + 100, lowerY),
-        Point(lowerX + 100, lowerY + 100),
-        Point(lowerX, lowerY + 100),
-        Point(lowerX, lowerY)
-      )
-    }).widen
-
-  private def instantGen: Gen[Instant] = arbitrary[Int] map { x => Instant.now.plusMillis(x.toLong) }
-
-  private def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
+  private[testing] def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     possiblyEmptyMapGen(
       (nonEmptyStringGen, stacCollectionAssetGen).tupled
     ).map(AssetCollectionExtension.apply)
 
-  private def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+  private[testing] def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     assetCollectionExtensionGen.map(_.asJsonObject)
   )
 
-  private def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+  private[testing] def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     labelExtensionPropertiesGen map { _.asJsonObject },
     layerPropertiesGen map { _.asJsonObject },
     eoItemExtensionGen map { _.asJsonObject }
   )
 
-  private def labelLinkExtensionGen: Gen[LabelLinkExtension] =
+  private[testing] def labelLinkExtensionGen: Gen[LabelLinkExtension] =
     nonEmptyListGen(nonEmptyStringGen).map(LabelLinkExtension.apply)
 
-  private def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
+  private[testing] def linkExtensionFields: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     labelLinkExtensionGen.map(_.asJsonObject)
   )
 
-  private def eoAssetExtensionGen: Gen[EOAssetExtension] =
+  private[testing] def eoAssetExtensionGen: Gen[EOAssetExtension] =
     nonEmptyListGen(bandGen).map(EOAssetExtension.apply)
 
-  private def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
+  private[testing] def assetExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
     eoAssetExtensionGen.map(_.asJsonObject)
   )
 
-  private def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
+  private[testing] def mediaTypeGen: Gen[StacMediaType] = Gen.oneOf(
     Gen.const(`image/geotiff`),
     Gen.const(`image/cog`),
     Gen.const(`image/jp2`),
@@ -104,7 +72,7 @@ package object testing extends NumericInstances {
     nonEmptyStringGen map VendorMediaType.apply
   )
 
-  private def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
+  private[testing] def linkTypeGen: Gen[StacLinkType] = Gen.oneOf(
     Gen.const(StacLinkType.Self),
     Gen.const(StacLinkType.StacRoot),
     Gen.const(StacLinkType.Parent),
@@ -129,7 +97,7 @@ package object testing extends NumericInstances {
     nonEmptyStringGen map StacLinkType.VendorLinkType.apply
   )
 
-  private def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
+  private[testing] def assetRoleGen: Gen[StacAssetRole] = Gen.oneOf(
     Gen.const(StacAssetRole.Thumbnail),
     Gen.const(StacAssetRole.Overview),
     Gen.const(StacAssetRole.Data),
@@ -137,17 +105,17 @@ package object testing extends NumericInstances {
     nonEmptyStringGen map StacAssetRole.VendorAsset.apply
   )
 
-  private def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
+  private[testing] def providerRoleGen: Gen[StacProviderRole] = Gen.oneOf(
     Licensor,
     Producer,
     Processor,
     Host
   )
 
-  private def finiteDoubleGen: Gen[Double] =
+  private[testing] def finiteDoubleGen: Gen[Double] =
     arbitrary[Double].filter(java.lang.Double.isFinite)
 
-  private def twoDimBboxGen: Gen[TwoDimBbox] =
+  private[testing] def twoDimBboxGen: Gen[TwoDimBbox] =
     (for {
       lowerX <- finiteDoubleGen
       lowerY <- finiteDoubleGen
@@ -163,11 +131,11 @@ package object testing extends NumericInstances {
   private def spdxGen: Gen[SPDX] =
     arbitrary[SpdxId] map { SPDX.apply }
 
-  private def proprietaryGen: Gen[Proprietary] = Gen.const(Proprietary())
+  private[testing] def proprietaryGen: Gen[Proprietary] = Gen.const(Proprietary())
 
-  private def stacLicenseGen: Gen[StacLicense] = Gen.oneOf(spdxGen, proprietaryGen)
+  private[testing] def stacLicenseGen: Gen[StacLicense] = Gen.oneOf(spdxGen, proprietaryGen)
 
-  private def threeDimBboxGen: Gen[ThreeDimBbox] =
+  private[testing] def threeDimBboxGen: Gen[ThreeDimBbox] =
     (for {
       lowerX <- finiteDoubleGen
       lowerY <- finiteDoubleGen
@@ -183,10 +151,10 @@ package object testing extends NumericInstances {
       )
     })
 
-  private def bboxGen: Gen[Bbox] =
+  private[testing] def bboxGen: Gen[Bbox] =
     Gen.oneOf(twoDimBboxGen.widen, threeDimBboxGen.widen)
 
-  private def stacLinkGen: Gen[StacLink] =
+  private[testing] def stacLinkGen: Gen[StacLink] =
     (
       nonEmptyStringGen,
       Gen.const(StacLinkType.Self), // self link type is required by TMS reification
@@ -195,20 +163,20 @@ package object testing extends NumericInstances {
       linkExtensionFields
     ).mapN(StacLink.apply)
 
-  private def temporalExtentGen: Gen[TemporalExtent] = {
+  private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
       .map { case (start, end) =>
         TemporalExtent(start, end)
       }
   }
 
-  private def stacExtentGen: Gen[StacExtent] =
+  private[testing] def stacExtentGen: Gen[StacExtent] =
     (
       bboxGen,
       temporalExtentGen
     ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
 
-  private def stacProviderGen: Gen[StacProvider] =
+  private[testing] def stacProviderGen: Gen[StacProvider] =
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
@@ -216,7 +184,7 @@ package object testing extends NumericInstances {
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply)
 
-  private def stacItemAssetGen: Gen[StacItemAsset] =
+  private[testing] def stacItemAssetGen: Gen[StacItemAsset] =
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
@@ -228,7 +196,7 @@ package object testing extends NumericInstances {
       StacItemAsset.apply
     }
 
-  private def stacCollectionAssetGen: Gen[StacCollectionAsset] =
+  private[testing] def stacCollectionAssetGen: Gen[StacCollectionAsset] =
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
@@ -240,24 +208,10 @@ package object testing extends NumericInstances {
 
   // Only do COGs for now, since we don't handle anything else in the example server.
   // As more types of stac items are supported, relax this assumption
-  private def cogAssetGen: Gen[StacItemAsset] =
+  private[testing] def cogAssetGen: Gen[StacItemAsset] =
     stacItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
 
-  private def stacItemGen: Gen[StacItem] =
-    (
-      nonEmptyStringGen,
-      Gen.const("0.8.0"),
-      Gen.const(List.empty[String]),
-      Gen.const("Feature"),
-      rectangleGen,
-      twoDimBboxGen,
-      nonEmptyListGen(stacLinkGen) map { _.toList },
-      Gen.nonEmptyMap((nonEmptyStringGen, cogAssetGen).tupled),
-      Gen.option(nonEmptyStringGen),
-      itemExtensionFieldsGen
-    ).mapN(StacItem.apply)
-
-  private def stacCatalogGen: Gen[StacCatalog] =
+  private[testing] def stacCatalogGen: Gen[StacCatalog] =
     (
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
@@ -268,7 +222,7 @@ package object testing extends NumericInstances {
       Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
-  private def stacCollectionGen: Gen[StacCollection] =
+  private[testing] def stacCollectionGen: Gen[StacCollection] =
     (
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
@@ -285,70 +239,60 @@ package object testing extends NumericInstances {
       collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
-  private def itemCollectionGen: Gen[ItemCollection] =
-    (
-      Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("0.9.0")),
-      Gen.const(Nil),
-      Gen.listOf[StacItem](stacItemGen),
-      Gen.listOf[StacLink](stacLinkGen),
-      Gen.const(().asJsonObject)
-    ).mapN(ItemCollection.apply)
-
-  private def labelClassNameGen: Gen[LabelClassName] =
+  private[testing] def labelClassNameGen: Gen[LabelClassName] =
     Gen.option(nonEmptyStringGen) map {
       case Some(s) => LabelClassName.VectorName(s.toLowerCase)
       case None    => LabelClassName.Raster
     }
 
-  private def namedLabelClassesGen: Gen[LabelClassClasses] =
+  private[testing] def namedLabelClassesGen: Gen[LabelClassClasses] =
     nonEmptyListGen(nonEmptyStringGen) map { NamedLabelClasses.apply }
 
-  private def numberedLabelClassesGen: Gen[LabelClassClasses] =
+  private[testing] def numberedLabelClassesGen: Gen[LabelClassClasses] =
     nonEmptyListGen(arbitrary[Int]) map { NumberedLabelClasses.apply }
 
-  private def labelClassClassesGen: Gen[LabelClassClasses] =
+  private[testing] def labelClassClassesGen: Gen[LabelClassClasses] =
     Gen.oneOf(
       namedLabelClassesGen,
       numberedLabelClassesGen
     )
 
-  private def labelClassGen: Gen[LabelClass] =
+  private[testing] def labelClassGen: Gen[LabelClass] =
     (
       labelClassNameGen,
       labelClassClassesGen
     ).mapN(LabelClass.apply)
 
-  private def labelCountGen: Gen[LabelCount] =
+  private[testing] def labelCountGen: Gen[LabelCount] =
     (
       nonEmptyStringGen,
       arbitrary[Int]
     ).mapN(LabelCount.apply)
 
-  private def labelStatsGen: Gen[LabelStats] =
+  private[testing] def labelStatsGen: Gen[LabelStats] =
     (
       nonEmptyStringGen,
       finiteDoubleGen
     ).mapN(LabelStats.apply)
 
-  private def labelOverviewWithCounts: Gen[LabelOverview] =
+  private[testing] def labelOverviewWithCounts: Gen[LabelOverview] =
     (
       nonEmptyStringGen,
       possiblyEmptyListGen(labelCountGen)
     ).mapN((key: String, counts: List[LabelCount]) => LabelOverview(key, counts, Nil))
 
-  private def labelOverviewWithStats: Gen[LabelOverview] =
+  private[testing] def labelOverviewWithStats: Gen[LabelOverview] =
     (
       nonEmptyStringGen,
       possiblyEmptyListGen(labelStatsGen)
     ).mapN((key: String, stats: List[LabelStats]) => LabelOverview(key, Nil, stats))
 
-  private def labelOverviewGen: Gen[LabelOverview] = Gen.oneOf(
+  private[testing] def labelOverviewGen: Gen[LabelOverview] = Gen.oneOf(
     labelOverviewWithCounts,
     labelOverviewWithStats
   )
 
-  private def labelTaskGen: Gen[LabelTask] =
+  private[testing] def labelTaskGen: Gen[LabelTask] =
     Gen.oneOf(
       Gen.const(LabelTask.Classification),
       Gen.const(LabelTask.Detection),
@@ -357,7 +301,7 @@ package object testing extends NumericInstances {
       nonEmptyStringGen map LabelTask.VendorTask.apply
     )
 
-  private def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
+  private[testing] def labelMethodGen: Gen[LabelMethod] = Gen.oneOf(
     Gen.oneOf(
       Gen.const(LabelMethod.Automatic),
       Gen.const(LabelMethod.Manual),
@@ -366,18 +310,18 @@ package object testing extends NumericInstances {
     nonEmptyStringGen map LabelMethod.fromString
   )
 
-  private def labelTypeGen: Gen[LabelType] = Gen.oneOf(
+  private[testing] def labelTypeGen: Gen[LabelType] = Gen.oneOf(
     LabelType.Vector,
     LabelType.Raster
   )
 
-  private def labelPropertiesGen: Gen[LabelProperties] =
+  private[testing] def labelPropertiesGen: Gen[LabelProperties] =
     Gen.option(possiblyEmptyListGen(nonEmptyStringGen)).map(LabelProperties.fromOption)
 
-  private def layerPropertiesGen: Gen[LayerItemExtension] =
+  private[testing] def layerPropertiesGen: Gen[LayerItemExtension] =
     nonEmptyListGen(nonEmptyAlphaRefinedStringGen) map { LayerItemExtension.apply }
 
-  private def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
+  private[testing] def labelExtensionPropertiesGen: Gen[LabelItemExtension] =
     (
       labelPropertiesGen,
       possiblyEmptyListGen(labelClassGen),
@@ -388,7 +332,7 @@ package object testing extends NumericInstances {
       possiblyEmptyListGen(labelOverviewGen)
     ).mapN(LabelItemExtension.apply)
 
-  private def bandGen: Gen[Band] =
+  private[testing] def bandGen: Gen[Band] =
     (
       nonEmptyAlphaRefinedStringGen,
       Gen.option(nonEmptyAlphaRefinedStringGen),
@@ -397,7 +341,7 @@ package object testing extends NumericInstances {
       Gen.option(arbitrary[PosDouble])
     ).mapN(Band.apply)
 
-  private def eoItemExtensionGen: Gen[EOItemExtension] =
+  private[testing] def eoItemExtensionGen: Gen[EOItemExtension] =
     (
       nonEmptyListGen(bandGen),
       Gen.option(arbitrary[Percentage])
@@ -419,13 +363,9 @@ package object testing extends NumericInstances {
 
   implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
 
-  implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
-
   implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
 
   implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
-
-  implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   implicit val arbCatalog: Arbitrary[StacCatalog] = Arbitrary { stacCatalogGen }
 
@@ -456,10 +396,6 @@ package object testing extends NumericInstances {
   implicit val arbSPDX: Arbitrary[SPDX] = Arbitrary { spdxGen }
 
   implicit val arbStacLicense: Arbitrary[StacLicense] = Arbitrary { stacLicenseGen }
-
-  implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
-    itemCollectionGen
-  }
 
   implicit val arbStacAssetRole: Arbitrary[StacAssetRole] = Arbitrary {
     assetRoleGen
@@ -515,3 +451,5 @@ package object testing extends NumericInstances {
     eoAssetExtensionGen
   }
 }
+
+object TestInstances extends TestInstances {}

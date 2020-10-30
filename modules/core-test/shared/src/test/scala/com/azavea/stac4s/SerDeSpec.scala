@@ -5,8 +5,7 @@ import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer._
 import com.azavea.stac4s.meta._
-import com.azavea.stac4s.testing._
-import geotrellis.vector.Geometry
+import com.azavea.stac4s.testing.TestInstances._
 import io.circe.syntax._
 import io.circe.parser._
 import io.circe.testing.{ArbitraryInstances, CodecTests}
@@ -22,16 +21,13 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
 
   // core
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
-  checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
   checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
-  checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
   checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
   checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
   checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
   checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
   checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
   checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
-  checkAll("Codec.StacItem", CodecTests[StacItem].unserializableCodec)
   checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
   checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
   checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
