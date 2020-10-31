@@ -1,8 +1,7 @@
 package com.azavea.stac4s.meta
 
-import java.time.Instant
-
 import eu.timepit.refined.api.Validate
+import java.time.Instant
 
 final case class HasInstant()
 

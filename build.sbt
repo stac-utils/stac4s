@@ -12,7 +12,7 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.12.10",
+  scalaVersion := "2.12.11",
   cancelable in Global := true,
   scalafmtOnCompile := true,
   scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
@@ -103,19 +103,36 @@ lazy val credentialSettings = Seq(
 )
 
 val coreDependencies = Seq(
-  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.SpdxCheckerVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
   "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
   "io.circe"                    %% "circe-generic"       % Versions.CirceVersion,
   "io.circe"                    %% "circe-parser"        % Versions.CirceVersion,
+  "io.circe"                    %% "circe-refined"       % Versions.CirceVersion,
   "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
-  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
-  "org.scalacheck"              %% "scalacheck"          % Versions.scalacheckVersion % Test,
-  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.scalacheckCatsVersion % Test,
-  "org.scalatest"               %% "scalatest"           % Versions.scalatestVersion % Test,
-  "com.github.tbouron"          % "spdx-license-checker" % Versions.spdxCheckerVersion,
+  "org.locationtech.jts"        % "jts-core"             % Versions.Jts,
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
+  "org.typelevel"               %% "cats-kernel"         % Versions.CatsVersion
+)
+
+val testingDependencies = Seq(
   "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
-  "org.locationtech.jts"        % "jts-core"             % Versions.jts,
-  "org.scalatestplus"           %% "scalacheck-1-14"     % Versions.ScalatestPlusScalacheck % Test
+  "com.github.tbouron"          % "spdx-license-checker" % Versions.SpdxCheckerVersion,
+  "eu.timepit"                  %% "refined-scalacheck"  % Versions.RefinedVersion,
+  "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
+  "io.chrisdavenport"           %% "cats-scalacheck"     % Versions.ScalacheckCatsVersion,
+  "io.circe"                    %% "circe-core"          % Versions.CirceVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
+  "org.locationtech.jts"        % "jts-core"             % Versions.Jts,
+  "org.scalacheck"              %% "scalacheck"          % Versions.ScalacheckVersion,
+  "org.typelevel"               %% "cats-core"           % Versions.CatsVersion
+)
+
+val testRunnerDependencies = Seq(
+  "io.circe"          %% "circe-testing"   % Versions.CirceVersion,
+  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion,
+  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck
 )
 
 lazy val root = project
@@ -124,7 +141,7 @@ lazy val root = project
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(core)
+  .aggregate(core, testing, coreTest)
 
 lazy val core = (project in file("modules/core"))
   .settings(commonSettings)
@@ -134,3 +151,19 @@ lazy val core = (project in file("modules/core"))
   })
 
 lazy val coreRef = LocalProject("modules/core")
+
+lazy val testing = (project in file("modules/testing"))
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(libraryDependencies ++= testingDependencies)
+
+lazy val testingRef = LocalProject("modules/testing")
+
+lazy val coreTest = (project in file("modules/core-test"))
+  .dependsOn(testing % Test)
+  .settings(commonSettings)
+  .settings(noPublishSettings)
+  .settings(libraryDependencies ++= testRunnerDependencies map { _ % Test })
+
+lazy val coreTestRef = LocalProject("modules/core-test")
