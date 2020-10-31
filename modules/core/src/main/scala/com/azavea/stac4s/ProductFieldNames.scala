@@ -12,8 +12,8 @@ object ProductFieldNames {
   def apply[T](implicit ev: ProductFieldNames[T]): ProductFieldNames[T] = ev
 
   @SuppressWarnings(Array("all"))
-  implicit def fromLabelledGeneric[T: LabelledGeneric.Aux[*, L], L <: HList, K <: HList](
-      implicit keys: Keys.Aux[L, K],
+  implicit def fromLabelledGeneric[T: LabelledGeneric.Aux[*, L], L <: HList, K <: HList](implicit
+      keys: Keys.Aux[L, K],
       toList: ToTraversable.Aux[K, List, Symbol]
   ): ProductFieldNames[T] =
     new ProductFieldNames[T] {

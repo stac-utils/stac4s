@@ -42,9 +42,15 @@ object StacLink {
           title: Option[String],
           document: JsonObject
       ) =>
-        StacLink(href, rel, _type, title, document.filter({
-          case (k, _) => !linkFields.contains(k)
-        }))
+        StacLink(
+          href,
+          rel,
+          _type,
+          title,
+          document.filter({ case (k, _) =>
+            !linkFields.contains(k)
+          })
+        )
     )
   }
 }

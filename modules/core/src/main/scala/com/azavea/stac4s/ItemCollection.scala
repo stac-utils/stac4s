@@ -61,9 +61,16 @@ object ItemCollection {
           links: Option[List[StacLink]],
           document: JsonObject
       ) =>
-        ItemCollection(_type, stacVersion, extensions getOrElse Nil, features, links getOrElse Nil, document.filter({
-          case (k, _) => !itemCollectionFields.contains(k)
-        }))
+        ItemCollection(
+          _type,
+          stacVersion,
+          extensions getOrElse Nil,
+          features,
+          links getOrElse Nil,
+          document.filter({ case (k, _) =>
+            !itemCollectionFields.contains(k)
+          })
+        )
     )
   }
 }
