@@ -44,9 +44,16 @@ object StacItemAsset {
           mediaType: Option[StacMediaType],
           document: JsonObject
       ) =>
-        StacItemAsset(href, title, description, roles getOrElse Set.empty, mediaType, document.filter({
-          case (k, _) => !assetFields.contains(k)
-        }))
+        StacItemAsset(
+          href,
+          title,
+          description,
+          roles getOrElse Set.empty,
+          mediaType,
+          document.filter({ case (k, _) =>
+            !assetFields.contains(k)
+          })
+        )
     )
   }
 }

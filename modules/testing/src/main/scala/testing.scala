@@ -197,9 +197,8 @@ package object testing extends NumericInstances {
 
   private def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
-      .map {
-        case (start, end) =>
-          TemporalExtent(start, end)
+      .map { case (start, end) =>
+        TemporalExtent(start, end)
       }
   }
 
