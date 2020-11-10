@@ -2,6 +2,8 @@
 
 ### Changed
 
+- SPDX license ids are captured by a specific enum rather than a refinement with validation [#172](https://github.com/azavea/stac4s/pull/172)
+
 ### Added
 
 ### Deprecated
