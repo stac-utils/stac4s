@@ -5,10 +5,10 @@ import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
-import com.github.tbouron.SpdxLicense
 import cats.data.NonEmptyList
 import cats.syntax.apply._
 import cats.syntax.functor._
+import enumeratum.scalacheck._
 import eu.timepit.refined.types.numeric.PosDouble
 import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.scalacheck.NumericInstances
@@ -161,7 +161,7 @@ package object testing extends NumericInstances {
     })
 
   private def spdxGen: Gen[SPDX] =
-    arbitrary[SpdxLicense] map (license => SPDX(SpdxId.unsafeFrom(license.id)))
+    arbitrary[SpdxId] map { SPDX.apply }
 
   private def proprietaryGen: Gen[Proprietary] = Gen.const(Proprietary())
 
