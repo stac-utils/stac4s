@@ -15,13 +15,16 @@
 
 package com.azavea.stac4s
 
-import enumeratum.{CirceEnum, Enum, EnumEntry}
+import enumeratum.{Circe, CirceEnum, Enum, EnumEntry}
+import io.circe.Decoder
 
 import scala.collection.immutable
 
 sealed trait SpdxId extends EnumEntry
 
 object SpdxId extends Enum[SpdxId] with CirceEnum[SpdxId] {
+
+  implicit val decoder: Decoder[SpdxId]    = Circe.decodeCaseInsensitive(this)
   def values: immutable.IndexedSeq[SpdxId] = findValues
 
   case object `0BSD`                                 extends SpdxId
