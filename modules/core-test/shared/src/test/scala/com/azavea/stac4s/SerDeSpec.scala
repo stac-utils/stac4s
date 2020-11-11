@@ -4,7 +4,7 @@ import com.azavea.stac4s.extensions.asset._
 import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer._
-import com.azavea.stac4s.meta._
+import com.azavea.stac4s.meta.ForeignImplicits._
 import com.azavea.stac4s.testing.TestInstances._
 
 import io.circe.parser._
