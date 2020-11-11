@@ -3,8 +3,8 @@ package com.azavea.stac4s.extensions.label
 import com.azavea.stac4s.extensions.LinkExtension
 
 import cats.data.NonEmptyList
-import io.circe.{Decoder, Encoder, Json}
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder, Json}
 
 case class LabelLinkExtension(assets: NonEmptyList[String])
 

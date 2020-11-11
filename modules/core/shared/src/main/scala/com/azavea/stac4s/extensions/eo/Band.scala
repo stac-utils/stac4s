@@ -1,8 +1,8 @@
 package com.azavea.stac4s.extensions.eo
 
 import cats.Eq
-import eu.timepit.refined.types.string.NonEmptyString
 import eu.timepit.refined.types.numeric.PosDouble
+import eu.timepit.refined.types.string.NonEmptyString
 import io.circe._
 import io.circe.refined._
 

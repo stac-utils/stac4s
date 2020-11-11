@@ -1,16 +1,18 @@
 package com.azavea.stac4s.meta
 
 import com.azavea.stac4s.TemporalExtent
+
 import cats.Eq
 import cats.syntax.either._
 import eu.timepit.refined.api.RefType
 import io.circe._
 import io.circe.parser.decode
 import io.circe.syntax._
-import java.time.{Instant, OffsetDateTime}
-import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 
 import scala.util.Try
+
+import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
+import java.time.{Instant, OffsetDateTime}
 
 trait ForeignImplicits {
 

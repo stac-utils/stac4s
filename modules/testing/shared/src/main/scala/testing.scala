@@ -1,9 +1,10 @@
 package com.azavea.stac4s
 
-import org.scalacheck.Gen
-import org.scalacheck.Arbitrary.arbitrary
-import eu.timepit.refined.types.string.NonEmptyString
 import cats.data.NonEmptyList
+import eu.timepit.refined.types.string.NonEmptyString
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+
 import java.time.Instant
 
 package object testing {

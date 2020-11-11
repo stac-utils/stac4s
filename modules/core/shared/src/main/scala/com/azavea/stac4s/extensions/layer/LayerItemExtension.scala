@@ -2,12 +2,12 @@ package com.azavea.stac4s.extensions.layer
 
 import com.azavea.stac4s.extensions.ItemExtension
 
-import cats.data.NonEmptyList
 import cats.Eq
+import cats.data.NonEmptyList
 import eu.timepit.refined.types.string.NonEmptyString
-import io.circe.{Decoder, Encoder}
 import io.circe.refined._
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 
 case class LayerItemExtension(ids: NonEmptyList[NonEmptyString])
 

@@ -1,15 +1,37 @@
 package com.azavea.stac4s.testing
 
-import org.scalacheck.{Arbitrary, Gen}
+import com.azavea.stac4s.{
+  Bbox,
+  Interval,
+  ItemCollection,
+  SpatialExtent,
+  StacCollection,
+  StacExtent,
+  StacItem,
+  StacLink,
+  StacVersion,
+  TemporalExtent
+}
+
 import cats.syntax.apply._
 import cats.syntax.functor._
-import org.scalacheck.cats.implicits._
-import com.azavea.stac4s.ItemCollection
-import io.circe.syntax._
-import com.azavea.stac4s.{StacItem, StacLink, StacVersion}
 import geotrellis.vector.{Geometry, Point, Polygon}
+import io.circe.JsonObject
+import io.circe.syntax._
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.cats.implicits._
+import org.scalacheck.{Arbitrary, Gen}
 
-trait JvmInstances {
+import java.time.Instant
+
+trait JvmInstances extends TestInstances {
+
+  private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
+    (arbitrary[Instant], arbitrary[Instant]).tupled
+      .map { case (start, end) =>
+        TemporalExtent(start, end)
+      }
+  }
 
   private[testing] def rectangleGen: Gen[Geometry] =
     (for {
@@ -49,6 +71,29 @@ trait JvmInstances {
       Gen.const(().asJsonObject)
     ).mapN(ItemCollection.apply)
 
+  private[testing] def stacExtentGen: Gen[StacExtent] =
+    (
+      bboxGen,
+      temporalExtentGen
+    ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
+
+  private[testing] def stacCollectionGen: Gen[StacCollection] =
+    (
+      nonEmptyStringGen,
+      possiblyEmptyListGen(nonEmptyStringGen),
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      nonEmptyStringGen,
+      possiblyEmptyListGen(nonEmptyStringGen),
+      stacLicenseGen,
+      possiblyEmptyListGen(stacProviderGen),
+      stacExtentGen,
+      Gen.const(().asJsonObject),
+      Gen.const(JsonObject.fromMap(Map.empty)),
+      possiblyEmptyListGen(stacLinkGen),
+      collectionExtensionFieldsGen
+    ).mapN(StacCollection.apply)
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
@@ -57,6 +102,19 @@ trait JvmInstances {
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
 
+  implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
+
+  implicit val arbCollection: Arbitrary[StacCollection] = Arbitrary {
+    stacCollectionGen
+  }
+
+  implicit val arbStacExtent: Arbitrary[StacExtent] = Arbitrary {
+    stacExtentGen
+  }
+
+  implicit val arbTemporalExtent: Arbitrary[TemporalExtent] = Arbitrary {
+    temporalExtentGen
+  }
 }
 
 object JvmInstances extends JvmInstances {}

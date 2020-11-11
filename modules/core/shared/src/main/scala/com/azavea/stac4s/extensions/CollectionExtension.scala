@@ -2,8 +2,8 @@ package com.azavea.stac4s.extensions
 
 import com.azavea.stac4s.StacCollection
 
-import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 
 trait CollectionExtension[T] {
   def getExtensionFields(collection: StacCollection): ExtensionResult[T]

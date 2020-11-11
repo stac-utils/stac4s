@@ -1,22 +1,22 @@
 package com.azavea.stac4s.testing
 
 import com.azavea.stac4s._
-import com.azavea.stac4s.extensions.eo._
-import com.azavea.stac4s.extensions.label._
-import com.azavea.stac4s.extensions.label.LabelClassClasses._
-import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
+import com.azavea.stac4s.extensions.eo._
+import com.azavea.stac4s.extensions.label.LabelClassClasses._
+import com.azavea.stac4s.extensions.label._
+import com.azavea.stac4s.extensions.layer.LayerItemExtension
+
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
-import eu.timepit.refined.types.numeric.PosDouble
 import eu.timepit.refined.scalacheck.NumericInstances
+import eu.timepit.refined.types.numeric.PosDouble
 import io.circe.JsonObject
 import io.circe.syntax._
-import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck._
 import org.scalacheck.cats.implicits._
-import java.time.Instant
 
 trait TestInstances extends NumericInstances {
 
@@ -162,19 +162,6 @@ trait TestInstances extends NumericInstances {
       linkExtensionFields
     ).mapN(StacLink.apply)
 
-  private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
-    (arbitrary[Instant], arbitrary[Instant]).tupled
-      .map { case (start, end) =>
-        TemporalExtent(start, end)
-      }
-  }
-
-  private[testing] def stacExtentGen: Gen[StacExtent] =
-    (
-      bboxGen,
-      temporalExtentGen
-    ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
-
   private[testing] def stacProviderGen: Gen[StacProvider] =
     (
       nonEmptyStringGen,
@@ -220,23 +207,6 @@ trait TestInstances extends NumericInstances {
       possiblyEmptyListGen(stacLinkGen),
       Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
-
-  private[testing] def stacCollectionGen: Gen[StacCollection] =
-    (
-      nonEmptyStringGen,
-      possiblyEmptyListGen(nonEmptyStringGen),
-      nonEmptyStringGen,
-      Gen.option(nonEmptyStringGen),
-      nonEmptyStringGen,
-      possiblyEmptyListGen(nonEmptyStringGen),
-      stacLicenseGen,
-      possiblyEmptyListGen(stacProviderGen),
-      stacExtentGen,
-      Gen.const(().asJsonObject),
-      Gen.const(JsonObject.fromMap(Map.empty)),
-      possiblyEmptyListGen(stacLinkGen),
-      collectionExtensionFieldsGen
-    ).mapN(StacCollection.apply)
 
   private[testing] def labelClassNameGen: Gen[LabelClassName] =
     Gen.option(nonEmptyStringGen) map {
@@ -360,21 +330,11 @@ trait TestInstances extends NumericInstances {
     stacProviderGen
   }
 
-  implicit val arbInstant: Arbitrary[Instant] = Arbitrary { instantGen }
-
   implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
 
   implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
 
   implicit val arbCatalog: Arbitrary[StacCatalog] = Arbitrary { stacCatalogGen }
-
-  implicit val arbCollection: Arbitrary[StacCollection] = Arbitrary {
-    stacCollectionGen
-  }
-
-  implicit val arbStacExtent: Arbitrary[StacExtent] = Arbitrary {
-    stacExtentGen
-  }
 
   implicit val arbTwoDimBbox: Arbitrary[TwoDimBbox] = Arbitrary {
     twoDimBboxGen
@@ -382,10 +342,6 @@ trait TestInstances extends NumericInstances {
 
   implicit val arbThreeDimBbox: Arbitrary[ThreeDimBbox] = Arbitrary {
     threeDimBboxGen
-  }
-
-  implicit val arbTemporalExtent: Arbitrary[TemporalExtent] = Arbitrary {
-    temporalExtentGen
   }
 
   implicit val arbBbox: Arbitrary[Bbox] = Arbitrary {

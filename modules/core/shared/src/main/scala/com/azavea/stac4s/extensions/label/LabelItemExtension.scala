@@ -4,8 +4,8 @@ import com.azavea.stac4s.extensions.ItemExtension
 
 import cats.Eq
 import cats.syntax.apply._
-import io.circe.{Decoder, Encoder, HCursor, Json}
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder, HCursor, Json}
 
 case class LabelItemExtension(
     properties: LabelProperties,
