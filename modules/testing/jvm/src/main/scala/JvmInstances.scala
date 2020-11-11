@@ -1,5 +1,6 @@
 package com.azavea.stac4s.testing
 
+import com.azavea.stac4s.types.TemporalExtent
 import com.azavea.stac4s.{
   Bbox,
   Interval,
@@ -11,7 +12,6 @@ import com.azavea.stac4s.{
   StacLink,
   StacVersion
 }
-import com.azavea.stac4s.types.TemporalExtent
 
 import cats.syntax.apply._
 import cats.syntax.functor._
