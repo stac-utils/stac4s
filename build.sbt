@@ -145,11 +145,14 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel" %%% "cats-kernel"      % Versions.CatsVersion
     )
   })
-<<<<<<< HEAD
-  =======.jvmSettings(
+  .jvmSettings(
     libraryDependencies ++= coreDependenciesJVM
   )
->>>>>>> fix dependency declarations
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %% "scala-java-time" % "2.0.0"
+    )
+  )
 
 lazy val coreJvm = core.jvm
 lazy val coreJs  = core.js

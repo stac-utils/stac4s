@@ -6,33 +6,30 @@ import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer._
 import com.azavea.stac4s.meta._
 import com.azavea.stac4s.testing.TestInstances._
-import io.circe.syntax._
-import io.circe.parser._
-import io.circe.testing.{ArbitraryInstances, CodecTests}
-import java.time.{Instant, OffsetDateTime}
 
+import io.circe.parser._
+import io.circe.syntax._
+import io.circe.testing.{ArbitraryInstances, CodecTests}
 import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
+import java.time.{Instant, OffsetDateTime}
+
 class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
 
   // core
   checkAll("Codec.Bbox", CodecTests[Bbox].unserializableCodec)
-  checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
   checkAll("Codec.SPDX", CodecTests[SPDX].unserializableCodec)
   checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
   checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
-  checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
   checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
-  checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
   checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
   checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
   checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
   checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)
-  checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
   checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
   checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
 

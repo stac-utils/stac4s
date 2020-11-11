@@ -9,9 +9,9 @@ import com.azavea.stac4s.{
   StacExtent,
   StacItem,
   StacLink,
-  StacVersion,
-  TemporalExtent
+  StacVersion
 }
+import com.azavea.stac4s.types.TemporalExtent
 
 import cats.syntax.apply._
 import cats.syntax.functor._
@@ -24,7 +24,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
 
-trait JvmInstances extends TestInstances {
+trait JvmInstances {
 
   private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
@@ -73,7 +73,7 @@ trait JvmInstances extends TestInstances {
 
   private[testing] def stacExtentGen: Gen[StacExtent] =
     (
-      bboxGen,
+      TestInstances.bboxGen,
       temporalExtentGen
     ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
 
@@ -85,13 +85,13 @@ trait JvmInstances extends TestInstances {
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
-      stacLicenseGen,
-      possiblyEmptyListGen(stacProviderGen),
+      TestInstances.stacLicenseGen,
+      possiblyEmptyListGen(TestInstances.stacProviderGen),
       stacExtentGen,
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
-      possiblyEmptyListGen(stacLinkGen),
-      collectionExtensionFieldsGen
+      possiblyEmptyListGen(TestInstances.stacLinkGen),
+      TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }

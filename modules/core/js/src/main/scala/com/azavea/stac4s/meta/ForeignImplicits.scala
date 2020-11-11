@@ -16,9 +16,6 @@ import java.time.{Instant, OffsetDateTime}
 
 trait ForeignImplicits {
 
-  // cats.Eq
-  implicit val eqInstant: Eq[Instant] = Eq.fromUniversalEquals
-
   // circe codecs
   // A more flexible alternative to DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS[xxx][xx][X]")
   // https://tools.ietf.org/html/rfc3339
@@ -36,6 +33,8 @@ trait ForeignImplicits {
       .appendOffset("+HH", "Z")
       .optionalEnd()
       .toFormatter()
+
+  implicit val eqInstant: Eq[Instant] = Eq.fromUniversalEquals
 
   implicit val encodeInstant: Encoder[Instant] = Encoder[String].contramap(_.toString)
 

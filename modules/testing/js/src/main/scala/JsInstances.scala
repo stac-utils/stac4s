@@ -1,16 +1,13 @@
 package com.azavea.stac4s.testing
 
+import com.azavea.stac4s.geometry.Geometry.{MultiPolygon, Point2d, Polygon}
 import com.azavea.stac4s.geometry._
+import com.azavea.stac4s.{ItemCollection, StacItem, StacLink, StacVersion}
 
-import org.scalacheck.{Arbitrary, Gen}
 import cats.syntax.apply._
-import org.scalacheck.cats.implicits._
-import com.azavea.stac4s.ItemCollection
 import io.circe.syntax._
-import com.azavea.stac4s.{StacItem, StacLink, StacVersion}
-import com.azavea.stac4s.geometry.Geometry.Point2d
-import com.azavea.stac4s.geometry.Geometry.Polygon
-import com.azavea.stac4s.geometry.Geometry.MultiPolygon
+import org.scalacheck.cats.implicits._
+import org.scalacheck.{Arbitrary, Gen}
 
 trait JsInstances {
 

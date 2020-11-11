@@ -2,7 +2,7 @@ package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions._
 
-package object syntax {
+trait Syntax {
 
   implicit class stacItemExtensions(item: StacItem) {
 
@@ -11,15 +11,6 @@ package object syntax {
 
     def addExtensionFields[T](properties: T)(implicit ev: ItemExtension[T]): StacItem =
       ev.addExtensionFields(item, properties)
-  }
-
-  implicit class stacCollectionExtensions(collection: StacCollection) {
-
-    def getExtensionFields[T](implicit ev: CollectionExtension[T]): ExtensionResult[T] =
-      ev.getExtensionFields(collection)
-
-    def addExtensionFields[T](properties: T)(implicit ev: CollectionExtension[T]): StacCollection =
-      ev.addExtensionFields(collection, properties)
   }
 
   implicit class stacCatalogExtensions(catalog: StacCatalog) {
