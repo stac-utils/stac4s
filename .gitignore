@@ -97,6 +97,7 @@ project/plugins/project/
 metals.lock.db
 .metals/
 .bloop/
+project/
 
 /.env
 /.envrc
