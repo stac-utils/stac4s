@@ -102,33 +102,14 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
-val coreDependencies = Seq(
-  "com.beachape"                %% "enumeratum"        % Versions.EnumeratumVersion,
-  "com.beachape"                %% "enumeratum-circe"  % Versions.EnumeratumVersion,
-  "com.chuusai"                 %% "shapeless"         % Versions.ShapelessVersion,
-  "eu.timepit"                  %% "refined"           % Versions.RefinedVersion,
-  "io.circe"                    %% "circe-core"        % Versions.CirceVersion,
-  "io.circe"                    %% "circe-generic"     % Versions.CirceVersion,
-  "io.circe"                    %% "circe-parser"      % Versions.CirceVersion,
-  "io.circe"                    %% "circe-refined"     % Versions.CirceVersion,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+val coreDependenciesJVM = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.typelevel"               %% "cats-core"         % Versions.CatsVersion,
-  "org.typelevel"               %% "cats-kernel"       % Versions.CatsVersion
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion
 )
 
-val testingDependencies = Seq(
-  "com.beachape"                %% "enumeratum"            % Versions.EnumeratumVersion,
-  "com.beachape"                %% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
-  "com.chuusai"                 %% "shapeless"             % Versions.ShapelessVersion,
-  "eu.timepit"                  %% "refined-scalacheck"    % Versions.RefinedVersion,
-  "eu.timepit"                  %% "refined"               % Versions.RefinedVersion,
-  "io.chrisdavenport"           %% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
-  "io.circe"                    %% "circe-core"            % Versions.CirceVersion,
-  "org.locationtech.geotrellis" %% "geotrellis-vector"     % Versions.GeoTrellisVersion,
-  "org.locationtech.jts"         % "jts-core"              % Versions.Jts,
-  "org.scalacheck"              %% "scalacheck"            % Versions.ScalacheckVersion,
-  "org.typelevel"               %% "cats-core"             % Versions.CatsVersion
+val testingDependenciesJVM = Seq(
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+  "org.locationtech.jts"         % "jts-core"          % Versions.Jts
 )
 
 val testRunnerDependenciesJVM = Seq(
@@ -150,8 +131,24 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings)
   .settings(publishSettings)
   .settings({
-    libraryDependencies ++= coreDependencies
+    libraryDependencies ++= Seq(
+      "com.beachape"  %%% "enumeratum"       % Versions.EnumeratumVersion,
+      "com.beachape"  %%% "enumeratum-circe" % Versions.EnumeratumVersion,
+      "com.chuusai"   %%% "shapeless"        % Versions.ShapelessVersion,
+      "eu.timepit"    %%% "refined"          % Versions.RefinedVersion,
+      "io.circe"      %%% "circe-core"       % Versions.CirceVersion,
+      "io.circe"      %%% "circe-generic"    % Versions.CirceVersion,
+      "io.circe"      %%% "circe-parser"     % Versions.CirceVersion,
+      "io.circe"      %%% "circe-refined"    % Versions.CirceVersion,
+      "org.typelevel" %%% "cats-core"        % Versions.CatsVersion,
+      "org.typelevel" %%% "cats-kernel"      % Versions.CatsVersion
+    )
   })
+<<<<<<< HEAD
+  =======.jvmSettings(
+    libraryDependencies ++= coreDependenciesJVM
+  )
+>>>>>>> fix dependency declarations
 
 lazy val coreJvm = core.jvm
 lazy val coreJs  = core.js
@@ -161,7 +158,20 @@ lazy val testing = (crossProject(JSPlatform, JVMPlatform))
   .dependsOn(core)
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(libraryDependencies ++= testingDependencies)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.beachape"      %%% "enumeratum"            % Versions.EnumeratumVersion,
+      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
+      "com.chuusai"       %%% "shapeless"             % Versions.ShapelessVersion,
+      "eu.timepit"        %%% "refined-scalacheck"    % Versions.RefinedVersion,
+      "eu.timepit"        %%% "refined"               % Versions.RefinedVersion,
+      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
+      "io.circe"          %%% "circe-core"            % Versions.CirceVersion,
+      "org.scalacheck"    %%% "scalacheck"            % Versions.ScalacheckVersion,
+      "org.typelevel"     %%% "cats-core"             % Versions.CatsVersion
+    )
+  )
+  .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
 
 lazy val testingJvm = testing.jvm
 
@@ -170,11 +180,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(testing % Test)
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .settings(libraryDependencies ++= testRunnerDependenciesJVM)
-  .jvmSettings(
-    libraryDependencies ++= testRunnerDependenciesJVM
-  )
-  .jsSettings(
+  .settings(
     libraryDependencies ++= Seq(
       "io.circe"          %%% "circe-testing"   % Versions.CirceVersion            % Test,
       "org.scalatest"     %%% "scalatest"       % Versions.ScalatestVersion        % Test,
