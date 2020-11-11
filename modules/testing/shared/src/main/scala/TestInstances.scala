@@ -6,7 +6,6 @@ import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.layer.LayerItemExtension
 import com.azavea.stac4s.extensions.asset._
-import cats.data.NonEmptyList
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
