@@ -3,7 +3,6 @@ package com.azavea.stac4s
 import cats.Eq
 import cats.syntax.either._
 import cats.syntax.functor._
-import eu.timepit.refined.api.RefType
 import io.circe._
 import io.circe.syntax._
 
@@ -16,7 +15,7 @@ final case class Proprietary() extends StacLicense {
 }
 
 final case class SPDX(spdxId: SpdxId) extends StacLicense {
-  val name = spdxId.value
+  val name = spdxId.toString
 }
 
 object SPDX {
@@ -37,7 +36,7 @@ object StacLicense {
   }
 
   implicit val decodeSpdx: Decoder[SPDX] =
-    Decoder.decodeString.emap { s => RefType.applyRef[SpdxId](s) map (id => SPDX(id)) }
+    Decoder[SpdxId] map { SPDX.apply }
 
   implicit val decodeProprietary: Decoder[Proprietary] =
     Decoder.decodeString.emap {
