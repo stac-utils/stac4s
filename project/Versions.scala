@@ -4,7 +4,7 @@ object Versions {
   val EnumeratumVersion       = "1.6.1"
   val GeoTrellisVersion       = "3.5.0"
   val Jts                     = "1.16.1"
-  val RefinedVersion          = "0.9.17"
+  val RefinedVersion          = "0.9.18"
   val ScalacheckCatsVersion   = "0.3.0"
   val ScalacheckVersion       = "1.15.1"
   val ScalatestPlusScalacheck = "3.2.2.0"
