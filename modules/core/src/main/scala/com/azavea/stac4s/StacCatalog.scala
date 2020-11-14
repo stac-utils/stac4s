@@ -63,8 +63,8 @@ object StacCatalog {
           title,
           description,
           links,
-          document.filter({
-            case (k, _) => !catalogFields.contains(k)
+          document.filter({ case (k, _) =>
+            !catalogFields.contains(k)
           })
         )
     )

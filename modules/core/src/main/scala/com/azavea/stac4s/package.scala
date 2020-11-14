@@ -1,6 +1,6 @@
 package com.azavea
 
-import com.azavea.stac4s.meta.{HasInstant, ValidSpdxId, ValidStacVersion}
+import com.azavea.stac4s.meta.{HasInstant, ValidStacVersion}
 
 import cats.Eq
 import eu.timepit.refined._
@@ -11,9 +11,6 @@ import eu.timepit.refined.collection.{Exists, MinSize, _}
 import java.time.Instant
 
 package object stac4s {
-
-  type SpdxId = String Refined ValidSpdxId
-  object SpdxId extends RefinedTypeOps[SpdxId, String]
 
   type StacVersion = String Refined ValidStacVersion
   object StacVersion extends RefinedTypeOps[StacVersion, String]
