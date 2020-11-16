@@ -119,13 +119,13 @@ val testRunnerDependenciesJVM = Seq(
   "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
-lazy val root = project
+lazy val root = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
   .settings(moduleName := "root")
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(coreJvm, testingJvm, coreTestJvm)
+  .aggregate(core, testing, coreTest)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/core"))
