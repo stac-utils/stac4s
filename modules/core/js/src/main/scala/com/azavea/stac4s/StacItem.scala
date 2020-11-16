@@ -1,8 +1,9 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.geometry.Geometry
+
 import cats.Eq
 import io.circe._
-import com.azavea.stac4s.geometry.Geometry
 
 final case class StacItem(
     id: String,

@@ -5,7 +5,6 @@ import com.azavea.stac4s.meta.HasInstant
 import cats.Eq
 import eu.timepit.refined._
 import eu.timepit.refined.api._
-
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
 
