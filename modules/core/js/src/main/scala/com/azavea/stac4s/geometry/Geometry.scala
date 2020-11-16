@@ -5,7 +5,6 @@ import cats.syntax.either._
 import cats.syntax.eq._
 import cats.syntax.traverse._
 import io.circe._
-import io.circe.generic.semiauto._
 import io.circe.syntax._
 
 sealed abstract class Geometry
@@ -106,7 +105,14 @@ object Geometry {
       }
   }
 
-  implicit val encGeometry: Encoder[Geometry] = deriveEncoder
+  implicit val encGeometry: Encoder[Geometry] = new Encoder[Geometry] {
+
+    def apply(g: Geometry): Json = g match {
+      case mp @ MultiPolygon(_) => mp.asJson
+      case p @ Polygon(_)       => p.asJson
+      case p2d @ Point2d(_, _)  => p2d.asJson
+    }
+  }
 
   implicit val decGeometry: Decoder[Geometry] = new Decoder[Geometry] {
 
