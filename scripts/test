@@ -23,8 +23,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             scalafmtCheck; \
             scalafmtSbtCheck; \
             scapegoat; \
-            undeclaredCompileDependenciesTest; \
-            unusedCompileDependenciesTest; \
+            rootJVM/undeclaredCompileDependenciesTest; \
+            rootJVM/unusedCompileDependenciesTest; \
             test
         "
     fi
