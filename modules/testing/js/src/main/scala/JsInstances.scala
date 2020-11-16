@@ -11,9 +11,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait JsInstances {
 
-  private[testing] def finiteDoubleGen: Gen[Double]       = Arbitrary.arbitrary[Double].filterNot(!_.isNaN)
-  private[testing] def point2dGen: Gen[Point2d]           = (finiteDoubleGen, finiteDoubleGen).mapN(Point2d.apply)
-  private[testing] def polygonGen: Gen[Polygon]           = Gen.listOfN(5, point2dGen).map(Polygon.apply)
+  private[testing] def finiteDoubleGen: Gen[Double] = Arbitrary.arbitrary[Double].filterNot(_.isNaN)
+  private[testing] def point2dGen: Gen[Point2d]     = (finiteDoubleGen, finiteDoubleGen).mapN(Point2d.apply)
+
+  private[testing] def polygonGen: Gen[Polygon] =
+    Gen.listOfN(5, point2dGen).map(points => Polygon(points :+ points.head))
   private[testing] def multipolygonGen: Gen[MultiPolygon] = Gen.listOfN(3, polygonGen).map(MultiPolygon.apply)
 
   private[testing] def geometryGen: Gen[Geometry] = Gen.oneOf(
