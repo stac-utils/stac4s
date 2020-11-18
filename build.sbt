@@ -40,7 +40,7 @@ lazy val commonSettings = Seq(
       Resolver.ivyStylePatterns
     )
   ),
-  scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.4.3"
+  scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.4.4"
 )
 
 lazy val noPublishSettings = Seq(
