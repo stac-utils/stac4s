@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Added cross-project configuration for Scala.js modules [#157](https://github.com/azavea/stac4s/pull/157)
 
 ## [0.0.17] - 2020-11-11
 ### Changed

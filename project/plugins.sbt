@@ -10,3 +10,5 @@ addSbtPlugin("com.eed3si9n"              % "sbt-assembly"              % "0.15.0
 addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat"              % "0.1.15")
 addSbtPlugin("ch.epfl.scala"             % "sbt-bloop"                 % "1.4.5")
 addSbtPlugin("org.jmotor.sbt"            % "sbt-dependency-updates"    % "1.2.2")
+addSbtPlugin("org.scala-js"              % "sbt-scalajs"               % "1.3.0")
+addSbtPlugin("org.portable-scala"        % "sbt-scalajs-crossproject"  % "1.0.0")
