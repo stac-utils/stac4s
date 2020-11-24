@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.0.18] - 2020-11-23
+### Added
+- Added cross-project configuration for Scala.js modules [#157](https://github.com/azavea/stac4s/pull/157)
+
 ## [0.0.17] - 2020-11-11
 ### Changed
 - SPDX license ids are captured by a specific enum rather than a refinement with validation [#172](https://github.com/azavea/stac4s/pull/172)
@@ -80,7 +84,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.17...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.18...HEAD
+[0.0.18]: https://github.com/azavea/stac4s/compare/v0.0.17...v0.0.18
 [0.0.17]: https://github.com/azavea/stac4s/compare/v0.0.16...v0.0.17
 [0.0.16]: https://github.com/azavea/stac4s/tree/0.0.16
 [0.0.15]: https://github.com/azavea/stac4s/tree/0.0.15

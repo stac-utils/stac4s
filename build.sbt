@@ -39,7 +39,8 @@ lazy val commonSettings = Seq(
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
     )
-  )
+  ),
+  scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.4.4"
 )
 
 lazy val noPublishSettings = Seq(
@@ -102,42 +103,23 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
-val coreDependencies = Seq(
-  "com.beachape"                %% "enumeratum"        % Versions.EnumeratumVersion,
-  "com.beachape"                %% "enumeratum-circe"  % Versions.EnumeratumVersion,
-  "com.chuusai"                 %% "shapeless"         % Versions.ShapelessVersion,
-  "eu.timepit"                  %% "refined"           % Versions.RefinedVersion,
-  "io.circe"                    %% "circe-core"        % Versions.CirceVersion,
-  "io.circe"                    %% "circe-generic"     % Versions.CirceVersion,
-  "io.circe"                    %% "circe-parser"      % Versions.CirceVersion,
-  "io.circe"                    %% "circe-refined"     % Versions.CirceVersion,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+val coreDependenciesJVM = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.typelevel"               %% "cats-core"         % Versions.CatsVersion,
-  "org.typelevel"               %% "cats-kernel"       % Versions.CatsVersion
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion
 )
 
-val testingDependencies = Seq(
-  "com.beachape"                %% "enumeratum"            % Versions.EnumeratumVersion,
-  "com.beachape"                %% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
-  "com.chuusai"                 %% "shapeless"             % Versions.ShapelessVersion,
-  "eu.timepit"                  %% "refined-scalacheck"    % Versions.RefinedVersion,
-  "eu.timepit"                  %% "refined"               % Versions.RefinedVersion,
-  "io.chrisdavenport"           %% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
-  "io.circe"                    %% "circe-core"            % Versions.CirceVersion,
-  "org.locationtech.geotrellis" %% "geotrellis-vector"     % Versions.GeoTrellisVersion,
-  "org.locationtech.jts"         % "jts-core"              % Versions.Jts,
-  "org.scalacheck"              %% "scalacheck"            % Versions.ScalacheckVersion,
-  "org.typelevel"               %% "cats-core"             % Versions.CatsVersion
+val testingDependenciesJVM = Seq(
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+  "org.locationtech.jts"         % "jts-core"          % Versions.Jts
 )
 
-val testRunnerDependencies = Seq(
-  "io.circe"          %% "circe-testing"   % Versions.CirceVersion,
-  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion,
-  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck
+val testRunnerDependenciesJVM = Seq(
+  "io.circe"          %% "circe-testing"   % Versions.CirceVersion            % Test,
+  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion        % Test,
+  "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
-lazy val root = project
+lazy val root = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
   .settings(moduleName := "root")
   .settings(commonSettings)
@@ -145,27 +127,74 @@ lazy val root = project
   .settings(noPublishSettings)
   .aggregate(core, testing, coreTest)
 
-lazy val core = (project in file("modules/core"))
+lazy val core = crossProject(JSPlatform, JVMPlatform)
+  .in(file("modules/core"))
   .settings(commonSettings)
   .settings(publishSettings)
   .settings({
-    libraryDependencies ++= coreDependencies
+    libraryDependencies ++= Seq(
+      "com.beachape"  %%% "enumeratum"       % Versions.EnumeratumVersion,
+      "com.beachape"  %%% "enumeratum-circe" % Versions.EnumeratumVersion,
+      "com.chuusai"   %%% "shapeless"        % Versions.ShapelessVersion,
+      "eu.timepit"    %%% "refined"          % Versions.RefinedVersion,
+      "io.circe"      %%% "circe-core"       % Versions.CirceVersion,
+      "io.circe"      %%% "circe-generic"    % Versions.CirceVersion,
+      "io.circe"      %%% "circe-parser"     % Versions.CirceVersion,
+      "io.circe"      %%% "circe-refined"    % Versions.CirceVersion,
+      "org.typelevel" %%% "cats-core"        % Versions.CatsVersion,
+      "org.typelevel" %%% "cats-kernel"      % Versions.CatsVersion
+    )
   })
+  .jvmSettings(
+    libraryDependencies ++= coreDependenciesJVM
+  )
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %% "scala-java-time" % "2.0.0"
+    )
+  )
 
-lazy val coreRef = LocalProject("modules/core")
+lazy val coreJvm = core.jvm
+lazy val coreJs  = core.js
 
-lazy val testing = (project in file("modules/testing"))
+lazy val testing = (crossProject(JSPlatform, JVMPlatform))
+  .in(file("modules/testing"))
   .dependsOn(core)
   .settings(commonSettings)
   .settings(publishSettings)
-  .settings(libraryDependencies ++= testingDependencies)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.beachape"      %%% "enumeratum"            % Versions.EnumeratumVersion,
+      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
+      "com.chuusai"       %%% "shapeless"             % Versions.ShapelessVersion,
+      "eu.timepit"        %%% "refined-scalacheck"    % Versions.RefinedVersion,
+      "eu.timepit"        %%% "refined"               % Versions.RefinedVersion,
+      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
+      "io.circe"          %%% "circe-core"            % Versions.CirceVersion,
+      "org.scalacheck"    %%% "scalacheck"            % Versions.ScalacheckVersion,
+      "org.typelevel"     %%% "cats-core"             % Versions.CatsVersion
+    )
+  )
+  .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
 
-lazy val testingRef = LocalProject("modules/testing")
+lazy val testingJvm = testing.jvm
 
-lazy val coreTest = (project in file("modules/core-test"))
+lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
+  .in(file("modules/core-test"))
   .dependsOn(testing % Test)
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .settings(libraryDependencies ++= testRunnerDependencies map { _ % Test })
+  .settings(
+    libraryDependencies ++= Seq(
+      "io.circe"          %%% "circe-testing"   % Versions.CirceVersion            % Test,
+      "org.scalatest"     %%% "scalatest"       % Versions.ScalatestVersion        % Test,
+      "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
+    )
+  )
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0" % Test
+    )
+  )
 
-lazy val coreTestRef = LocalProject("modules/core-test")
+lazy val coreTestJvm = coreTest.jvm
