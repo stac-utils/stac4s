@@ -1,5 +1,5 @@
 object Versions {
-  val CatsVersion             = "2.2.0"
+  val CatsVersion             = "2.3.0"
   val CirceVersion            = "0.13.0"
   val EnumeratumVersion       = "1.6.1"
   val GeoTrellisVersion       = "3.5.1"
@@ -7,7 +7,7 @@ object Versions {
   val RefinedVersion          = "0.9.18"
   val ScalacheckCatsVersion   = "0.3.0"
   val ScalacheckVersion       = "1.15.1"
-  val ScalatestPlusScalacheck = "3.2.2.0"
+  val ScalatestPlusScalacheck = "3.2.3.0"
   val ScalatestVersion        = "3.2.3"
   val ScapegoatVersion        = "1.3.11"
   val ShapelessVersion        = "2.3.3"
