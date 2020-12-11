@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Fixed
+- Told circle not to publish tags that don't start with numbers [#190](https://github.com/azavea/stac4s/pull/190)
 
 ## [0.0.21] - 2021-01-08
 ### Fixed
