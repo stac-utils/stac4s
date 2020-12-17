@@ -18,7 +18,7 @@ lazy val commonSettings = Seq(
   scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.0" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.2" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(
     "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
@@ -119,13 +119,13 @@ val testRunnerDependenciesJVM = Seq(
   "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
-lazy val root = crossProject(JSPlatform, JVMPlatform)
+lazy val root = project
   .in(file("."))
   .settings(moduleName := "root")
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(core, testing, coreTest)
+  .aggregate(coreJS, coreJVM, testingJS, testingJVM, coreTestJS, coreTestJVM)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/core"))
@@ -154,8 +154,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   )
 
-lazy val coreJvm = core.jvm
-lazy val coreJs  = core.js
+lazy val coreJVM = core.jvm
+lazy val coreJS  = core.js
 
 lazy val testing = (crossProject(JSPlatform, JVMPlatform))
   .in(file("modules/testing"))
@@ -177,7 +177,8 @@ lazy val testing = (crossProject(JSPlatform, JVMPlatform))
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
 
-lazy val testingJvm = testing.jvm
+lazy val testingJVM = testing.jvm
+lazy val testingJS  = testing.js
 
 lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/core-test"))
@@ -197,4 +198,5 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
     )
   )
 
-lazy val coreTestJvm = coreTest.jvm
+lazy val coreTestJVM = coreTest.jvm
+lazy val coreTestJS  = coreTest.js
