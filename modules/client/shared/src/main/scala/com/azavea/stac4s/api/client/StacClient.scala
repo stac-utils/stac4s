@@ -26,4 +26,6 @@ trait StacClient[F[_]] {
   def collection(collectionId: NonEmptyString): F[Option[StacCollection]]
   def items(collectionId: NonEmptyString): F[List[StacItem]]
   def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[Option[StacItem]]
+  def itemCreate(collectionId: NonEmptyString, item: StacItem): F[StacItem]
+  def collectionCreate(collection: StacCollection): F[StacCollection]
 }

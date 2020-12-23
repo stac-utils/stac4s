@@ -5,6 +5,7 @@ import com.azavea.stac4s.{StacCollection, StacItem}
 import cats.effect.{ConcurrentEffect, Resource, Sync}
 import cats.syntax.apply._
 import cats.syntax.either._
+import cats.syntax.flatMap._
 import cats.syntax.functor._
 import eu.timepit.refined.types.string.NonEmptyString
 import io.chrisdavenport.log4cats.Logger
@@ -54,6 +55,26 @@ case class Http4sStacClient[F[_]: Sync: Logger](
       client
         .expect(getRequest.withUri(baseUri.withPath(s"/collections/$collectionId/items/$itemId")))
         .map(_.as[Option[StacItem]].bimap(_ => None, identity).merge)
+
+  def itemCreate(collectionId: NonEmptyString, item: StacItem): F[StacItem] =
+    logger.trace(s"createItem: $collectionId, $item") *>
+      client
+        .expect(
+          postRequest
+            .withUri(baseUri.withPath(s"/collections/$collectionId/items"))
+            .withEntity(item.asJson.noSpaces)
+        )
+        .flatMap { json => Sync[F].fromEither(json.as[StacItem].leftMap(_.getCause)) }
+
+  def collectionCreate(collection: StacCollection): F[StacCollection] =
+    logger.trace(s"createCollection: $collection") *>
+      client
+        .expect(
+          postRequest
+            .withUri(baseUri.withPath(s"/collections/"))
+            .withEntity(collection.asJson.noSpaces)
+        )
+        .flatMap { json => Sync[F].fromEither(json.as[StacCollection].leftMap(_.getCause)) }
 }
 
 object Http4sStacClient {
