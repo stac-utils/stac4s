@@ -12,7 +12,7 @@ import sttp.monad.EitherMonad
 
 class StacClientSpec extends AnyFunSpec with Matchers {
 
-  lazy val backend =
+  lazy val backend: SttpBackendStub[Either[Throwable, *], Nothing] =
     SttpBackendStub(EitherMonad)
       .whenRequestMatches(_.uri.path == Seq("collections"))
       .thenRespondF { _ =>

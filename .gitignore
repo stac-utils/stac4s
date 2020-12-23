@@ -77,7 +77,6 @@ project/plugins/project/
 /project/.sbtboot
 /project/.boot/
 /project/.ivy/
-/.sbtopts
 
 # Molecule
 .molecule/

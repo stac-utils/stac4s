@@ -146,7 +146,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
-  .jsSettings(libraryDependencies +"io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -203,28 +203,30 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"                      %%% "circe-core"                     % Versions.Circe,
-      "io.circe"                      %%% "circe-generic"                  % Versions.Circe,
-      "io.circe"                      %%% "circe-refined"                  % Versions.Circe,
-      "com.chuusai"                   %%% "shapeless"                      % Versions.Shapeless,
-      "eu.timepit"                    %%% "refined"                        % Versions.Refined,
-      "org.typelevel"                 %%% "cats-core"                      % Versions.Cats,
-      "com.softwaremill.sttp.client3" %%% "core"                           % Versions.Sttp,
-      "com.softwaremill.sttp.client3" %%% "circe"                          % Versions.Sttp,
-      "com.softwaremill.sttp.client3" %%% "json-common"                    % Versions.Sttp,
-      "com.softwaremill.sttp.model"   %%% "core"                           % Versions.SttpModel,
-      "com.softwaremill.sttp.shared"  %%% "core"                           % Versions.SttpShared,
-      "org.scalatest"                 %%% "scalatest"                      % Versions.Scalatest % Test,
+      "io.circe"                      %%% "circe-core"    % Versions.Circe,
+      "io.circe"                      %%% "circe-generic" % Versions.Circe,
+      "io.circe"                      %%% "circe-refined" % Versions.Circe,
+      "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
+      "eu.timepit"                    %%% "refined"       % Versions.Refined,
+      "org.typelevel"                 %%% "cats-core"     % Versions.Cats,
+      "com.softwaremill.sttp.client3" %%% "core"          % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "circe"         % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "json-common"   % Versions.Sttp,
+      "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
+      "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
+      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
-  .jvmSettings(libraryDependencies ++= Seq(
-    "io.chrisdavenport"             %%% "log4cats-core"                  % Versions.Log4Cats,
-    "io.chrisdavenport"             %%% "log4cats-slf4j"                 % Versions.Log4Cats  % Test,
-    "com.softwaremill.sttp.client3" %% "http4s-backend"                 % Versions.Sttp      % Test,
-    "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.Sttp      % Test
-  ))
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "io.chrisdavenport"            %%% "log4cats-core"                  % Versions.Log4Cats,
+      "io.chrisdavenport"            %%% "log4cats-slf4j"                 % Versions.Log4Cats % Test,
+      "com.softwaremill.sttp.client3" %% "http4s-backend"                 % Versions.Sttp     % Test,
+      "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.Sttp     % Test
+    )
+  )
 
 lazy val clientJVM = client.jvm
 lazy val clientJS  = client.js
