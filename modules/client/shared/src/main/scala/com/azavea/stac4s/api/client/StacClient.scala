@@ -17,6 +17,7 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s._
+
 import eu.timepit.refined.types.string.NonEmptyString
 
 trait StacClient[F[_]] {

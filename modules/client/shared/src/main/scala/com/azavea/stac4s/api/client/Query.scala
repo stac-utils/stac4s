@@ -4,9 +4,10 @@ import cats.data.NonEmptyVector
 import cats.implicits._
 import eu.timepit.refined.types.string.NonEmptyString
 import io.circe._
-import io.circe.syntax._
 import io.circe.refined._
+import io.circe.syntax._
 
+/** https://github.com/azavea/franklin/blob/286c5c755585cf743eae5bd176609d8c125ad2b9/application/src/main/scala/com/azavea/franklin/datamodel/Query.scala */
 sealed abstract class Query
 
 case class Equals(value: Json)                    extends Query
@@ -83,24 +84,22 @@ object Query {
       case (k, _) => Left(s"$k is not a valid operator")
     })
 
-  implicit val encQuery: Encoder[List[Query]] = new Encoder[List[Query]] {
-
-    def apply(queries: List[Query]): Json =
-      Map(
-        (queries map {
-          case Equals(value)           => "eq"         -> value.asJson
-          case NotEqualTo(value)       => "neq"        -> value.asJson
-          case GreaterThan(floor)      => "gt"         -> floor.asJson
-          case GreaterThanEqual(floor) => "gte"        -> floor.asJson
-          case LessThan(ceiling)       => "lt"         -> ceiling.asJson
-          case LessThanEqual(ceiling)  => "lte"        -> ceiling.asJson
-          case StartsWith(prefix)      => "startsWith" -> prefix.asJson
-          case EndsWith(postfix)       => "endsWith"   -> postfix.asJson
-          case Contains(substring)     => "contains"   -> substring.asJson
-          case In(values)              => "in"         -> values.asJson
-          case Superset(values)        => "superset"   -> values.asJson
-        }): _*
-      ).asJson
+  implicit val encQuery: Encoder[List[Query]] = { queries =>
+    Map(
+      queries map {
+        case Equals(value)           => "eq"         -> value.asJson
+        case NotEqualTo(value)       => "neq"        -> value.asJson
+        case GreaterThan(floor)      => "gt"         -> floor.asJson
+        case GreaterThanEqual(floor) => "gte"        -> floor.asJson
+        case LessThan(ceiling)       => "lt"         -> ceiling.asJson
+        case LessThanEqual(ceiling)  => "lte"        -> ceiling.asJson
+        case StartsWith(prefix)      => "startsWith" -> prefix.asJson
+        case EndsWith(postfix)       => "endsWith"   -> postfix.asJson
+        case Contains(substring)     => "contains"   -> substring.asJson
+        case In(values)              => "in"         -> values.asJson
+        case Superset(values)        => "superset"   -> values.asJson
+      }: _*
+    ).asJson
   }
 
   implicit val decQueries: Decoder[List[Query]] = Decoder[JsonObject].emap { jsonObj => queriesFromMap(jsonObj.toMap) }

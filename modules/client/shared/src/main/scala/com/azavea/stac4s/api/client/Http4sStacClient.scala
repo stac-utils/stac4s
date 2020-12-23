@@ -1,18 +1,19 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.{StacCollection, StacItem}
-import org.http4s.Method.{GET, POST}
-import org.http4s.{Request, Uri}
-import org.http4s.client.Client
-import io.circe.syntax._
-import org.http4s.circe._
-import cats.syntax.functor._
-import cats.syntax.either._
-import cats.syntax.apply._
+
 import cats.effect.{ConcurrentEffect, Resource, Sync}
+import cats.syntax.apply._
+import cats.syntax.either._
+import cats.syntax.functor._
 import eu.timepit.refined.types.string.NonEmptyString
-import org.http4s.client.blaze.BlazeClientBuilder
 import io.chrisdavenport.log4cats.Logger
+import io.circe.syntax._
+import org.http4s.Method.{GET, POST}
+import org.http4s.circe._
+import org.http4s.client.Client
+import org.http4s.client.blaze.BlazeClientBuilder
+import org.http4s.{Request, Uri}
 
 import scala.concurrent.ExecutionContext
 

@@ -1,14 +1,16 @@
 package com.azavea.stac4s.api.client
 
-import com.azavea.stac4s.{Bbox, TemporalExtent}
+import com.azavea.stac4s.Bbox
+import com.azavea.stac4s.types.TemporalExtent
+
+import cats.instances.either._
+import cats.syntax.apply._
+import cats.syntax.either._
+import eu.timepit.refined.types.numeric.NonNegInt
+import geotrellis.vector.{io => _, _}
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.refined._
-import geotrellis.vector._
-import cats.syntax.either._
-import cats.syntax.apply._
-import cats.instances.either._
-import eu.timepit.refined.types.numeric.NonNegInt
 
 import java.time.Instant
 
@@ -26,6 +28,7 @@ case class SearchFilters(
 object SearchFilters {
 
   // TemporalExtent STAC API compatible serialization
+  // Ported from https://github.com/azavea/franklin/
   private def stringToInstant(s: String): Either[Throwable, Instant] =
     Either.catchNonFatal(Instant.parse(s))
 

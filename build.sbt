@@ -125,7 +125,7 @@ lazy val root = project
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(coreJS, coreJVM, testingJS, testingJVM, coreTestJS, coreTestJVM)
+  .aggregate(coreJS, coreJVM, testingJS, testingJVM, coreTestJS, coreTestJVM, clientJS, clientJVM)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/core"))
@@ -157,7 +157,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
 
-lazy val testing = (crossProject(JSPlatform, JVMPlatform))
+lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/testing"))
   .dependsOn(core)
   .settings(commonSettings)
@@ -202,7 +202,8 @@ lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
 lazy val coreTestRef = LocalProject("modules/core-test")
 
-lazy val client = (project in file("modules/client"))
+lazy val client = crossProject(JSPlatform, JVMPlatform)
+  .in(file("modules/client"))
   .dependsOn(core)
   .settings(commonSettings)
   .settings(publishSettings)
@@ -214,7 +215,7 @@ lazy val client = (project in file("modules/client"))
       "com.chuusai"                 %% "shapeless"           % Versions.ShapelessVersion,
       "eu.timepit"                  %% "refined"             % Versions.RefinedVersion,
       "org.locationtech.geotrellis" %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
-      "org.locationtech.jts"        % "jts-core"             % Versions.jts,
+      "org.locationtech.jts"         % "jts-core"            % Versions.Jts,
       "org.typelevel"               %% "cats-core"           % Versions.CatsVersion,
       "co.fs2"                      %% "fs2-core"            % "2.4.2",
       "org.http4s"                  %% "http4s-blaze-client" % "0.21.7",
@@ -226,3 +227,6 @@ lazy val client = (project in file("modules/client"))
       "io.chrisdavenport"           %% "log4cats-core"       % "1.1.1"
     )
   )
+
+lazy val clientJVM = client.jvm
+lazy val clientJS  = client.js
