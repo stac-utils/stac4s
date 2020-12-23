@@ -36,9 +36,9 @@ object Query {
     s"Cannot construct `$operator` query with $json"
 
   def queriesFromMap(unparsed: Map[String, Json]): Either[String, List[Query]] =
-    (unparsed.toList traverse {
-      case (op @ "eq", json)  => Right(Equals(json))
-      case (op @ "neq", json) => Right(NotEqualTo(json))
+    unparsed.toList traverse {
+      case (_ @ "eq", json)  => Right(Equals(json))
+      case (_ @ "neq", json) => Right(NotEqualTo(json))
       case (op @ "lt", json) =>
         Either.fromOption(fromStringOrNum(json, LessThan.apply), errMessage(op, json))
       case (op @ "lte", json) =>
@@ -82,7 +82,7 @@ object Query {
           errMessage(op, json)
         )
       case (k, _) => Left(s"$k is not a valid operator")
-    })
+    }
 
   implicit val encQuery: Encoder[List[Query]] = { queries =>
     Map(
@@ -102,5 +102,7 @@ object Query {
     ).asJson
   }
 
-  implicit val decQueries: Decoder[List[Query]] = Decoder[JsonObject].emap { jsonObj => queriesFromMap(jsonObj.toMap) }
+  implicit val decQueries: Decoder[List[Query]] = Decoder.decodeJsonObject.emap { jsonObj =>
+    queriesFromMap(jsonObj.toMap)
+  }
 }
