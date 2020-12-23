@@ -20,6 +20,7 @@ import com.azavea.stac4s._
 
 import eu.timepit.refined.types.string.NonEmptyString
 
+/** TODO: instead of returning F[List] we can return fs2.Stream */
 trait StacClient[F[_]] {
   def search(filter: SearchFilters = SearchFilters()): F[List[StacItem]]
   def collections: F[List[StacCollection]]

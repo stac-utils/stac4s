@@ -12,10 +12,10 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.12.11",
+  scalaVersion := "2.12.12",
   cancelable in Global := true,
   scalafmtOnCompile := true,
-  scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
+  scapegoatVersion in ThisBuild := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.2" cross CrossVersion.full),
@@ -105,17 +105,17 @@ lazy val credentialSettings = Seq(
 
 val coreDependenciesJVM = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
 )
 
 val testingDependenciesJVM = Seq(
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts
 )
 
 val testRunnerDependenciesJVM = Seq(
-  "io.circe"          %% "circe-testing"   % Versions.CirceVersion            % Test,
-  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion        % Test,
+  "io.circe"          %% "circe-testing"   % Versions.Circe                   % Test,
+  "org.scalatest"     %% "scalatest"       % Versions.Scalatest               % Test,
   "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
@@ -133,16 +133,16 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= Seq(
-      "com.beachape"  %%% "enumeratum"       % Versions.EnumeratumVersion,
-      "com.beachape"  %%% "enumeratum-circe" % Versions.EnumeratumVersion,
-      "com.chuusai"   %%% "shapeless"        % Versions.ShapelessVersion,
-      "eu.timepit"    %%% "refined"          % Versions.RefinedVersion,
-      "io.circe"      %%% "circe-core"       % Versions.CirceVersion,
-      "io.circe"      %%% "circe-generic"    % Versions.CirceVersion,
-      "io.circe"      %%% "circe-parser"     % Versions.CirceVersion,
-      "io.circe"      %%% "circe-refined"    % Versions.CirceVersion,
-      "org.typelevel" %%% "cats-core"        % Versions.CatsVersion,
-      "org.typelevel" %%% "cats-kernel"      % Versions.CatsVersion
+      "com.beachape"  %%% "enumeratum"       % Versions.Enumeratum,
+      "com.beachape"  %%% "enumeratum-circe" % Versions.Enumeratum,
+      "com.chuusai"   %%% "shapeless"        % Versions.Shapeless,
+      "eu.timepit"    %%% "refined"          % Versions.Refined,
+      "io.circe"      %%% "circe-core"       % Versions.Circe,
+      "io.circe"      %%% "circe-generic"    % Versions.Circe,
+      "io.circe"      %%% "circe-parser"     % Versions.Circe,
+      "io.circe"      %%% "circe-refined"    % Versions.Circe,
+      "org.typelevel" %%% "cats-core"        % Versions.Cats,
+      "org.typelevel" %%% "cats-kernel"      % Versions.Cats
     )
   })
   .jvmSettings(
@@ -164,15 +164,15 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.beachape"      %%% "enumeratum"            % Versions.EnumeratumVersion,
-      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
-      "com.chuusai"       %%% "shapeless"             % Versions.ShapelessVersion,
-      "eu.timepit"        %%% "refined-scalacheck"    % Versions.RefinedVersion,
-      "eu.timepit"        %%% "refined"               % Versions.RefinedVersion,
-      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
-      "io.circe"          %%% "circe-core"            % Versions.CirceVersion,
-      "org.scalacheck"    %%% "scalacheck"            % Versions.ScalacheckVersion,
-      "org.typelevel"     %%% "cats-core"             % Versions.CatsVersion
+      "com.beachape"      %%% "enumeratum"            % Versions.Enumeratum,
+      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.Enumeratum,
+      "com.chuusai"       %%% "shapeless"             % Versions.Shapeless,
+      "eu.timepit"        %%% "refined-scalacheck"    % Versions.Refined,
+      "eu.timepit"        %%% "refined"               % Versions.Refined,
+      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCats,
+      "io.circe"          %%% "circe-core"            % Versions.Circe,
+      "org.scalacheck"    %%% "scalacheck"            % Versions.Scalacheck,
+      "org.typelevel"     %%% "cats-core"             % Versions.Cats
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
@@ -187,8 +187,8 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"          %%% "circe-testing"   % Versions.CirceVersion            % Test,
-      "org.scalatest"     %%% "scalatest"       % Versions.ScalatestVersion        % Test,
+      "io.circe"          %%% "circe-testing"   % Versions.Circe                   % Test,
+      "org.scalatest"     %%% "scalatest"       % Versions.Scalatest               % Test,
       "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
     )
   )
@@ -209,23 +209,24 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"                      %% "circe-core"          % Versions.CirceVersion,
-      "io.circe"                      %% "circe-generic"       % Versions.CirceVersion,
-      "io.circe"                      %% "circe-refined"       % Versions.CirceVersion,
-      "com.chuusai"                   %% "shapeless"           % Versions.ShapelessVersion,
-      "eu.timepit"                    %% "refined"             % Versions.RefinedVersion,
-      "org.locationtech.geotrellis"   %% "geotrellis-vector"   % Versions.GeoTrellisVersion,
-      "org.locationtech.jts"           % "jts-core"            % Versions.Jts,
-      "org.typelevel"                 %% "cats-core"           % Versions.CatsVersion,
-      "com.softwaremill.sttp.client3" %% "core"                % "3.0.0-RC13",
-      "co.fs2"                        %% "fs2-core"            % "2.4.2",
-      "org.http4s"                    %% "http4s-blaze-client" % "0.21.7",
-      "org.http4s"                    %% "http4s-circe"        % "0.21.7",
-      "org.http4s"                    %% "http4s-client"       % "0.21.7",
-      "org.http4s"                    %% "http4s-core"         % "0.21.7",
-      "org.typelevel"                 %% "cats-effect"         % "2.1.4",
-      "io.chrisdavenport"             %% "vault"               % "2.0.0",
-      "io.chrisdavenport"             %% "log4cats-core"       % "1.1.1"
+      "io.circe"                      %% "circe-core"                     % Versions.Circe,
+      "io.circe"                      %% "circe-generic"                  % Versions.Circe,
+      "io.circe"                      %% "circe-refined"                  % Versions.Circe,
+      "com.chuusai"                   %% "shapeless"                      % Versions.Shapeless,
+      "eu.timepit"                    %% "refined"                        % Versions.Refined,
+      "org.locationtech.geotrellis"   %% "geotrellis-vector"              % Versions.GeoTrellis,
+      "org.locationtech.jts"           % "jts-core"                       % Versions.Jts,
+      "org.typelevel"                 %% "cats-core"                      % Versions.Cats,
+      "com.softwaremill.sttp.client3" %% "core"                           % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %% "circe"                          % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %% "json-common"                    % Versions.Sttp,
+      "com.softwaremill.sttp.model"   %% "core"                           % Versions.SttpModel,
+      "com.softwaremill.sttp.shared"  %% "core"                           % Versions.SttpShared,
+      "com.softwaremill.sttp.client3" %% "http4s-backend"                 % Versions.Sttp      % Test,
+      "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.Sttp      % Test,
+      "org.scalatest"                %%% "scalatest"                      % Versions.Scalatest % Test,
+      "io.chrisdavenport"             %% "log4cats-core"                  % Versions.Log4Cats,
+      "io.chrisdavenport"             %% "log4cats-slf4j"                 % Versions.Log4Cats  % Test
     )
   )
 
