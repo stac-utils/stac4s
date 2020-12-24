@@ -5,6 +5,7 @@ import com.azavea.stac4s.api.client.utils.ClientCodecs
 import com.azavea.stac4s.geometry.Geometry
 import com.azavea.stac4s.types.TemporalExtent
 
+import alleycats.Empty
 import eu.timepit.refined.types.numeric.NonNegInt
 import io.circe._
 import io.circe.generic.semiauto._
@@ -22,6 +23,8 @@ case class SearchFilters(
 )
 
 object SearchFilters extends ClientCodecs {
+
+  implicit val searchFiltersEmpty: Empty[SearchFilters] = Empty(SearchFilters())
 
   implicit val searchFilterDecoder: Decoder[SearchFilters] = { c =>
     for {
