@@ -1,18 +1,18 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.testing.JsInstances
-
 import cats.syntax.either._
 import eu.timepit.refined.types.all.NonEmptyString
 import io.circe.JsonObject
 import io.circe.syntax._
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext}
 import sttp.monad.EitherMonad
 
-class StacClientSpec extends AnyFunSpec with Matchers with JsInstances {
+class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with BeforeAndAfterAll {
 
   lazy val backend =
     SttpBackendStub(EitherMonad)
@@ -69,4 +69,6 @@ class StacClientSpec extends AnyFunSpec with Matchers with JsInstances {
         .size should be > 0
     }
   }
+
+  override def afterAll(): Unit = backend.close().valueOr(throw _)
 }

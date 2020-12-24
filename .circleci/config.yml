@@ -35,7 +35,7 @@ aliases:
       - image: circleci/openjdk:8-jdk-node
         environment:
           # https://circleci.com/docs/2.0/java-oom/
-          _JAVA_OPTIONS: "-Xms64m -Xmx2g"
+          _JAVA_OPTIONS: "-Xms128m -Xmx2g"
 
 version: 2
 workflows:

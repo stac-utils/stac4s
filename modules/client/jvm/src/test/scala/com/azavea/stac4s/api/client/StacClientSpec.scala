@@ -1,7 +1,6 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.testing.JvmInstances
-
 import cats.effect.{Blocker, IO}
 import cats.syntax.applicative._
 import cats.syntax.either._
@@ -10,15 +9,16 @@ import eu.timepit.refined.collection.Empty
 import eu.timepit.refined.types.all.NonEmptyString
 import io.circe.JsonObject
 import io.circe.syntax._
+import org.scalatest.BeforeAndAfterAll
 import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import sttp.client3.http4s.Http4sBackend
 import sttp.client3.impl.cats.CatsMonadAsyncError
 import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext}
 
-class StacClientSpec extends IOSpec with JvmInstances {
+class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
 
-  lazy val backend: SttpBackendStub[IO, Nothing] =
+  lazy val backend =
     SttpBackendStub(new CatsMonadAsyncError[IO]())
       .whenRequestMatches(_.uri.path == Seq("search"))
       .thenRespondF { _ =>
@@ -88,4 +88,6 @@ class StacClientSpec extends IOSpec with JvmInstances {
       res map (_ shouldNot be(Empty))
     }
   }
+
+  override def afterAll(): Unit = backend.close().unsafeRunSync()
 }
