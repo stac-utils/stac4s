@@ -18,8 +18,10 @@ case class SttpStacClient[F[_]: MonadError[*[_], Throwable]: Logger](
     baseUri: Uri
 ) extends StacClient[F] {
 
+  type Filter = SearchFilters
+
   def search(filter: SearchFilters = SearchFilters()): F[List[StacItem]] =
-    Logger[F].trace(s"search: ${filter.asJson.spaces4}") >>
+    Logger[F].trace(s"search: ${filter.asJson.spaces2}") >>
       client
         .send(basicRequest.post(baseUri.withPath("search")).body(filter.asJson.noSpaces).response(asJson[Json]))
         .map(_.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]))
@@ -62,7 +64,7 @@ case class SttpStacClient[F[_]: MonadError[*[_], Throwable]: Logger](
         .flatMap(MonadError[F, Throwable].fromEither)
 
   def itemCreate(collectionId: NonEmptyString, item: StacItem): F[StacItem] =
-    Logger[F].trace(s"createItem: ($collectionId, $item)") >>
+    Logger[F].trace(s"createItem: ($collectionId, ${item.asJson.spaces2})") >>
       client
         .send(
           basicRequest
@@ -74,7 +76,7 @@ case class SttpStacClient[F[_]: MonadError[*[_], Throwable]: Logger](
         .flatMap(MonadError[F, Throwable].fromEither)
 
   def collectionCreate(collection: StacCollection): F[StacCollection] =
-    Logger[F].trace(s"createCollection: $collection") >>
+    Logger[F].trace(s"createCollection: ${collection.asJson.spaces2}") >>
       client
         .send(
           basicRequest

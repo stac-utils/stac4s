@@ -17,6 +17,8 @@ case class SttpStacClient[F[_]: MonadError[*[_], Throwable]](
     baseUri: Uri
 ) extends StacClient[F] {
 
+  type Filter = SearchFilters
+
   def search(filter: SearchFilters = SearchFilters()): F[List[StacItem]] =
     client
       .send(basicRequest.post(baseUri.withPath("search")).body(filter.asJson.noSpaces).response(asJson[Json]))
