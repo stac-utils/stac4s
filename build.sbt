@@ -170,6 +170,11 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" % Test
+    )
+  )
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -198,7 +203,7 @@ lazy val coreTestRef = LocalProject("modules/core-test")
 
 lazy val client = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/client"))
-  .dependsOn(core)
+  .dependsOn(core, testing % Test)
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(

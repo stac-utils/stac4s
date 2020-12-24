@@ -9,6 +9,7 @@ import com.azavea.stac4s.{
   StacCollection,
   StacExtent,
   StacItem,
+  StacItemAsset,
   StacLink,
   StacVersion
 }
@@ -61,6 +62,20 @@ trait JvmInstances {
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
 
+  private[testing] def stacItemShortGen: Gen[StacItem] =
+    (
+      nonEmptyStringGen,
+      Gen.const("0.8.0"),
+      Gen.const(List.empty[String]),
+      Gen.const("Feature"),
+      rectangleGen,
+      TestInstances.twoDimBboxGen,
+      Gen.const(Nil),
+      Gen.const(Map.empty[String, StacItemAsset]),
+      Gen.option(nonEmptyStringGen),
+      TestInstances.itemExtensionFieldsGen
+    ).mapN(StacItem.apply)
+
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
@@ -68,6 +83,16 @@ trait JvmInstances {
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
+      Gen.const(().asJsonObject)
+    ).mapN(ItemCollection.apply)
+
+  private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
+    (
+      Gen.const("FeatureCollection"),
+      Gen.const(StacVersion.unsafeFrom("0.9.0")),
+      Gen.const(Nil),
+      Gen.listOf[StacItem](stacItemGen),
+      Gen.const(Nil),
       Gen.const(().asJsonObject)
     ).mapN(ItemCollection.apply)
 
@@ -94,10 +119,33 @@ trait JvmInstances {
       TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
+  private[testing] def stacCollectionShortGen: Gen[StacCollection] =
+    (
+      nonEmptyStringGen,
+      possiblyEmptyListGen(nonEmptyStringGen),
+      nonEmptyStringGen,
+      Gen.option(nonEmptyStringGen),
+      nonEmptyStringGen,
+      Gen.const(Nil),
+      TestInstances.stacLicenseGen,
+      Gen.const(Nil),
+      stacExtentGen,
+      Gen.const(().asJsonObject),
+      Gen.const(JsonObject.fromMap(Map.empty)),
+      Gen.const(Nil),
+      Gen.const(().asJsonObject)
+    ).mapN(StacCollection.apply)
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
+
+  val arbItemShort: Arbitrary[StacItem] = Arbitrary { stacItemShortGen }
 
   implicit val arbItemCollection: Arbitrary[ItemCollection] = Arbitrary {
     itemCollectionGen
+  }
+
+  val arbItemCollectionShort: Arbitrary[ItemCollection] = Arbitrary {
+    itemCollectionShortGen
   }
 
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { rectangleGen }
@@ -107,6 +155,8 @@ trait JvmInstances {
   implicit val arbCollection: Arbitrary[StacCollection] = Arbitrary {
     stacCollectionGen
   }
+
+  val arbCollectionShort: Arbitrary[StacCollection] = Arbitrary { stacCollectionShortGen }
 
   implicit val arbStacExtent: Arbitrary[StacExtent] = Arbitrary {
     stacExtentGen
