@@ -96,7 +96,7 @@ trait JsInstances {
       Gen.const("FeatureCollection"),
       Gen.const(StacVersion.unsafeFrom("0.9.0")),
       Gen.const(Nil),
-      Gen.listOf[StacItem](stacItemGen),
+      Gen.listOfN[StacItem](2, stacItemGen),
       Gen.const(Nil),
       Gen.const(().asJsonObject)
     ).mapN(ItemCollection.apply)
