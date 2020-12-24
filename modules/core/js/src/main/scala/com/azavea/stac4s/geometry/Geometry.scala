@@ -66,7 +66,7 @@ object Geometry {
   }
 
   // for now, I'm ignoring multi polygons with holes
-  // however polygons still store coordinates as List[List[List[List[Double]]]]
+  // however multipolygons still store coordinates as List[List[List[List[Double]]]]
   implicit val encMultiPolygon: Encoder[MultiPolygon] = { mpolygon =>
     Map(
       "type"        -> "MultiPolygon".asJson,

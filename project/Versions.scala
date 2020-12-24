@@ -15,5 +15,4 @@ object Versions {
   val Sttp                    = "3.0.0-RC13"
   val SttpModel               = "1.2.0-RC9"
   val SttpShared              = "1.0.0-RC11"
-  val Log4Cats                = "1.1.1"
 }
