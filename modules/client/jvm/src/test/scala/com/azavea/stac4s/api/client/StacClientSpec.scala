@@ -1,6 +1,7 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.testing.JvmInstances
+
 import cats.effect.{Blocker, IO}
 import cats.syntax.applicative._
 import cats.syntax.either._

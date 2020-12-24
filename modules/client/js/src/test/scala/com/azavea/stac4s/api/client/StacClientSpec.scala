@@ -1,6 +1,7 @@
 package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.testing.JsInstances
+
 import cats.syntax.either._
 import eu.timepit.refined.types.all.NonEmptyString
 import io.circe.JsonObject
