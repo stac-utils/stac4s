@@ -11,6 +11,7 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext}
+import sttp.model.Method
 import sttp.monad.EitherMonad
 
 class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with BeforeAndAfterAll {
@@ -23,13 +24,19 @@ class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with Befo
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
           .asRight
       }
-      .whenRequestMatches(_.uri.path == Seq("collections"))
+      .whenRequestMatches {
+        case req if req.method == Method.GET => req.uri.path == Seq("collections")
+        case _                               => false
+      }
       .thenRespondF { _ =>
         Response
           .ok(JsonObject("collections" -> arbCollectionShort.arbitrary.sample.toList.asJson).asJson.asRight)
           .asRight
       }
-      .whenRequestMatches(_.uri.path == Seq("collections", "collection_id", "items"))
+      .whenRequestMatches {
+        case req if req.method == Method.GET => req.uri.path == Seq("collections", "collection_id", "items")
+        case _                               => false
+      }
       .thenRespondF { _ =>
         Response
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
@@ -39,6 +46,24 @@ class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with Befo
       .thenRespondF { _ =>
         Response
           .ok(arbItemShort.arbitrary.sample.asRight)
+          .asRight
+      }
+      .whenRequestMatches {
+        case req if req.method == Method.POST => req.uri.path == Seq("collections", "collection_id", "items")
+        case _                                => false
+      }
+      .thenRespondF { _ =>
+        Response
+          .ok(arbItemShort.arbitrary.sample.get.asRight)
+          .asRight
+      }
+      .whenRequestMatches {
+        case req if req.method == Method.POST => req.uri.path == Seq("collections")
+        case _                                => false
+      }
+      .thenRespondF { _ =>
+        Response
+          .ok(arbCollectionShort.arbitrary.sample.get.asRight)
           .asRight
       }
 
@@ -68,6 +93,18 @@ class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with Befo
         .item(NonEmptyString.unsafeFrom("collection_id"), NonEmptyString.unsafeFrom("item_id"))
         .valueOr(throw _)
         .size should be > 0
+    }
+
+    it("itemCreate") {
+      SttpStacClient(backend, uri"http://localhost:9090")
+        .itemCreate(NonEmptyString.unsafeFrom("collection_id"), arbItemShort.arbitrary.sample.get)
+        .map(_.id should not be empty)
+    }
+
+    it("collectionCreate") {
+      SttpStacClient(backend, uri"http://localhost:9090")
+        .collectionCreate(arbCollectionShort.arbitrary.sample.get)
+        .map(_.id should not be empty)
     }
   }
 

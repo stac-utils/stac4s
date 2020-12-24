@@ -5,6 +5,7 @@ import com.azavea.stac4s.{StacCollection, StacItem}
 import cats.MonadError
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import cats.syntax.option._
 import eu.timepit.refined.types.string.NonEmptyString
 import io.chrisdavenport.log4cats.Logger
 import io.circe.Json
@@ -69,7 +70,7 @@ case class SttpStacClient[F[_]: MonadError[*[_], Throwable]: Logger](
         .send(
           basicRequest
             .post(baseUri.withPath("collections", collectionId.value, "items"))
-            .body(item.asJson.noSpaces)
+            .body(item.copy(collection = collectionId.value.some).asJson.noSpaces)
             .response(asJson[StacItem])
         )
         .map(_.body)

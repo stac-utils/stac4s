@@ -16,6 +16,7 @@ import sttp.client3.http4s.Http4sBackend
 import sttp.client3.impl.cats.CatsMonadAsyncError
 import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext}
+import sttp.model.Method
 
 class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
 
@@ -27,13 +28,19 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
           .pure[IO]
       }
-      .whenRequestMatches(_.uri.path == Seq("collections"))
+      .whenRequestMatches {
+        case req if req.method == Method.GET => req.uri.path == Seq("collections")
+        case _                               => false
+      }
       .thenRespondF { _ =>
         Response
           .ok(JsonObject("collections" -> arbCollectionShort.arbitrary.sample.toList.asJson).asJson.asRight)
           .pure[IO]
       }
-      .whenRequestMatches(_.uri.path == Seq("collections", "collection_id", "items"))
+      .whenRequestMatches {
+        case req if req.method == Method.GET => req.uri.path == Seq("collections", "collection_id", "items")
+        case _                               => false
+      }
       .thenRespondF { _ =>
         Response
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
@@ -43,6 +50,24 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       .thenRespondF { _ =>
         Response
           .ok(arbItemShort.arbitrary.sample.asRight)
+          .pure[IO]
+      }
+      .whenRequestMatches {
+        case req if req.method == Method.POST => req.uri.path == Seq("collections", "collection_id", "items")
+        case _                                => false
+      }
+      .thenRespondF { _ =>
+        Response
+          .ok(arbItemShort.arbitrary.sample.get.asRight)
+          .pure[IO]
+      }
+      .whenRequestMatches {
+        case req if req.method == Method.POST => req.uri.path == Seq("collections")
+        case _                                => false
+      }
+      .thenRespondF { _ =>
+        Response
+          .ok(arbCollectionShort.arbitrary.sample.get.asRight)
           .pure[IO]
       }
 
@@ -68,6 +93,18 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       SttpStacClient(backend, uri"http://localhost:9090")
         .item(NonEmptyString.unsafeFrom("collection_id"), NonEmptyString.unsafeFrom("item_id"))
         .map(_.size should be > 0)
+    }
+
+    it("itemCreate") {
+      SttpStacClient(backend, uri"http://localhost:9090")
+        .itemCreate(NonEmptyString.unsafeFrom("collection_id"), arbItemShort.arbitrary.sample.get)
+        .map(_.id should not be empty)
+    }
+
+    it("collectionCreate") {
+      SttpStacClient(backend, uri"http://localhost:9090")
+        .collectionCreate(arbCollectionShort.arbitrary.sample.get)
+        .map(_.id should not be empty)
     }
   }
 
