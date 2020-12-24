@@ -208,19 +208,18 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"                      %%% "circe-core"     % Versions.Circe,
-      "io.circe"                      %%% "circe-generic"  % Versions.Circe,
-      "io.circe"                      %%% "circe-refined"  % Versions.Circe,
-      "com.chuusai"                   %%% "shapeless"      % Versions.Shapeless,
-      "eu.timepit"                    %%% "refined"        % Versions.Refined,
-      "org.typelevel"                 %%% "cats-core"      % Versions.Cats,
-      "org.typelevel"                 %%% "alleycats-core" % Versions.Cats,
-      "com.softwaremill.sttp.client3" %%% "core"           % Versions.Sttp,
-      "com.softwaremill.sttp.client3" %%% "circe"          % Versions.Sttp,
-      "com.softwaremill.sttp.client3" %%% "json-common"    % Versions.Sttp,
-      "com.softwaremill.sttp.model"   %%% "core"           % Versions.SttpModel,
-      "com.softwaremill.sttp.shared"  %%% "core"           % Versions.SttpShared,
-      "org.scalatest"                 %%% "scalatest"      % Versions.Scalatest % Test
+      "io.circe"                      %%% "circe-core"    % Versions.Circe,
+      "io.circe"                      %%% "circe-generic" % Versions.Circe,
+      "io.circe"                      %%% "circe-refined" % Versions.Circe,
+      "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
+      "eu.timepit"                    %%% "refined"       % Versions.Refined,
+      "org.typelevel"                 %%% "cats-core"     % Versions.Cats,
+      "com.softwaremill.sttp.client3" %%% "core"          % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "circe"         % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "json-common"   % Versions.Sttp,
+      "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
+      "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
+      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")

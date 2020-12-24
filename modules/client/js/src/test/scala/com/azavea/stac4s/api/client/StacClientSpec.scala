@@ -69,8 +69,7 @@ class StacClientSpec extends AnyFunSpec with Matchers with JsInstances with Befo
 
   describe("StacClientSpec") {
     it("search") {
-      SttpStacClient(backend, uri"http://localhost:9090")
-        .search()
+      SttpStacClient(backend, uri"http://localhost:9090").search
         .valueOr(throw _)
         .size should be > 0
     }

@@ -2,10 +2,10 @@ package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.{StacCollection, StacItem}
 
-import alleycats.Empty
 import cats.MonadError
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import cats.syntax.option._
 import eu.timepit.refined.types.string.NonEmptyString
 import io.circe.syntax._
 import io.circe.{Encoder, Json}
@@ -21,11 +21,19 @@ abstract class BaseSttpStacClient[F[_]: MonadError[*[_], Throwable]](
   type Filter
 
   protected implicit def filterEncoder: Encoder[Filter]
-  protected implicit def filterEmpty: Empty[Filter]
 
-  def search(filter: Filter = filterEmpty.empty): F[List[StacItem]] =
+  def search: F[List[StacItem]] = search(None)
+
+  def search(filter: Filter): F[List[StacItem]] = search(filter.asJson.some)
+
+  private def search(filter: Option[Json]): F[List[StacItem]] =
     client
-      .send(basicRequest.post(baseUri.withPath("search")).body(filter.asJson.noSpaces).response(asJson[Json]))
+      .send {
+        filter
+          .fold(basicRequest)(f => basicRequest.body(f.asJson.noSpaces))
+          .post(baseUri.withPath("search"))
+          .response(asJson[Json])
+      }
       .map(_.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]))
       .flatMap(MonadError[F, Throwable].fromEither)
 
@@ -90,9 +98,8 @@ object BaseSttpStacClient {
   def instance[F[_]: MonadError[*[_], Throwable], S](
       client: SttpBackend[F, Any],
       baseUri: Uri
-  )(implicit sencoder: Encoder[S], sempty: Empty[S]): Aux[F, S] = new BaseSttpStacClient[F](client, baseUri) {
+  )(implicit sencoder: Encoder[S]): Aux[F, S] = new BaseSttpStacClient[F](client, baseUri) {
     type Filter = S
     protected val filterEncoder: Encoder[Filter] = sencoder
-    protected val filterEmpty: Empty[Filter]     = sempty
   }
 }

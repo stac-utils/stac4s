@@ -73,8 +73,7 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
 
   describe("StacClientSpec") {
     it("search") {
-      SttpStacClient(backend, uri"http://localhost:9090")
-        .search()
+      SttpStacClient(backend, uri"http://localhost:9090").search
         .map(_.size should be > 0)
     }
 

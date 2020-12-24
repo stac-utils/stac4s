@@ -23,6 +23,7 @@ import eu.timepit.refined.types.string.NonEmptyString
 /** TODO: instead of returning F[List] we can return fs2.Stream */
 trait StacClient[F[_]] {
   type Filter
+  def search: F[List[StacItem]]
   def search(filter: Filter): F[List[StacItem]]
   def collections: F[List[StacCollection]]
   def collection(collectionId: NonEmptyString): F[Option[StacCollection]]
