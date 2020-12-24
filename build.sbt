@@ -226,8 +226,6 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "io.chrisdavenport"            %%% "log4cats-core"                  % Versions.Log4Cats,
-      "io.chrisdavenport"            %%% "log4cats-slf4j"                 % Versions.Log4Cats % Test,
       "com.softwaremill.sttp.client3" %% "http4s-backend"                 % Versions.Sttp     % Test,
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.Sttp     % Test
     )
