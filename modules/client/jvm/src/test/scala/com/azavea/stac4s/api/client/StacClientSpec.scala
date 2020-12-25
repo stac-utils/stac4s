@@ -2,28 +2,27 @@ package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.testing.JvmInstances
 
-import cats.effect.IO
-import cats.syntax.applicative._
 import cats.syntax.either._
-import com.azavea.IOSpec
 import eu.timepit.refined.types.all.NonEmptyString
 import io.circe.JsonObject
 import io.circe.syntax._
 import org.scalatest.BeforeAndAfterAll
-import sttp.client3.impl.cats.CatsMonadAsyncError
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext}
 import sttp.model.Method
+import sttp.monad.EitherMonad
 
-class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
+class StacClientSpec extends AnyFunSpec with Matchers with JvmInstances with BeforeAndAfterAll {
 
   lazy val backend =
-    SttpBackendStub(new CatsMonadAsyncError[IO]())
+    SttpBackendStub(EitherMonad)
       .whenRequestMatches(_.uri.path == Seq("search"))
       .thenRespondF { _ =>
         Response
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
-          .pure[IO]
+          .asRight
       }
       .whenRequestMatches {
         case req if req.method == Method.GET => req.uri.path == Seq("collections")
@@ -32,7 +31,7 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       .thenRespondF { _ =>
         Response
           .ok(JsonObject("collections" -> arbCollectionShort.arbitrary.sample.toList.asJson).asJson.asRight)
-          .pure[IO]
+          .asRight
       }
       .whenRequestMatches {
         case req if req.method == Method.GET => req.uri.path == Seq("collections", "collection_id", "items")
@@ -41,13 +40,13 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       .thenRespondF { _ =>
         Response
           .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
-          .pure[IO]
+          .asRight
       }
       .whenRequestMatches(_.uri.path == Seq("collections", "collection_id", "items", "item_id"))
       .thenRespondF { _ =>
         Response
           .ok(arbItemShort.arbitrary.sample.asRight)
-          .pure[IO]
+          .asRight
       }
       .whenRequestMatches {
         case req if req.method == Method.POST => req.uri.path == Seq("collections", "collection_id", "items")
@@ -56,7 +55,7 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       .thenRespondF { _ =>
         Response
           .ok(arbItemShort.arbitrary.sample.get.asRight)
-          .pure[IO]
+          .asRight
       }
       .whenRequestMatches {
         case req if req.method == Method.POST => req.uri.path == Seq("collections")
@@ -65,30 +64,34 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
       .thenRespondF { _ =>
         Response
           .ok(arbCollectionShort.arbitrary.sample.get.asRight)
-          .pure[IO]
+          .asRight
       }
 
   describe("StacClientSpec") {
     it("search") {
       SttpStacClient(backend, uri"http://localhost:9090").search
-        .map(_.size should be > 0)
+        .valueOr(throw _)
+        .size should be > 0
     }
 
     it("collections") {
       SttpStacClient(backend, uri"http://localhost:9090").collections
-        .map(_.size should be > 0)
+        .valueOr(throw _)
+        .size should be > 0
     }
 
     it("items") {
       SttpStacClient(backend, uri"http://localhost:9090")
         .items(NonEmptyString.unsafeFrom("collection_id"))
-        .map(_.size should be > 0)
+        .valueOr(throw _)
+        .size should be > 0
     }
 
     it("item") {
       SttpStacClient(backend, uri"http://localhost:9090")
         .item(NonEmptyString.unsafeFrom("collection_id"), NonEmptyString.unsafeFrom("item_id"))
-        .map(_.size should be > 0)
+        .valueOr(throw _)
+        .size should be > 0
     }
 
     it("itemCreate") {
@@ -104,5 +107,5 @@ class StacClientSpec extends IOSpec with JvmInstances with BeforeAndAfterAll {
     }
   }
 
-  override def afterAll(): Unit = backend.close().unsafeRunSync()
+  override def afterAll(): Unit = backend.close().valueOr(throw _)
 }

@@ -224,9 +224,6 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
-  .jvmSettings(
-    libraryDependencies += "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.Sttp % Test
-  )
 
 lazy val clientJVM = client.jvm
 lazy val clientJS  = client.js
