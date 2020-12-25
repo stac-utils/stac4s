@@ -9,6 +9,6 @@ object SttpStacClient {
   def apply[F[_]: MonadError[*[_], Throwable]](
       client: SttpBackend[F, Any],
       baseUri: Uri
-  ): BaseSttpStacClient.Aux[F, SearchFilters] =
+  ): SttpStacClient[F] =
     BaseSttpStacClient.instance[F, SearchFilters](client, baseUri)
 }
