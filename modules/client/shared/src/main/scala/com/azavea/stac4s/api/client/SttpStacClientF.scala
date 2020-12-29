@@ -13,7 +13,7 @@ import sttp.client3.circe.asJson
 import sttp.client3.{SttpBackend, basicRequest}
 import sttp.model.Uri
 
-abstract class BaseSttpStacClient[F[_]: MonadError[*[_], Throwable]](
+abstract class SttpStacClientF[F[_]: MonadError[*[_], Throwable]](
     client: SttpBackend[F, Any],
     baseUri: Uri
 ) extends StacClient[F] {
@@ -92,13 +92,13 @@ abstract class BaseSttpStacClient[F[_]: MonadError[*[_], Throwable]](
       .flatMap(MonadError[F, Throwable].fromEither)
 }
 
-object BaseSttpStacClient {
-  type Aux[F[_], S] = BaseSttpStacClient[F] { type Filter = S }
+object SttpStacClientF {
+  type Aux[F[_], S] = SttpStacClientF[F] { type Filter = S }
 
   def instance[F[_]: MonadError[*[_], Throwable], S](
       client: SttpBackend[F, Any],
       baseUri: Uri
-  )(implicit sencoder: Encoder[S]): Aux[F, S] = new BaseSttpStacClient[F](client, baseUri) {
+  )(implicit sencoder: Encoder[S]): Aux[F, S] = new SttpStacClientF[F](client, baseUri) {
     type Filter = S
     protected val filterEncoder: Encoder[Filter] = sencoder
   }

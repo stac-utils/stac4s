@@ -10,5 +10,5 @@ object SttpStacClient {
       client: SttpBackend[F, Any],
       baseUri: Uri
   ): SttpStacClient[F] =
-    BaseSttpStacClient.instance[F, SearchFilters](client, baseUri)
+    SttpStacClientF.instance[F, SearchFilters](client, baseUri)
 }

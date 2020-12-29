@@ -15,13 +15,13 @@ import sttp.client3.testing.SttpBackendStub
 import sttp.model.Method
 import sttp.monad.EitherMonad
 
-trait BaseSttpStacClientSpec extends AnyFunSpec with Matchers with BeforeAndAfterAll {
+trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAll {
 
   def arbCollectionShort: Arbitrary[StacCollection]
   def arbItemCollectionShort: Arbitrary[ItemCollection]
   def arbItemShort: Arbitrary[StacItem]
 
-  def client: BaseSttpStacClient[Either[Throwable, *]]
+  def client: SttpStacClientF[Either[Throwable, *]]
 
   lazy val backend =
     SttpBackendStub(EitherMonad)
