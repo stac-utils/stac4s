@@ -27,14 +27,19 @@ Contributions can be made via [pull requests](https://github.com/azavea/stac4s/p
 
 ### Deployments, Releases, and Maintenance
 
-`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release, rotate changelog entries into a section for the version you're releasing usin `chan release X.Y.Z`, then make an annotated tag and push it to the repository:
+`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` and is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release, rotate changelog entries into a section for the version you're releasing using `chan release X.Y.Z`, then commit that changelog change:
 
 ```
-git tag -s -a <version> -m "Release version <version>
-git push origin --tags
+$ git add CHANGELOG.md
+$ git commit -m "X.Y.Z"
 ```
 
-After you've pushed the tag, create a GitHub release using `chan gh-release X.Y.Z`.
+Then create a release with `chan`. To do so, you'll need a [GitHub access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).
+
+```
+$ export GITHUB_TOKEN=<your token>
+$ chan gh-release
+```
 
 Active development and backports for a particular _minor_ version of `stac4s` will be tracked and maintained on a branch for that series (e.g. `series/0.1.x`, `series/0.2.x`, etc). Pull requests to backport a fix, feature, or other change should be made to that series' respective branch.
 
