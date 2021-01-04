@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.0.20] - 2021-01-04
 ### Added
 - Сlient module [#140](https://github.com/azavea/stac4s/pull/140)
 
@@ -90,7 +92,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.19...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.20...HEAD
+[0.0.20]: https://github.com/azavea/stac4s/compare/v0.0.19...v0.0.20
 [0.0.19]: https://github.com/azavea/stac4s/compare/v0.0.18...v0.0.19
 [0.0.18]: https://github.com/azavea/stac4s/compare/v0.0.17...v0.0.18
 [0.0.17]: https://github.com/azavea/stac4s/compare/v0.0.16...v0.0.17
