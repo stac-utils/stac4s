@@ -26,9 +26,11 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             coreJVM/undeclaredCompileDependenciesTest; \
             testingJVM/undeclaredCompileDependenciesTest; \
             coreTestJVM/undeclaredCompileDependenciesTest; \
+            clientJVM/undeclaredCompileDependenciesTest; \
             coreJVM/unusedCompileDependenciesTest; \
             testingJVM/unusedCompileDependenciesTest; \
             coreTestJVM/unusedCompileDependenciesTest; \
+            clientJVM/unusedCompileDependenciesTest; \
             test
         "
     fi
