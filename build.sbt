@@ -12,10 +12,10 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.12.11",
+  scalaVersion := "2.12.12",
   cancelable in Global := true,
   scalafmtOnCompile := true,
-  scapegoatVersion in ThisBuild := Versions.ScapegoatVersion,
+  scapegoatVersion in ThisBuild := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.2" cross CrossVersion.full),
@@ -105,17 +105,17 @@ lazy val credentialSettings = Seq(
 
 val coreDependenciesJVM = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
 )
 
 val testingDependenciesJVM = Seq(
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellisVersion,
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts
 )
 
 val testRunnerDependenciesJVM = Seq(
-  "io.circe"          %% "circe-testing"   % Versions.CirceVersion            % Test,
-  "org.scalatest"     %% "scalatest"       % Versions.ScalatestVersion        % Test,
+  "io.circe"          %% "circe-testing"   % Versions.Circe                   % Test,
+  "org.scalatest"     %% "scalatest"       % Versions.Scalatest               % Test,
   "org.scalatestplus" %% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
 )
 
@@ -125,7 +125,7 @@ lazy val root = project
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
-  .aggregate(coreJS, coreJVM, testingJS, testingJVM, coreTestJS, coreTestJVM)
+  .aggregate(coreJS, coreJVM, testingJS, testingJVM, coreTestJS, coreTestJVM, clientJS, clientJVM)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/core"))
@@ -133,49 +133,48 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= Seq(
-      "com.beachape"  %%% "enumeratum"       % Versions.EnumeratumVersion,
-      "com.beachape"  %%% "enumeratum-circe" % Versions.EnumeratumVersion,
-      "com.chuusai"   %%% "shapeless"        % Versions.ShapelessVersion,
-      "eu.timepit"    %%% "refined"          % Versions.RefinedVersion,
-      "io.circe"      %%% "circe-core"       % Versions.CirceVersion,
-      "io.circe"      %%% "circe-generic"    % Versions.CirceVersion,
-      "io.circe"      %%% "circe-parser"     % Versions.CirceVersion,
-      "io.circe"      %%% "circe-refined"    % Versions.CirceVersion,
-      "org.typelevel" %%% "cats-core"        % Versions.CatsVersion,
-      "org.typelevel" %%% "cats-kernel"      % Versions.CatsVersion
+      "com.beachape"  %%% "enumeratum"       % Versions.Enumeratum,
+      "com.beachape"  %%% "enumeratum-circe" % Versions.Enumeratum,
+      "com.chuusai"   %%% "shapeless"        % Versions.Shapeless,
+      "eu.timepit"    %%% "refined"          % Versions.Refined,
+      "io.circe"      %%% "circe-core"       % Versions.Circe,
+      "io.circe"      %%% "circe-generic"    % Versions.Circe,
+      "io.circe"      %%% "circe-parser"     % Versions.Circe,
+      "io.circe"      %%% "circe-refined"    % Versions.Circe,
+      "org.typelevel" %%% "cats-core"        % Versions.Cats,
+      "org.typelevel" %%% "cats-kernel"      % Versions.Cats
     )
   })
-  .jvmSettings(
-    libraryDependencies ++= coreDependenciesJVM
-  )
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "io.github.cquiroz" %% "scala-java-time" % "2.0.0"
-    )
-  )
+  .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
 
-lazy val testing = (crossProject(JSPlatform, JVMPlatform))
+lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .in(file("modules/testing"))
   .dependsOn(core)
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.beachape"      %%% "enumeratum"            % Versions.EnumeratumVersion,
-      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.EnumeratumVersion,
-      "com.chuusai"       %%% "shapeless"             % Versions.ShapelessVersion,
-      "eu.timepit"        %%% "refined-scalacheck"    % Versions.RefinedVersion,
-      "eu.timepit"        %%% "refined"               % Versions.RefinedVersion,
-      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCatsVersion,
-      "io.circe"          %%% "circe-core"            % Versions.CirceVersion,
-      "org.scalacheck"    %%% "scalacheck"            % Versions.ScalacheckVersion,
-      "org.typelevel"     %%% "cats-core"             % Versions.CatsVersion
+      "com.beachape"      %%% "enumeratum"            % Versions.Enumeratum,
+      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.Enumeratum,
+      "com.chuusai"       %%% "shapeless"             % Versions.Shapeless,
+      "eu.timepit"        %%% "refined-scalacheck"    % Versions.Refined,
+      "eu.timepit"        %%% "refined"               % Versions.Refined,
+      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCats,
+      "io.circe"          %%% "circe-core"            % Versions.Circe,
+      "org.scalacheck"    %%% "scalacheck"            % Versions.Scalacheck,
+      "org.typelevel"     %%% "cats-core"             % Versions.Cats
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" % Test
+    )
+  )
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -187,16 +186,45 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"          %%% "circe-testing"   % Versions.CirceVersion            % Test,
-      "org.scalatest"     %%% "scalatest"       % Versions.ScalatestVersion        % Test,
+      "io.circe"          %%% "circe-testing"   % Versions.Circe                   % Test,
+      "org.scalatest"     %%% "scalatest"       % Versions.Scalatest               % Test,
       "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
     )
   )
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0" % Test
+      "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" % Test
     )
   )
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
+lazy val coreTestRef = LocalProject("modules/core-test")
+
+lazy val client = crossProject(JSPlatform, JVMPlatform)
+  .in(file("modules/client"))
+  .dependsOn(core, testing % Test)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "io.circe"                      %%% "circe-core"    % Versions.Circe,
+      "io.circe"                      %%% "circe-generic" % Versions.Circe,
+      "io.circe"                      %%% "circe-refined" % Versions.Circe,
+      "io.circe"                      %%% "circe-parser"  % Versions.Circe,
+      "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
+      "eu.timepit"                    %%% "refined"       % Versions.Refined,
+      "org.typelevel"                 %%% "cats-core"     % Versions.Cats,
+      "com.softwaremill.sttp.client3" %%% "core"          % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "circe"         % Versions.Sttp,
+      "com.softwaremill.sttp.client3" %%% "json-common"   % Versions.Sttp,
+      "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
+      "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
+      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
+    )
+  )
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0")
+  .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
+
+lazy val clientJVM = client.jvm
+lazy val clientJS  = client.js

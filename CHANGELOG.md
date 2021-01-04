@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ## [0.0.19] - 2020-12-11
+### Added
+- Сlient module [#140](https://github.com/azavea/stac4s/pull/140)
+
 ### Fixed
 - Repaired build.sbt configuration to get sonatype publication to cooperate [#186](https://github.com/azavea/stac4s/pull/186)
 
