@@ -9,9 +9,9 @@ trait StacClient[F[_]] {
   def search: F[List[StacItem]]
   def search(filter: Filter): F[List[StacItem]]
   def collections: F[List[StacCollection]]
-  def collection(collectionId: NonEmptyString): F[Option[StacCollection]]
+  def collection(collectionId: NonEmptyString): F[StacCollection]
   def items(collectionId: NonEmptyString): F[List[StacItem]]
-  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[Option[StacItem]]
+  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[StacItem]
   def itemCreate(collectionId: NonEmptyString, item: StacItem): F[StacItem]
   def collectionCreate(collection: StacCollection): F[StacCollection]
 }
