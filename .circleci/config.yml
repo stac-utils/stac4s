@@ -57,7 +57,7 @@ workflows:
           filters:
             tags:
               only:
-                - /^(\d.*)$/
+                - /^(v.*)$/
             branches:
               ignore:
                 - /^(.*)$/
