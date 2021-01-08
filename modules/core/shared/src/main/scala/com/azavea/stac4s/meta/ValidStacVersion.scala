@@ -7,7 +7,7 @@ final case class ValidStacVersion()
 object ValidStacVersion {
 
   val stacVersions = List(
-    "0.9.0"
+    "1.0.0-beta2"
   )
 
   implicit def validStacVersion: Validate.Plain[String, ValidStacVersion] =
