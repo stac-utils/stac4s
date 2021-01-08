@@ -49,7 +49,7 @@ workflows:
           filters:
             tags:
               only:
-                - /^(\d.*)$/
+                - /^(v.*)$/
       - "openjdk8-scala2.12_deploy":
           context: sonatype-azavea-signing-key
           requires:
