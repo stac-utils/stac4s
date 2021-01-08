@@ -43,12 +43,12 @@ abstract class SttpStacClientF[F[_]: MonadError[*[_], Throwable]](
       .map(_.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]))
       .flatMap(MonadError[F, Throwable].fromEither)
 
-  def collection(collectionId: NonEmptyString): F[Option[StacCollection]] =
+  def collection(collectionId: NonEmptyString): F[StacCollection] =
     client
       .send(
         basicRequest
           .get(baseUri.withPath("collections", collectionId.value))
-          .response(asJson[Option[StacCollection]])
+          .response(asJson[StacCollection])
       )
       .map(_.body)
       .flatMap(MonadError[F, Throwable].fromEither)
@@ -59,12 +59,12 @@ abstract class SttpStacClientF[F[_]: MonadError[*[_], Throwable]](
       .map(_.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]))
       .flatMap(MonadError[F, Throwable].fromEither)
 
-  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[Option[StacItem]] =
+  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[StacItem] =
     client
       .send(
         basicRequest
           .get(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
-          .response(asJson[Option[StacItem]])
+          .response(asJson[StacItem])
       )
       .map(_.body)
       .flatMap(MonadError[F, Throwable].fromEither)
