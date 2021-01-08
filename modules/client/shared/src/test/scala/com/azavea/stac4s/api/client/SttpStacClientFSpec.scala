@@ -7,6 +7,7 @@ import eu.timepit.refined.types.all.NonEmptyString
 import io.circe.JsonObject
 import io.circe.syntax._
 import org.scalacheck.Arbitrary
+import org.scalacheck.resample._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
@@ -28,7 +29,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       .whenRequestMatches(_.uri.path == Seq("search"))
       .thenRespondF { _ =>
         Response
-          .ok(arbItemCollectionShort.arbitrary.sample.asJson.asRight)
+          .ok(arbItemCollectionShort.arbitrary.resample().asJson.asRight)
           .asRight
       }
       .whenRequestMatches {
@@ -46,7 +47,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       }
       .thenRespondF { _ =>
         Response
-          .ok(arbCollectionShort.arbitrary.sample.toRight("Collection generation failure."))
+          .ok(arbCollectionShort.arbitrary.resample().asRight)
           .asRight
       }
       .whenRequestMatches {
@@ -61,7 +62,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       .whenRequestMatches(_.uri.path == Seq("collections", "collection_id", "items", "item_id"))
       .thenRespondF { _ =>
         Response
-          .ok(arbItemShort.arbitrary.sample.toRight("Item generation failure."))
+          .ok(arbItemShort.arbitrary.resample().asRight)
           .asRight
       }
       .whenRequestMatches {
@@ -70,7 +71,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       }
       .thenRespondF { _ =>
         Response
-          .ok(arbItemShort.arbitrary.sample.get.asRight)
+          .ok(arbItemShort.arbitrary.resample().asRight)
           .asRight
       }
       .whenRequestMatches {
@@ -79,7 +80,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       }
       .thenRespondF { _ =>
         Response
-          .ok(arbCollectionShort.arbitrary.sample.get.asRight)
+          .ok(arbCollectionShort.arbitrary.resample().asRight)
           .asRight
       }
 
@@ -87,13 +88,11 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
     it("search") {
       client.search
         .valueOr(throw _)
-        .size should be > 0
     }
 
     it("collections") {
       client.collections
         .valueOr(throw _)
-        .size should be > 0
     }
 
     it("collection") {
@@ -106,7 +105,6 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       client
         .items(NonEmptyString.unsafeFrom("collection_id"))
         .valueOr(throw _)
-        .size should be > 0
     }
 
     it("item") {
@@ -118,13 +116,15 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
     it("itemCreate") {
       client
         .itemCreate(NonEmptyString.unsafeFrom("collection_id"), arbItemShort.arbitrary.sample.get)
-        .map(_.id should not be empty)
+        .valueOr(throw _)
+        .id should not be empty
     }
 
     it("collectionCreate") {
       client
         .collectionCreate(arbCollectionShort.arbitrary.sample.get)
-        .map(_.id should not be empty)
+        .valueOr(throw _)
+        .id should not be empty
     }
   }
 
