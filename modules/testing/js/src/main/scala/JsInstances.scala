@@ -84,7 +84,7 @@ trait JsInstances {
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("0.9.0")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
@@ -94,7 +94,7 @@ trait JsInstances {
   private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("0.9.0")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
       Gen.const(Nil),
       Gen.listOfN[StacItem](2, stacItemGen),
       Gen.const(Nil),
@@ -103,7 +103,7 @@ trait JsInstances {
 
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
-      Gen.const("0.9.0"),
+      Gen.const("1.0.0-beta.2"),
       Gen.const(Nil),
       nonEmptyStringGen,
       nonEmptyStringGen.map(_.some),
