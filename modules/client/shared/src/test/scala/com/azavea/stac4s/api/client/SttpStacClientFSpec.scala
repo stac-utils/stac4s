@@ -41,6 +41,15 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
           .asRight
       }
       .whenRequestMatches {
+        case req if req.method == Method.GET => req.uri.path == Seq("collections", "collection_id")
+        case _                               => false
+      }
+      .thenRespondF { _ =>
+        Response
+          .ok(arbCollectionShort.arbitrary.sample.toRight("Collection generation failure."))
+          .asRight
+      }
+      .whenRequestMatches {
         case req if req.method == Method.GET => req.uri.path == Seq("collections", "collection_id", "items")
         case _                               => false
       }
@@ -52,7 +61,7 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       .whenRequestMatches(_.uri.path == Seq("collections", "collection_id", "items", "item_id"))
       .thenRespondF { _ =>
         Response
-          .ok(arbItemShort.arbitrary.sample.asRight)
+          .ok(arbItemShort.arbitrary.sample.toRight("Item generation failure."))
           .asRight
       }
       .whenRequestMatches {
@@ -87,6 +96,12 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
         .size should be > 0
     }
 
+    it("collection") {
+      client
+        .collection(NonEmptyString.unsafeFrom("collection_id"))
+        .valueOr(throw _)
+    }
+
     it("items") {
       client
         .items(NonEmptyString.unsafeFrom("collection_id"))
@@ -98,7 +113,6 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
       client
         .item(NonEmptyString.unsafeFrom("collection_id"), NonEmptyString.unsafeFrom("item_id"))
         .valueOr(throw _)
-        .size should be > 0
     }
 
     it("itemCreate") {
