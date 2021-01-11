@@ -115,14 +115,14 @@ trait SttpStacClientFSpec extends AnyFunSpec with Matchers with BeforeAndAfterAl
 
     it("itemCreate") {
       client
-        .itemCreate(NonEmptyString.unsafeFrom("collection_id"), arbItemShort.arbitrary.sample.get)
+        .itemCreate(NonEmptyString.unsafeFrom("collection_id"), arbItemShort.arbitrary.resample())
         .valueOr(throw _)
         .id should not be empty
     }
 
     it("collectionCreate") {
       client
-        .collectionCreate(arbCollectionShort.arbitrary.sample.get)
+        .collectionCreate(arbCollectionShort.arbitrary.resample())
         .valueOr(throw _)
         .id should not be empty
     }
