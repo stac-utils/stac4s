@@ -39,7 +39,7 @@ Request to `GET /layers`:
 
 ```javascript
 {
-    "stac_version": "1.0.0-beta.1",
+    "stac_version": "1.0.0-beta.2",
     "stac_extensions": [],
     "id": "layer-us-global",
     "title": "Landsat 8 L1",

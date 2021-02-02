@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Fixed
+- Told circle only to publish tags that start with `v` [#190](https://github.com/azavea/stac4s/pull/190)
+- Review client specs and make them more deterministic [#212](https://github.com/azavea/stac4s/pull/212)
+
+## [0.0.21] - 2021-01-08
+### Fixed
+- Fix Client signatures [#210](https://github.com/azavea/stac4s/pull/210)
+
+## [0.0.20] - 2021-01-04
 ### Added
 - Сlient module [#140](https://github.com/azavea/stac4s/pull/140)
 
@@ -90,7 +99,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.19...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.21...HEAD
+[0.0.21]: https://github.com/azavea/stac4s/compare/v0.0.20...v0.0.21
+[0.0.20]: https://github.com/azavea/stac4s/compare/v0.0.19...v0.0.20
 [0.0.19]: https://github.com/azavea/stac4s/compare/v0.0.18...v0.0.19
 [0.0.18]: https://github.com/azavea/stac4s/compare/v0.0.17...v0.0.18
 [0.0.17]: https://github.com/azavea/stac4s/compare/v0.0.16...v0.0.17

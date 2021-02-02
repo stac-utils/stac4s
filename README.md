@@ -27,11 +27,17 @@ Contributions can be made via [pull requests](https://github.com/azavea/stac4s/p
 
 ### Deployments, Releases, and Maintenance
 
-`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release, rotate changelog entries into a section for the version you're releasing usin `chan release X.Y.Z`, then make an annotated tag and push it to the repository:
+`master` signals the current unreleased, actively developed codebase. Each release will have an associated `git tag` is handled automatically via a CI job once a tag is pushed. Releases are handled automatically in CI. To produce a release:
 
-```
-git tag -s -a <version> -m "Release version <version>
-git push origin --tags
+- make sure `master` is up-to-date: `git checkout master && git pull origin master`
+- rotate changelog entries into a section for the version you're releasing using `chan release X.Y.Z`
+- commit your changelog rotation: `git commit -am "Release X.Y.Z"`
+- make and push an annotated tag for your release and push `master`:
+
+```bash
+$ git tag -s -a vX.Y.Z -m "Release version <version>"
+$ git push origin --tags
+$ git push origin master
 ```
 
 After you've pushed the tag, create a GitHub release using `chan gh-release X.Y.Z`.
