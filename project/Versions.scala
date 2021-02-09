@@ -1,5 +1,5 @@
 object Versions {
-  val Cats                    = "2.3.1"
+  val Cats                    = "2.4.0"
   val Circe                   = "0.13.0"
   val Enumeratum              = "1.6.1"
   val GeoTrellis              = "3.5.2"
