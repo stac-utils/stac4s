@@ -6,7 +6,7 @@ object Versions {
   val Jts                     = "1.16.1"
   val Refined                 = "0.9.20"
   val ScalacheckCats          = "0.3.0"
-  val Scalacheck              = "1.15.2"
+  val Scalacheck              = "1.15.3"
   val ScalatestPlusScalacheck = "3.2.2.0"
   val Scalatest               = "3.2.3"
   val Scapegoat               = "1.3.11"
