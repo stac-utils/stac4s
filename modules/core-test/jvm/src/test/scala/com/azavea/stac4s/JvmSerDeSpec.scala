@@ -12,6 +12,7 @@ import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
 import java.time.Instant
+import com.azavea.stac4s.extensions.layer.StacLayer
 
 class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
   checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
@@ -21,5 +22,6 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
   checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
   checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
   checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
+  checkAll("Codec.StacLayer", CodecTests[StacLayer].unserializableCodec)
 
 }

@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Told circle only to publish tags that start with `v` [#190](https://github.com/azavea/stac4s/pull/190)
 - Review client specs and make them more deterministic [#212](https://github.com/azavea/stac4s/pull/212)
 
+### Added
+- Added `StacLayer` and `StacLayerProperties` types [#252](https://github.com/azavea/stac4s/pull/252)
+
 ## [0.0.21] - 2021-01-08
 ### Fixed
 - Fix Client signatures [#210](https://github.com/azavea/stac4s/pull/210)

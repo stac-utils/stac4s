@@ -5,7 +5,7 @@ import com.azavea.stac4s.extensions.asset._
 import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.label._
-import com.azavea.stac4s.extensions.layer.LayerItemExtension
+import com.azavea.stac4s.extensions.layer.{LayerItemExtension, StacLayerProperties}
 
 import cats.syntax.apply._
 import cats.syntax.functor._
@@ -316,6 +316,16 @@ trait TestInstances extends NumericInstances {
       Gen.option(arbitrary[Percentage])
     ).mapN(EOItemExtension.apply)
 
+  private[testing] def stacLayerPropertiesGen: Gen[StacLayerProperties] =
+    (
+      instantGen,
+      instantGen
+    ).mapN {
+      case (inst1, inst2) if inst1.isBefore(inst2) =>
+        StacLayerProperties(inst1, inst2)
+      case (inst1, inst2) => StacLayerProperties(inst2, inst1)
+    }
+
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
   }
@@ -404,6 +414,10 @@ trait TestInstances extends NumericInstances {
 
   implicit val arbEOAssetExtension: Arbitrary[EOAssetExtension] = Arbitrary {
     eoAssetExtensionGen
+  }
+
+  implicit val arbStacLayerProperties: Arbitrary[StacLayerProperties] = Arbitrary {
+    stacLayerPropertiesGen
   }
 }
 
