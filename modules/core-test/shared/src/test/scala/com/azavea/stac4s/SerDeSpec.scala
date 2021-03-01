@@ -50,6 +50,7 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
 
   // Layer extension
   checkAll("Codec.LayerProperties", CodecTests[LayerItemExtension].unserializableCodec)
+  checkAll("Codec.StacLayerProperties", CodecTests[StacLayerProperties].unserializableCodec)
 
   // eo extension
   checkAll("Codec.EOBand", CodecTests[Band].unserializableCodec)

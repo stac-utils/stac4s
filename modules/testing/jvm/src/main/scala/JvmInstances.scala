@@ -1,5 +1,6 @@
 package com.azavea.stac4s.testing
 
+import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.types.TemporalExtent
 import com.azavea.stac4s.{
   Bbox,
@@ -136,6 +137,17 @@ trait JvmInstances {
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
+  private[testing] def stacLayerGen: Gen[StacLayer] = (
+    nonEmptyAlphaRefinedStringGen,
+    TestInstances.bboxGen,
+    rectangleGen,
+    TestInstances.stacLayerPropertiesGen,
+    Gen.listOfN(8, TestInstances.stacLinkGen),
+    Gen.const("Feature")
+  ).mapN(
+    StacLayer.apply
+  )
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   val arbItemShort: Arbitrary[StacItem] = Arbitrary { stacItemShortGen }
@@ -164,6 +176,10 @@ trait JvmInstances {
 
   implicit val arbTemporalExtent: Arbitrary[TemporalExtent] = Arbitrary {
     temporalExtentGen
+  }
+
+  implicit val arbStaclayer: Arbitrary[StacLayer] = Arbitrary {
+    stacLayerGen
   }
 }
 

@@ -25,6 +25,7 @@ import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
+import com.azavea.stac4s.extensions.layer.StacLayer
 
 trait JsInstances {
 
@@ -118,6 +119,17 @@ trait JsInstances {
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
+  private[testing] def stacLayerGen: Gen[StacLayer] = (
+    nonEmptyAlphaRefinedStringGen,
+    TestInstances.bboxGen,
+    geometryGen,
+    TestInstances.stacLayerPropertiesGen,
+    Gen.listOfN(8, TestInstances.stacLinkGen),
+    Gen.const("Feature")
+  ).mapN(
+    StacLayer.apply
+  )
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   val arbItemShort: Arbitrary[StacItem] = Arbitrary { stacItemShortGen }
@@ -133,6 +145,10 @@ trait JsInstances {
   implicit val arbGeometry: Arbitrary[Geometry] = Arbitrary { geometryGen }
 
   val arbCollectionShort: Arbitrary[StacCollection] = Arbitrary { stacCollectionShortGen }
+
+  implicit val arbStacLayer: Arbitrary[StacLayer] = Arbitrary {
+    stacLayerGen
+  }
 }
 
 object JsInstances extends JsInstances {}
