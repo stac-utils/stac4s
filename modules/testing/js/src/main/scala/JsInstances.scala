@@ -1,5 +1,6 @@
 package com.azavea.stac4s.testing
 
+import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.geometry.Geometry.{MultiPolygon, Point2d, Polygon}
 import com.azavea.stac4s.geometry._
 import com.azavea.stac4s.types.TemporalExtent
@@ -25,7 +26,6 @@ import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
-import com.azavea.stac4s.extensions.layer.StacLayer
 
 trait JsInstances {
 

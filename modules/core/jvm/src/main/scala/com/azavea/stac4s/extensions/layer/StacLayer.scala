@@ -1,13 +1,13 @@
 package com.azavea.stac4s.extensions.layer
 
-import geotrellis.vector.Geometry
-import eu.timepit.refined.types.string
-import com.azavea.stac4s.{Bbox, StacLink}
 import com.azavea.stac4s.meta._
+import com.azavea.stac4s.{Bbox, StacLink}
+
 import cats.kernel.Eq
-import io.circe.Encoder
+import eu.timepit.refined.types.string
+import geotrellis.vector.Geometry
 import io.circe.refined._
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 
 final case class StacLayer(
     id: string.NonEmptyString,

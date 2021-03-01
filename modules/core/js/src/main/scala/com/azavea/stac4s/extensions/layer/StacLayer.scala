@@ -1,12 +1,12 @@
 package com.azavea.stac4s.extensions.layer
 
 import com.azavea.stac4s.geometry.Geometry
-import eu.timepit.refined.types.string
 import com.azavea.stac4s.{Bbox, StacLink}
+
 import cats.kernel.Eq
-import io.circe.Encoder
+import eu.timepit.refined.types.string
 import io.circe.refined._
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 
 final case class StacLayer(
     id: string.NonEmptyString,
