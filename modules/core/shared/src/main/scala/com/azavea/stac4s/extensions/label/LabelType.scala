@@ -14,7 +14,7 @@ object LabelType {
   def fromStringE(s: String): Either[String, LabelType] = s.toLowerCase match {
     case "vector" => Right(Vector)
     case "raster" => Right(Raster)
-    case s        => Left(s"$s is not a valid label type. Should be raster or vector")
+    case str      => Left(s"$str is not a valid label type. Should be raster or vector")
   }
 
   // There's no invariant functor with strings here because only two strings map to

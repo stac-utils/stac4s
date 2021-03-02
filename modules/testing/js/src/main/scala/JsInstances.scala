@@ -44,7 +44,8 @@ trait JsInstances {
     ).mapN((bbox: Bbox, interval: TemporalExtent) => StacExtent(SpatialExtent(List(bbox)), Interval(List(interval))))
 
   /** We know for sure that we have five points, so there's no risk in calling .head */
-  @SuppressWarnings(Array("TraversableHead")) private[testing] def polygonGen: Gen[Polygon] =
+  @SuppressWarnings(Array("TraversableHead", "UnsafeTraversableMethods")) private[testing] def polygonGen
+      : Gen[Polygon] =
     Gen.listOfN(5, point2dGen).map(points => Polygon(points :+ points.head))
   private[testing] def multipolygonGen: Gen[MultiPolygon] = Gen.listOfN(3, polygonGen).map(MultiPolygon.apply)
 

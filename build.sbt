@@ -12,7 +12,7 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.12.12",
+  scalaVersion := "2.12.13",
   cancelable in Global := true,
   scalafmtOnCompile := true,
   scapegoatVersion in ThisBuild := Versions.Scapegoat,
