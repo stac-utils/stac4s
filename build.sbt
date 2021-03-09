@@ -20,9 +20,6 @@ lazy val commonSettings = Seq(
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin(
-    "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
-  ),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
   externalResolvers := Seq(
