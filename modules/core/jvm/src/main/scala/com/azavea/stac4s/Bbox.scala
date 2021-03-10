@@ -6,6 +6,7 @@ import cats.syntax.functor._
 import geotrellis.vector.{Extent, ExtentRangeError}
 import io.circe._
 import io.circe.syntax._
+import cats.kernel.Semigroup
 
 sealed trait Bbox {
   val xmin: Double
@@ -113,5 +114,7 @@ object Bbox {
   implicit val decoderBbox: Decoder[Bbox] = Decoder[TwoDimBbox].widen or Decoder[ThreeDimBbox].widen
 
   implicit val eqBbox: Eq[Bbox] = Eq.fromUniversalEquals
+
+  implicit val semigroupBbox: Semigroup[Bbox] = Semigroup.instance((_ union _))
 
 }
