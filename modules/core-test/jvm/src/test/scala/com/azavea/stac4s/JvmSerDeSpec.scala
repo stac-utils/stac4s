@@ -23,5 +23,4 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
   checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
   checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
   checkAll("Codec.StacLayer", CodecTests[StacLayer].unserializableCodec)
-
 }

@@ -1,12 +1,12 @@
 package com.azavea.stac4s
 
 import cats.Eq
+import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.syntax.functor._
 import geotrellis.vector.{Extent, ExtentRangeError}
 import io.circe._
 import io.circe.syntax._
-import cats.kernel.Semigroup
 
 sealed trait Bbox {
   val xmin: Double
