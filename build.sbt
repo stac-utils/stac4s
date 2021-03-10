@@ -131,16 +131,16 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= Seq(
-      "com.beachape"  %%% "enumeratum"       % Versions.Enumeratum,
-      "com.beachape"  %%% "enumeratum-circe" % Versions.Enumeratum,
-      "com.chuusai"   %%% "shapeless"        % Versions.Shapeless,
-      "eu.timepit"    %%% "refined"          % Versions.Refined,
-      "io.circe"      %%% "circe-core"       % Versions.Circe,
-      "io.circe"      %%% "circe-generic"    % Versions.Circe,
-      "io.circe"      %%% "circe-parser"     % Versions.Circe,
-      "io.circe"      %%% "circe-refined"    % Versions.Circe,
-      "org.typelevel" %%% "cats-core"        % Versions.Cats,
-      "org.typelevel" %%% "cats-kernel"      % Versions.Cats,
+      "com.beachape"          %%% "enumeratum"              % Versions.Enumeratum,
+      "com.beachape"          %%% "enumeratum-circe"        % Versions.Enumeratum,
+      "com.chuusai"           %%% "shapeless"               % Versions.Shapeless,
+      "eu.timepit"            %%% "refined"                 % Versions.Refined,
+      "io.circe"              %%% "circe-core"              % Versions.Circe,
+      "io.circe"              %%% "circe-generic"           % Versions.Circe,
+      "io.circe"              %%% "circe-parser"            % Versions.Circe,
+      "io.circe"              %%% "circe-refined"           % Versions.Circe,
+      "org.typelevel"         %%% "cats-core"               % Versions.Cats,
+      "org.typelevel"         %%% "cats-kernel"             % Versions.Cats,
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2"
     )
   })
