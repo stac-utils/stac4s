@@ -13,6 +13,7 @@ lazy val commonSettings = Seq(
       git.gitDescribedVersion.value.get
   },
   scalaVersion := "2.12.13",
+  crossScalaVersions := List("2.12.13"),
   cancelable in Global := true,
   scalafmtOnCompile := true,
   scapegoatVersion in ThisBuild := Versions.Scapegoat,
@@ -139,7 +140,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe"      %%% "circe-parser"     % Versions.Circe,
       "io.circe"      %%% "circe-refined"    % Versions.Circe,
       "org.typelevel" %%% "cats-core"        % Versions.Cats,
-      "org.typelevel" %%% "cats-kernel"      % Versions.Cats
+      "org.typelevel" %%% "cats-kernel"      % Versions.Cats,
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2"
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
