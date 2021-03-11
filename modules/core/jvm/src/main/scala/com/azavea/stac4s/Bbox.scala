@@ -1,6 +1,7 @@
 package com.azavea.stac4s
 
 import cats.Eq
+import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.syntax.functor._
 import geotrellis.vector.{Extent, ExtentRangeError}
@@ -20,10 +21,19 @@ sealed trait Bbox {
     } catch {
       case e: ExtentRangeError => Either.left(e.toString)
     }
+
+  def union(other: Bbox): Bbox
 }
 
 final case class TwoDimBbox(xmin: Double, ymin: Double, xmax: Double, ymax: Double) extends Bbox {
   val toList = List(xmin, ymin, xmax, ymax)
+
+  def union(other: Bbox): Bbox = other match {
+    case TwoDimBbox(otherXmin, otherYmin, otherXmax, otherYmax) =>
+      TwoDimBbox(otherXmin min xmin, otherYmin min ymin, otherXmax max xmax, otherYmax max ymax)
+    case ThreeDimBbox(otherXmin, otherYmin, zmin, otherXmax, otherYmax, zmax) =>
+      ThreeDimBbox(otherXmin min xmin, otherYmin min ymin, zmin, otherXmax max xmax, otherYmax max ymax, zmax)
+  }
 }
 
 final case class ThreeDimBbox(
@@ -35,6 +45,20 @@ final case class ThreeDimBbox(
     zmax: Double
 ) extends Bbox {
   val toList = List(xmin, ymin, zmin, xmax, ymax, zmax)
+
+  def union(other: Bbox): Bbox = other match {
+    case TwoDimBbox(otherXmin, otherYmin, otherXmax, otherYmax) =>
+      ThreeDimBbox(otherXmin min xmin, otherYmin min ymin, zmin, otherXmax max xmax, otherYmax max ymax, zmax)
+    case ThreeDimBbox(otherXmin, otherYmin, otherZmin, otherXmax, otherYmax, otherZmax) =>
+      ThreeDimBbox(
+        otherXmin min xmin,
+        otherYmin min ymin,
+        otherZmin min zmin,
+        otherXmax max xmax,
+        otherYmax max ymax,
+        otherZmax max zmax
+      )
+  }
 }
 
 object TwoDimBbox {
@@ -90,5 +114,7 @@ object Bbox {
   implicit val decoderBbox: Decoder[Bbox] = Decoder[TwoDimBbox].widen or Decoder[ThreeDimBbox].widen
 
   implicit val eqBbox: Eq[Bbox] = Eq.fromUniversalEquals
+
+  implicit val semigroupBbox: Semigroup[Bbox] = Semigroup.instance((_ union _))
 
 }

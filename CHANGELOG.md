@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Added `StacLayer` and `StacLayerProperties` types [#252](https://github.com/azavea/stac4s/pull/252)
+- Bboxes can be unioned and form a semigroup [#259](https://github.com/azavea/stac4s/pull/259)
 
 ## [0.0.21] - 2021-01-08
 ### Fixed
