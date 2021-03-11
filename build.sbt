@@ -18,7 +18,9 @@ lazy val commonSettings = Seq(
   scalafmtOnCompile := true,
   scapegoatVersion in ThisBuild := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
-  unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
+  unusedCompileDependenciesFilter -=
+    moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin") |
+    moduleFilter("org.scala-lang.modules", "scala-collection-compat"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(scalafixSemanticdb),
@@ -141,7 +143,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe"              %%% "circe-refined"           % Versions.Circe,
       "org.typelevel"         %%% "cats-core"               % Versions.Cats,
       "org.typelevel"         %%% "cats-kernel"             % Versions.Cats,
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2"
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2" % Compile
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
