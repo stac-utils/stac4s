@@ -120,8 +120,8 @@ trait TestInstances extends NumericInstances {
       lowerY <- finiteDoubleGen
     } yield {
       TwoDimBbox(
-        lowerX,
-        lowerY,
+        lowerX.round.toDouble,
+        lowerY.round.toDouble,
         lowerX + 100,
         lowerY + 100
       )
