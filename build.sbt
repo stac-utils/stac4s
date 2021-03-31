@@ -102,7 +102,8 @@ lazy val credentialSettings = Seq(
 
 val coreDependenciesJVM = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
+  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
+  "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
 )
 
 val testingDependenciesJVM = Seq(
