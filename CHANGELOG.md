@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Tested bbox union invariants [#266](https://github.com/azavea/stac4s/pull/266)
+- Modeled periodic extent and made intervals extensible [#276](https://github.com/azavea/stac4s/pull/276)
 
 ## [0.1.1] - 2021-03-12
 ### Fixed
