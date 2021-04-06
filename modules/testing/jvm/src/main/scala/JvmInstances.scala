@@ -25,6 +25,10 @@ import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
+import org.threeten.extra.PeriodDuration
+import java.time.Period
+import java.time.Duration
+import com.azavea.stac4s.extensions.periodic.PeriodicExtent
 
 trait JvmInstances {
 
@@ -148,6 +152,25 @@ trait JvmInstances {
     StacLayer.apply
   )
 
+  private[testing] def periodDurationGen: Gen[PeriodDuration] = for {
+    years  <- Gen.choose(0, 100)
+    months <- Gen.choose(0, 12)
+    days   <- Gen.choose(0, 100)
+    // minutes is an Int because with a Long we overflow during the test.
+    // since Long.MaxValue is a suuuuuuuper unlikely quantity of minutes in a
+    // duration, I'm declaring this More or Less Fine™
+    minutes <- arbitrary[Int]
+  } yield PeriodDuration.of(
+    Period.of(years, months, days),
+    Duration.ofMinutes(minutes.toLong)
+  )
+
+  private[testing] def periodicExtentGen: Gen[PeriodicExtent] = (
+    periodDurationGen
+  ) map {
+    PeriodicExtent.apply
+  }
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   val arbItemShort: Arbitrary[StacItem] = Arbitrary { stacItemShortGen }
@@ -180,6 +203,14 @@ trait JvmInstances {
 
   implicit val arbStaclayer: Arbitrary[StacLayer] = Arbitrary {
     stacLayerGen
+  }
+
+  implicit val arbPeriodDuration: Arbitrary[PeriodDuration] = Arbitrary {
+    periodDurationGen
+  }
+
+  implicit val arbPeriodicExtent: Arbitrary[PeriodicExtent] = Arbitrary {
+    periodicExtentGen
   }
 }
 

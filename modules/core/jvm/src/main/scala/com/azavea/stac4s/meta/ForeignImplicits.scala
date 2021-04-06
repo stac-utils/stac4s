@@ -13,6 +13,7 @@ import scala.util.Try
 
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import java.time.{Instant, OffsetDateTime}
+import org.threeten.extra.PeriodDuration
 
 trait ForeignImplicits {
 
@@ -67,6 +68,13 @@ trait ForeignImplicits {
         throw new ParsingFailure(message, new Exception(message))
     }
   }
+
+  implicit val decPeriodDuration: Decoder[PeriodDuration] =
+    Decoder[String].emap(s =>
+      Either.fromTry(Try(PeriodDuration.parse(s))).leftMap(_ => s"$s was not a valid period duration format")
+    )
+  implicit val encPeriodDuration: Encoder[PeriodDuration] = Encoder[String].contramap(_.toString)
+  implicit val eqPeriodDuration: Eq[PeriodDuration]       = Eq.fromUniversalEquals
 
 }
 
