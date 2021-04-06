@@ -1,13 +1,12 @@
 package com.azavea.stac4s.extensions.periodic
 
+import com.azavea.stac4s.extensions.IntervalExtension
 import com.azavea.stac4s.meta._
 
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import org.threeten.extra.PeriodDuration
-import io.circe.Decoder
-import io.circe.Encoder
 import cats.kernel.Eq
-import com.azavea.stac4s.extensions.IntervalExtension
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import org.threeten.extra.PeriodDuration
 
 final case class PeriodicExtent(
     period: PeriodDuration

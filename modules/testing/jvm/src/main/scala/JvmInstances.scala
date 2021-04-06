@@ -1,6 +1,8 @@
 package com.azavea.stac4s.testing
 
 import com.azavea.stac4s.extensions.layer.StacLayer
+import com.azavea.stac4s.extensions.periodic.PeriodicExtent
+import com.azavea.stac4s.syntax._
 import com.azavea.stac4s.types.TemporalExtent
 import com.azavea.stac4s.{
   Bbox,
@@ -23,13 +25,9 @@ import io.circe.syntax._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
-
-import java.time.Instant
 import org.threeten.extra.PeriodDuration
-import java.time.Period
-import java.time.Duration
-import com.azavea.stac4s.extensions.periodic.PeriodicExtent
-import com.azavea.stac4s.syntax._
+
+import java.time.{Duration, Instant, Period}
 
 trait JvmInstances {
 

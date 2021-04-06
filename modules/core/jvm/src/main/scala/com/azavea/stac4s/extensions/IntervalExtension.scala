@@ -1,9 +1,9 @@
 package com.azavea.stac4s.extensions
 
 import com.azavea.stac4s.Interval
-import io.circe.Decoder
-import io.circe.Encoder
+
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 
 trait IntervalExtension[T] {
   def getExtensionFields(interval: Interval): ExtensionResult[T]

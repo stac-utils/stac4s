@@ -8,12 +8,12 @@ import eu.timepit.refined.api.RefType
 import io.circe._
 import io.circe.parser.decode
 import io.circe.syntax._
+import org.threeten.extra.PeriodDuration
 
 import scala.util.Try
 
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import java.time.{Instant, OffsetDateTime}
-import org.threeten.extra.PeriodDuration
 
 trait ForeignImplicits {
 
