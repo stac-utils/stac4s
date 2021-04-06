@@ -108,7 +108,8 @@ val coreDependenciesJVM = Seq(
 
 val testingDependenciesJVM = Seq(
   "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
-  "org.locationtech.jts"         % "jts-core"          % Versions.Jts
+  "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
+  "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
 )
 
 val testRunnerDependenciesJVM = Seq(
