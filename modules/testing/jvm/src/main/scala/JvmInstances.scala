@@ -29,6 +29,7 @@ import org.threeten.extra.PeriodDuration
 import java.time.Period
 import java.time.Duration
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
+import com.azavea.stac4s.syntax._
 
 trait JvmInstances {
 
@@ -38,6 +39,14 @@ trait JvmInstances {
         TemporalExtent(start, end)
       }
   }
+
+  private[testing] def intervalGen: Gen[Interval] =
+    (periodicExtentGen, temporalExtentGen).tupled flatMap { case (periodicity, temporalExtent) =>
+      Gen.oneOf(
+        Gen.const(Interval(List(temporalExtent))),
+        Gen.const(Interval(List(temporalExtent)).addExtensionFields(periodicity))
+      )
+    }
 
   private[testing] def rectangleGen: Gen[Geometry] =
     (for {
@@ -211,6 +220,10 @@ trait JvmInstances {
 
   implicit val arbPeriodicExtent: Arbitrary[PeriodicExtent] = Arbitrary {
     periodicExtentGen
+  }
+
+  implicit val arbInterval: Arbitrary[Interval] = Arbitrary {
+    intervalGen
   }
 }
 
