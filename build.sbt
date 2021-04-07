@@ -143,7 +143,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.1")
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -169,7 +169,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" % Test
+      "io.github.cquiroz" %%% "scala-java-time" % "2.2.1" % Test
     )
   )
 
@@ -190,7 +190,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" % Test
+      "io.github.cquiroz" %%% "scala-java-time" % "2.2.1" % Test
     )
   )
 
@@ -220,7 +220,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.1")
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
 
 lazy val clientJVM = client.jvm
