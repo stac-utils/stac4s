@@ -13,6 +13,8 @@ import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
 import java.time.Instant
 import com.azavea.stac4s.extensions.layer.StacLayer
+import org.threeten.extra.PeriodDuration
+import com.azavea.stac4s.extensions.periodic.PeriodicExtent
 
 class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with Matchers with ArbitraryInstances {
   checkAll("Codec.ItemCollection", CodecTests[ItemCollection].unserializableCodec)
@@ -20,8 +22,10 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
   checkAll("Codec.Geometry", CodecTests[Geometry].unserializableCodec)
   checkAll("Codec.Instant", CodecTests[Instant].unserializableCodec)
   checkAll("Codec.StacCollection", CodecTests[StacCollection].unserializableCodec)
+  checkAll("Codec.Interval", CodecTests[Interval].unserializableCodec)
   checkAll("Codec.StacExtent", CodecTests[StacExtent].unserializableCodec)
   checkAll("Codec.TemporalExtent", CodecTests[TemporalExtent].unserializableCodec)
   checkAll("Codec.StacLayer", CodecTests[StacLayer].unserializableCodec)
-
+  checkAll("Codec.PeriodDuration", CodecTests[PeriodDuration].unserializableCodec)
+  checkAll("Codec.PeriodicExtent", CodecTests[PeriodicExtent].unserializableCodec)
 }

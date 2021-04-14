@@ -12,17 +12,14 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.13.5",
-  cancelable in Global := true,
+  scalaVersion := "2.12.13",
+  Global / cancelable := true,
   scalafmtOnCompile := true,
-  scapegoatVersion in ThisBuild := Versions.Scapegoat,
+  ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin(
-    "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
-  ),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
   externalResolvers := Seq(
@@ -40,7 +37,7 @@ lazy val commonSettings = Seq(
       Resolver.ivyStylePatterns
     )
   ),
-  scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.5.0"
+  ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.5.0"
 )
 
 lazy val noPublishSettings = Seq(
@@ -54,7 +51,7 @@ lazy val publishSettings = Seq(
   organizationName := "Azavea",
   organizationHomepage := Some(new URL("https://azavea.com/")),
   description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
-  publishArtifact in Test := false
+  Test / publishArtifact := false
 ) ++ sonatypeSettings ++ credentialSettings
 
 lazy val sonatypeSettings = Seq(
@@ -103,14 +100,19 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
-val coreDependenciesJVM = Seq(
+val jvmGeometryDependencies = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
   "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
 )
 
+val coreDependenciesJVM = Seq(
+  "org.threeten" % "threeten-extra" % Versions.ThreeTenExtra
+) ++ jvmGeometryDependencies
+
 val testingDependenciesJVM = Seq(
   "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
-  "org.locationtech.jts"         % "jts-core"          % Versions.Jts
+  "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
+  "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
 )
 
 val testRunnerDependenciesJVM = Seq(
@@ -146,7 +148,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.1")
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -172,7 +174,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" % Test
+      "io.github.cquiroz" %%% "scala-java-time" % "2.2.1" % Test
     )
   )
 
@@ -193,7 +195,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" % Test
+      "io.github.cquiroz" %%% "scala-java-time" % "2.2.1" % Test
     )
   )
 
@@ -223,8 +225,8 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.0")
-  .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.1")
+  .jvmSettings(libraryDependencies ++= jvmGeometryDependencies)
 
 lazy val clientJVM = client.jvm
 lazy val clientJS  = client.js

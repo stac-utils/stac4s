@@ -13,4 +13,13 @@ package object syntax extends Syntax {
       ev.addExtensionFields(collection, properties)
   }
 
+  implicit class intervalExtensions(interval: Interval) {
+
+    def getExtensionFields[T](implicit ev: IntervalExtension[T]): ExtensionResult[T] =
+      ev.getExtensionFields(interval)
+
+    def addExtensionFields[T](properties: T)(implicit ev: IntervalExtension[T]): Interval =
+      ev.addExtensionFields(interval, properties)
+  }
+
 }

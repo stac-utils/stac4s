@@ -4,12 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Tested bbox union invariants [#266](https://github.com/azavea/stac4s/pull/266)
+- Modeled periodic extent and made intervals extensible [#276](https://github.com/azavea/stac4s/pull/276)
+
+## [0.1.1] - 2021-03-12
 ### Fixed
 - Told circle only to publish tags that start with `v` [#190](https://github.com/azavea/stac4s/pull/190)
 - Review client specs and make them more deterministic [#212](https://github.com/azavea/stac4s/pull/212)
 
 ### Added
 - Added `StacLayer` and `StacLayerProperties` types [#252](https://github.com/azavea/stac4s/pull/252)
+- Bboxes can be unioned and form a semigroup [#259](https://github.com/azavea/stac4s/pull/259)
 
 ## [0.0.21] - 2021-01-08
 ### Fixed
@@ -102,7 +108,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.0.21...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.1.0...HEAD
+[0.1.1]: https://github.com/azavea/stac4s/compare/v0.0.21...v0.1.1
 [0.0.21]: https://github.com/azavea/stac4s/compare/v0.0.20...v0.0.21
 [0.0.20]: https://github.com/azavea/stac4s/compare/v0.0.19...v0.0.20
 [0.0.19]: https://github.com/azavea/stac4s/compare/v0.0.18...v0.0.19
