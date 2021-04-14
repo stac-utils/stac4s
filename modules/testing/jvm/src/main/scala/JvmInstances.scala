@@ -146,7 +146,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.const(Nil),
-      Gen.const(Map.empty[String, StacAsset]),
+      Gen.option(Gen.const(Map.empty[String, StacAsset])),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
