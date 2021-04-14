@@ -100,14 +100,19 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
-val coreDependenciesJVM = Seq(
+val jvmGeometryDependencies = Seq(
   "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
   "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
 )
 
+val coreDependenciesJVM = Seq(
+  "org.threeten" % "threeten-extra" % Versions.ThreeTenExtra
+) ++ jvmGeometryDependencies
+
 val testingDependenciesJVM = Seq(
   "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
-  "org.locationtech.jts"         % "jts-core"          % Versions.Jts
+  "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
+  "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
 )
 
 val testRunnerDependenciesJVM = Seq(
@@ -221,7 +226,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.1")
-  .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
+  .jvmSettings(libraryDependencies ++= jvmGeometryDependencies)
 
 lazy val clientJVM = client.jvm
 lazy val clientJS  = client.js
