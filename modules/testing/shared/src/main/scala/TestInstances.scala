@@ -209,6 +209,7 @@ trait TestInstances extends NumericInstances with GenericInstances {
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       possiblyEmptyListGen(stacLinkGen),
+      Gen.const(().asJsonObject),
       Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
