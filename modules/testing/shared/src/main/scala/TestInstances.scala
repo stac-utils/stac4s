@@ -11,7 +11,7 @@ import com.azavea.stac4s.types.CatalogType
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
-import eu.timepit.refined.scalacheck.{NumericInstances, GenericInstances}
+import eu.timepit.refined.scalacheck.{GenericInstances, NumericInstances}
 import eu.timepit.refined.types.numeric.PosDouble
 import io.circe.JsonObject
 import io.circe.syntax._

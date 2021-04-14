@@ -11,10 +11,10 @@ import com.azavea.stac4s.{
   ItemCollection,
   Proprietary,
   SpatialExtent,
+  StacAsset,
   StacCollection,
   StacExtent,
   StacItem,
-  StacAsset,
   StacLink,
   StacVersion
 }
