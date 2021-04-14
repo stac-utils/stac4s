@@ -18,6 +18,7 @@ final case class StacCollection(
     summaries: JsonObject,
     properties: JsonObject,
     links: List[StacLink],
+    assets: Map[String, StacAsset],
     extensionFields: JsonObject = ().asJsonObject
 )
 
@@ -27,7 +28,7 @@ object StacCollection {
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 
   implicit val encoderStacCollection: Encoder[StacCollection] = { collection =>
-    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct12(
+    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct13(
       "stac_version",
       "stac_extensions",
       "id",
@@ -39,7 +40,8 @@ object StacCollection {
       "extent",
       "summaries",
       "properties",
-      "links"
+      "links",
+      "assets"
     )(collection =>
       (
         collection.stacVersion,
@@ -53,7 +55,8 @@ object StacCollection {
         collection.extent,
         collection.summaries,
         collection.properties,
-        collection.links
+        collection.links,
+        collection.assets
       )
     )
 
@@ -74,6 +77,7 @@ object StacCollection {
       c.get[Option[JsonObject]]("summaries"),
       c.get[Option[JsonObject]]("properties"),
       c.get[List[StacLink]]("links"),
+      c.get[Map[String, StacAsset]]("assets"),
       c.value.as[JsonObject]
     ).mapN(
       (
@@ -89,6 +93,7 @@ object StacCollection {
           summaries: Option[JsonObject],
           properties: Option[JsonObject],
           links: List[StacLink],
+          assets: Map[String, StacAsset],
           extensionFields: JsonObject
       ) =>
         StacCollection(
@@ -104,6 +109,7 @@ object StacCollection {
           summaries getOrElse JsonObject.fromMap(Map.empty),
           properties getOrElse JsonObject.fromMap(Map.empty),
           links,
+          assets,
           extensionFields.filter({ case (k, _) =>
             !collectionFields.contains(k)
           })
