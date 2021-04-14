@@ -13,9 +13,9 @@ lazy val commonSettings = Seq(
       git.gitDescribedVersion.value.get
   },
   scalaVersion := "2.12.13",
-  cancelable in Global := true,
+  Global / cancelable := true,
   scalafmtOnCompile := true,
-  scapegoatVersion in ThisBuild := Versions.Scapegoat,
+  ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
       Resolver.ivyStylePatterns
     )
   ),
-  scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.5.0"
+  ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.5.0"
 )
 
 lazy val noPublishSettings = Seq(
@@ -51,7 +51,7 @@ lazy val publishSettings = Seq(
   organizationName := "Azavea",
   organizationHomepage := Some(new URL("https://azavea.com/")),
   description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
-  publishArtifact in Test := false
+  Test / publishArtifact := false
 ) ++ sonatypeSettings ++ credentialSettings
 
 lazy val sonatypeSettings = Seq(
