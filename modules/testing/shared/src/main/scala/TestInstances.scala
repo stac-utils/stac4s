@@ -171,7 +171,7 @@ trait TestInstances extends NumericInstances with GenericInstances {
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply)
 
-  private[testing] def stacItemAssetGen: Gen[StacItemAsset] =
+  private[testing] def ItemAssetGen: Gen[ItemAsset] =
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
@@ -180,7 +180,7 @@ trait TestInstances extends NumericInstances with GenericInstances {
       Gen.option(mediaTypeGen),
       assetExtensionFieldsGen
     ) mapN {
-      StacItemAsset.apply
+      ItemAsset.apply
     }
 
   private[testing] def stacCollectionAssetGen: Gen[StacCollectionAsset] =
@@ -195,8 +195,8 @@ trait TestInstances extends NumericInstances with GenericInstances {
 
   // Only do COGs for now, since we don't handle anything else in the example server.
   // As more types of stac items are supported, relax this assumption
-  private[testing] def cogAssetGen: Gen[StacItemAsset] =
-    stacItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
+  private[testing] def cogAssetGen: Gen[ItemAsset] =
+    ItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
 
   private[testing] def stacCatalogGen: Gen[StacCatalog] =
     (
@@ -342,7 +342,7 @@ trait TestInstances extends NumericInstances with GenericInstances {
     stacProviderGen
   }
 
-  implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
+  implicit val arbItemAsset: Arbitrary[ItemAsset] = Arbitrary { ItemAssetGen }
 
   implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
 

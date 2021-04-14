@@ -22,12 +22,12 @@ trait Syntax {
       ev.addExtensionFields(catalog, properties)
   }
 
-  implicit class stacItemAssetExtensions(itemAsset: StacItemAsset) {
+  implicit class ItemAssetExtensions(itemAsset: ItemAsset) {
 
     def getExtensionFields[T](implicit ev: ItemAssetExtension[T]): ExtensionResult[T] =
       ev.getExtensionFields(itemAsset)
 
-    def addExtensionFields[T](properties: T)(implicit ev: ItemAssetExtension[T]): StacItemAsset =
+    def addExtensionFields[T](properties: T)(implicit ev: ItemAssetExtension[T]): ItemAsset =
       ev.addExtensionFields(itemAsset, properties)
   }
 

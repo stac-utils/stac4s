@@ -5,7 +5,7 @@ import cats.syntax.apply._
 import io.circe._
 import io.circe.syntax._
 
-final case class StacItemAsset(
+final case class StacAsset(
     href: String,
     title: Option[String],
     description: Option[String],
@@ -14,20 +14,20 @@ final case class StacItemAsset(
     extensionFields: JsonObject = ().asJsonObject
 )
 
-object StacItemAsset {
-  val assetFields = productFieldNames[StacItemAsset]
+object StacAsset {
+  val assetFields = productFieldNames[StacAsset]
 
-  implicit val eqStacItemAsset: Eq[StacItemAsset] = Eq.fromUniversalEquals
+  implicit val eqStacAsset: Eq[StacAsset] = Eq.fromUniversalEquals
 
-  implicit val encStacItemAsset: Encoder[StacItemAsset] = { asset =>
-    val baseEncoder: Encoder[StacItemAsset] =
+  implicit val encStacAsset: Encoder[StacAsset] = { asset =>
+    val baseEncoder: Encoder[StacAsset] =
       Encoder.forProduct5("href", "title", "description", "roles", "type")(asset =>
         (asset.href, asset.title, asset.description, asset.roles, asset._type)
       )
     baseEncoder(asset).deepMerge(asset.extensionFields.asJson)
   }
 
-  implicit val decStacItemAsset: Decoder[StacItemAsset] = { c: HCursor =>
+  implicit val decStacAsset: Decoder[StacAsset] = { c: HCursor =>
     (
       c.get[String]("href"),
       c.get[Option[String]]("title"),
@@ -44,7 +44,7 @@ object StacItemAsset {
           mediaType: Option[StacMediaType],
           document: JsonObject
       ) =>
-        StacItemAsset(
+        StacAsset(
           href,
           title,
           description,

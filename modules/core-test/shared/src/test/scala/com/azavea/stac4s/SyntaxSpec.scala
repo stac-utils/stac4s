@@ -27,15 +27,15 @@ class SyntaxSpec extends AnyFunSuite with Checkers with Matchers {
   }
 
   test("asset syntax results in the same values as typeclass summoner to extend") {
-    check { (stacItemAsset: StacItemAsset, eoAssetExtension: EOAssetExtension) =>
-      stacItemAsset.addExtensionFields(eoAssetExtension) == ItemAssetExtension[EOAssetExtension]
-        .addExtensionFields(stacItemAsset, eoAssetExtension)
+    check { (ItemAsset: ItemAsset, eoAssetExtension: EOAssetExtension) =>
+      ItemAsset.addExtensionFields(eoAssetExtension) == ItemAssetExtension[EOAssetExtension]
+        .addExtensionFields(ItemAsset, eoAssetExtension)
     }
   }
 
   test("asset syntax results in the same values as typeclass summoner to parse") {
-    check { (stacItemAsset: StacItemAsset, eoAssetExtension: EOAssetExtension) =>
-      stacItemAsset.addExtensionFields(eoAssetExtension).getExtensionFields[EOAssetExtension] == eoAssetExtension.valid
+    check { (ItemAsset: ItemAsset, eoAssetExtension: EOAssetExtension) =>
+      ItemAsset.addExtensionFields(eoAssetExtension).getExtensionFields[EOAssetExtension] == eoAssetExtension.valid
     }
   }
 

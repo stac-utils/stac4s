@@ -14,7 +14,7 @@ final case class StacItem(
     geometry: Geometry,
     bbox: TwoDimBbox,
     links: List[StacLink],
-    assets: Map[String, StacItemAsset],
+    assets: Map[String, ItemAsset],
     collection: Option[String],
     properties: JsonObject
 ) {
@@ -75,7 +75,7 @@ object StacItem {
         geometry: Geometry,
         bbox: TwoDimBbox,
         links: List[StacLink],
-        assets: Map[String, StacItemAsset],
+        assets: Map[String, ItemAsset],
         collection: Option[String],
         properties: JsonObject
     ) => {

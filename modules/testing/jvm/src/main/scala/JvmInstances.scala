@@ -12,7 +12,7 @@ import com.azavea.stac4s.{
   StacCollection,
   StacExtent,
   StacItem,
-  StacItemAsset,
+  ItemAsset,
   StacLink,
   StacVersion
 }
@@ -83,7 +83,7 @@ trait JvmInstances {
       rectangleGen,
       TestInstances.twoDimBboxGen,
       Gen.const(Nil),
-      Gen.const(Map.empty[String, StacItemAsset]),
+      Gen.const(Map.empty[String, ItemAsset]),
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -128,6 +128,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       possiblyEmptyListGen(TestInstances.stacLinkGen),
+      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
       TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
@@ -145,6 +146,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.const(Nil),
+      Gen.const(Map.empty[String, StacAsset]),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 

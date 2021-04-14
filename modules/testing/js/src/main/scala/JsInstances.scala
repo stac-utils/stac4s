@@ -14,7 +14,7 @@ import com.azavea.stac4s.{
   StacCollection,
   StacExtent,
   StacItem,
-  StacItemAsset,
+  ItemAsset,
   StacLink,
   StacVersion
 }
@@ -80,7 +80,7 @@ trait JsInstances extends GenericInstances {
       geometryGen,
       TestInstances.twoDimBboxGen,
       Gen.const(Nil),
-      Gen.const(Map.empty[String, StacItemAsset]),
+      Gen.const(Map.empty[String, ItemAsset]),
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -120,6 +120,7 @@ trait JsInstances extends GenericInstances {
       Gen.const(JsonObject.empty),
       Gen.const(JsonObject.empty),
       Gen.const(Nil),
+      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
