@@ -1,11 +1,15 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.types.CatalogType
+
 import cats.Eq
 import cats.syntax.apply._
 import io.circe._
+import io.circe.refined._
 import io.circe.syntax._
 
 final case class StacCatalog(
+    _type: CatalogType,
     stacVersion: String,
     stacExtensions: List[String],
     id: String,
@@ -23,8 +27,9 @@ object StacCatalog {
 
   implicit val encCatalog: Encoder[StacCatalog] = { catalog =>
     val baseEncoder: Encoder[StacCatalog] =
-      Encoder.forProduct6("stac_version", "stac_extensions", "id", "title", "description", "links")(catalog =>
+      Encoder.forProduct7("type", "stac_version", "stac_extensions", "id", "title", "description", "links")(catalog =>
         (
+          catalog._type,
           catalog.stacVersion,
           catalog.stacExtensions,
           catalog.id,
@@ -39,6 +44,7 @@ object StacCatalog {
 
   implicit val decCatalog: Decoder[StacCatalog] = { c: HCursor =>
     (
+      c.get[CatalogType]("type"),
       c.get[String]("stac_version"),
       c.get[Option[List[String]]]("stac_extensions"),
       c.get[String]("id"),
@@ -48,6 +54,7 @@ object StacCatalog {
       c.value.as[JsonObject]
     ).mapN(
       (
+          catalogType: CatalogType,
           version: String,
           extensions: Option[List[String]],
           id: String,
@@ -57,6 +64,7 @@ object StacCatalog {
           document: JsonObject
       ) =>
         StacCatalog.apply(
+          catalogType,
           version,
           extensions getOrElse Nil,
           id,

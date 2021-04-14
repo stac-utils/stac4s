@@ -3,7 +3,8 @@ package com.azavea.stac4s.testing
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.geometry.Geometry.{MultiPolygon, Point2d, Polygon}
 import com.azavea.stac4s.geometry._
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jsTypes.TemporalExtent
+import com.azavea.stac4s.types.CollectionType
 import com.azavea.stac4s.{
   Bbox,
   Interval,
@@ -20,6 +21,7 @@ import com.azavea.stac4s.{
 
 import cats.syntax.apply._
 import cats.syntax.option._
+import eu.timepit.refined.scalacheck.GenericInstances
 import io.circe.JsonObject
 import io.circe.syntax._
 import org.scalacheck.cats.implicits._
@@ -27,7 +29,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
 
-trait JsInstances {
+trait JsInstances extends GenericInstances {
 
   private[testing] def finiteDoubleGen: Gen[Double] = Arbitrary.arbitrary[Double].filterNot(_.isNaN)
 
@@ -105,6 +107,7 @@ trait JsInstances {
 
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
+      Arbitrary.arbitrary[CollectionType],
       Gen.const("1.0.0-beta.2"),
       Gen.const(Nil),
       nonEmptyStringGen,

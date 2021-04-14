@@ -6,11 +6,12 @@ import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer.{LayerItemExtension, StacLayerProperties}
+import com.azavea.stac4s.types.CatalogType
 
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
-import eu.timepit.refined.scalacheck.NumericInstances
+import eu.timepit.refined.scalacheck.{NumericInstances, GenericInstances}
 import eu.timepit.refined.types.numeric.PosDouble
 import io.circe.JsonObject
 import io.circe.syntax._
@@ -18,7 +19,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck._
 import org.scalacheck.cats.implicits._
 
-trait TestInstances extends NumericInstances {
+trait TestInstances extends NumericInstances with GenericInstances {
 
   private[testing] def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
     possiblyEmptyMapGen(
@@ -199,6 +200,7 @@ trait TestInstances extends NumericInstances {
 
   private[testing] def stacCatalogGen: Gen[StacCatalog] =
     (
+      arbitrary[CatalogType],
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,

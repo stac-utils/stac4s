@@ -3,7 +3,7 @@ package com.azavea.stac4s.testing
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
 import com.azavea.stac4s.syntax._
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jvmTypes.TemporalExtent
 import com.azavea.stac4s.{
   Bbox,
   Interval,

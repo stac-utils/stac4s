@@ -2,7 +2,7 @@ package com.azavea.stac4s
 
 import com.azavea.stac4s.meta._
 import com.azavea.stac4s.testing.JvmInstances._
-import com.azavea.stac4s.types._
+import com.azavea.stac4s.jvmTypes._
 
 import geotrellis.vector.Geometry
 import io.circe.testing.{ArbitraryInstances, CodecTests}

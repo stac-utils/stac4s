@@ -1,6 +1,6 @@
 package com.azavea.stac4s.meta
 
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jvmTypes.TemporalExtent
 
 import cats.Eq
 import cats.syntax.either._

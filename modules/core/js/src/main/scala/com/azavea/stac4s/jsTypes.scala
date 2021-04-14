@@ -7,10 +7,14 @@ import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
+import eu.timepit.refined.auto._
+import eu.timepit.refined.generic._
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.W
 
 import java.time.Instant
 
-package object types {
+package object jsTypes {
 
   type TemporalExtent =
     List[Option[Instant]] Refined And[
@@ -32,4 +36,7 @@ package object types {
   }
 
   implicit val eqTemporalExtent: Eq[TemporalExtent] = Eq.fromUniversalEquals
+
+  type CatalogType    = String Refined Equal[W.`"Catalog"`.T]
+  type CollectionType = String Refined Equal[W.`"Collection"`.T]
 }

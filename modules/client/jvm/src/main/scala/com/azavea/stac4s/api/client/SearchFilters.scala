@@ -2,7 +2,7 @@ package com.azavea.stac4s.api.client
 
 import com.azavea.stac4s.Bbox
 import com.azavea.stac4s.api.client.utils.ClientCodecs
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jvmTypes.TemporalExtent
 
 import eu.timepit.refined.types.numeric.NonNegInt
 import geotrellis.vector.{io => _, _}

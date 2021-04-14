@@ -1,6 +1,6 @@
 package com.azavea.stac4s
 
-import com.azavea.stac4s.types._
+import com.azavea.stac4s.jvmTypes._
 
 import cats.Eq
 import cats.syntax.apply._
