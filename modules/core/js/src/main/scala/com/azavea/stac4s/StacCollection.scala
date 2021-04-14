@@ -22,7 +22,7 @@ final case class StacCollection(
     summaries: JsonObject,
     properties: JsonObject,
     links: List[StacLink],
-    assets: Map[String, StacAsset],
+    assets: Option[Map[String, StacAsset]],
     extensionFields: JsonObject = ().asJsonObject
 )
 
@@ -84,7 +84,7 @@ object StacCollection {
       c.get[Option[JsonObject]]("summaries"),
       c.get[Option[JsonObject]]("properties"),
       c.get[List[StacLink]]("links"),
-      c.get[Map[String, StacAsset]]("assets"),
+      c.get[Option[Map[String, StacAsset]]]("assets"),
       c.value.as[JsonObject]
     ).mapN(
       (
@@ -101,7 +101,7 @@ object StacCollection {
           summaries: Option[JsonObject],
           properties: Option[JsonObject],
           links: List[StacLink],
-          assets: Map[String, StacAsset],
+          assets: Option[Map[String, StacAsset]],
           extensionFields: JsonObject
       ) =>
         StacCollection(

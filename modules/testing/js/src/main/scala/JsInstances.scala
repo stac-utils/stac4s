@@ -120,7 +120,7 @@ trait JsInstances extends GenericInstances {
       Gen.const(JsonObject.empty),
       Gen.const(JsonObject.empty),
       Gen.const(Nil),
-      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
+      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 

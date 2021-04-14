@@ -128,7 +128,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       possiblyEmptyListGen(TestInstances.stacLinkGen),
-      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
+      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
       TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
