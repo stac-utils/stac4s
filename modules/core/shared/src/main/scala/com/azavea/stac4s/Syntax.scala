@@ -22,13 +22,13 @@ trait Syntax {
       ev.addExtensionFields(catalog, properties)
   }
 
-  implicit class ItemAssetExtensions(itemAsset: ItemAsset) {
+  implicit class StacAssetExtensions(StacAsset: StacAsset) {
 
-    def getExtensionFields[T](implicit ev: ItemAssetExtension[T]): ExtensionResult[T] =
-      ev.getExtensionFields(itemAsset)
+    def getExtensionFields[T](implicit ev: StacAssetExtension[T]): ExtensionResult[T] =
+      ev.getExtensionFields(StacAsset)
 
-    def addExtensionFields[T](properties: T)(implicit ev: ItemAssetExtension[T]): ItemAsset =
-      ev.addExtensionFields(itemAsset, properties)
+    def addExtensionFields[T](properties: T)(implicit ev: StacAssetExtension[T]): StacAsset =
+      ev.addExtensionFields(StacAsset, properties)
   }
 
   implicit class stacLinkExtensions(link: StacLink) {
