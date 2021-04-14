@@ -94,6 +94,8 @@ trait TestInstances extends NumericInstances with GenericInstances {
     Gen.const(StacLinkType.PredecessorVersion),
     Gen.const(StacLinkType.SuccessorVersion),
     Gen.const(StacLinkType.DerivedFrom),
+    Gen.const(StacLinkType.Via),
+    Gen.const(StacLinkType.Canonical),
     nonEmptyStringGen map StacLinkType.VendorLinkType.apply
   )
 
