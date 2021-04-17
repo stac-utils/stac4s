@@ -14,6 +14,6 @@ object Versions {
   val SpdxChecker             = "1.0.0"
   val Sttp                    = "3.2.3"
   val SttpModel               = "1.4.3"
-  val SttpShared              = "1.2.0"
+  val SttpShared              = "1.2.1"
   val ThreeTenExtra           = "1.6.0"
 }
