@@ -7,7 +7,6 @@ import com.azavea.stac4s.testing.JvmInstances._
 import com.azavea.stac4s.testing.TestInstances._
 
 import cats.syntax.validated._
-import io.circe.syntax._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.Checkers
