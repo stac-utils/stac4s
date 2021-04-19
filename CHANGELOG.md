@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.2.0] - 2021-04-19
 ### Added
 - Tested bbox union invariants [#266](https://github.com/azavea/stac4s/pull/266)
 - Modeled periodic extent and made intervals extensible [#276](https://github.com/azavea/stac4s/pull/276)
-- Updated models for compatibility with spec version 1.0.0-rc2 [#283](https://github.com/azavea/stac4s/pull/283)
+- Updated models for compatibility with spec version 1.0.0-rc2 (breaking) [#283](https://github.com/azavea/stac4s/pull/283)
 
 ## [0.1.1] - 2021-03-12
 ### Fixed
@@ -109,7 +111,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/azavea/stac4s/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/azavea/stac4s/compare/v0.0.21...v0.1.1
 [0.0.21]: https://github.com/azavea/stac4s/compare/v0.0.20...v0.0.21
 [0.0.20]: https://github.com/azavea/stac4s/compare/v0.0.19...v0.0.20
