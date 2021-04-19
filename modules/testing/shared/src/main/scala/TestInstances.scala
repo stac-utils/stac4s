@@ -21,15 +21,8 @@ import org.scalacheck.cats.implicits._
 
 trait TestInstances extends NumericInstances with GenericInstances {
 
-  private[testing] def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
-    possiblyEmptyMapGen(
-      (nonEmptyStringGen, stacCollectionAssetGen).tupled
-    ).map(AssetCollectionExtension.apply)
-
-  private[testing] def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
-    Gen.const(().asJsonObject),
-    assetCollectionExtensionGen.map(_.asJsonObject)
-  )
+  private[testing] def collectionExtensionFieldsGen: Gen[JsonObject] =
+    Gen.const(().asJsonObject)
 
   private[testing] def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
@@ -404,10 +397,6 @@ trait TestInstances extends NumericInstances with GenericInstances {
   }
 
   implicit val arbLayerProperties: Arbitrary[LayerItemExtension] = Arbitrary { layerPropertiesGen }
-
-  implicit val arbAssetExtensionProperties: Arbitrary[AssetCollectionExtension] = Arbitrary {
-    assetCollectionExtensionGen
-  }
 
   implicit val arbEOItemExtension: Arbitrary[EOItemExtension] = Arbitrary {
     eoItemExtensionGen
