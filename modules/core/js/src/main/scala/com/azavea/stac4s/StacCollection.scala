@@ -1,11 +1,15 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.types.CollectionType
+
 import cats.Eq
 import cats.syntax.apply._
 import io.circe._
+import io.circe.refined._
 import io.circe.syntax._
 
 final case class StacCollection(
+    _type: CollectionType,
     stacVersion: String,
     stacExtensions: List[String],
     id: String,
@@ -18,6 +22,7 @@ final case class StacCollection(
     summaries: JsonObject,
     properties: JsonObject,
     links: List[StacLink],
+    assets: Option[Map[String, StacAsset]],
     extensionFields: JsonObject = ().asJsonObject
 )
 
@@ -27,7 +32,8 @@ object StacCollection {
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 
   implicit val encoderStacCollection: Encoder[StacCollection] = { collection =>
-    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct12(
+    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct14(
+      "type",
       "stac_version",
       "stac_extensions",
       "id",
@@ -39,9 +45,11 @@ object StacCollection {
       "extent",
       "summaries",
       "properties",
-      "links"
+      "links",
+      "assets"
     )(collection =>
       (
+        collection._type,
         collection.stacVersion,
         collection.stacExtensions,
         collection.id,
@@ -53,7 +61,8 @@ object StacCollection {
         collection.extent,
         collection.summaries,
         collection.properties,
-        collection.links
+        collection.links,
+        collection.assets
       )
     )
 
@@ -62,6 +71,7 @@ object StacCollection {
 
   implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>
     (
+      c.get[CollectionType]("type"),
       c.get[String]("stac_version"),
       c.get[Option[List[String]]]("stac_extensions"),
       c.get[String]("id"),
@@ -74,9 +84,11 @@ object StacCollection {
       c.get[Option[JsonObject]]("summaries"),
       c.get[Option[JsonObject]]("properties"),
       c.get[List[StacLink]]("links"),
+      c.get[Option[Map[String, StacAsset]]]("assets"),
       c.value.as[JsonObject]
     ).mapN(
       (
+          _type: CollectionType,
           stacVersion: String,
           stacExtensions: Option[List[String]],
           id: String,
@@ -89,9 +101,11 @@ object StacCollection {
           summaries: Option[JsonObject],
           properties: Option[JsonObject],
           links: List[StacLink],
+          assets: Option[Map[String, StacAsset]],
           extensionFields: JsonObject
       ) =>
         StacCollection(
+          _type,
           stacVersion,
           stacExtensions getOrElse Nil,
           id,
@@ -104,6 +118,7 @@ object StacCollection {
           summaries getOrElse JsonObject.fromMap(Map.empty),
           properties getOrElse JsonObject.fromMap(Map.empty),
           links,
+          assets,
           extensionFields.filter({ case (k, _) =>
             !collectionFields.contains(k)
           })

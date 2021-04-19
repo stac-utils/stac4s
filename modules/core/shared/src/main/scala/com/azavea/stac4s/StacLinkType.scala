@@ -35,6 +35,8 @@ object StacLinkType {
   case object PredecessorVersion                      extends StacLinkType("predecessor-version")
   case object SuccessorVersion                        extends StacLinkType("successor-version")
   case object DerivedFrom                             extends StacLinkType("derived_from")
+  case object Via                                     extends StacLinkType("via")
+  case object Canonical                               extends StacLinkType("canonical")
   final case class VendorLinkType(underlying: String) extends StacLinkType(underlying)
 
   private def fromString(s: String): StacLinkType = s.toLowerCase match {
@@ -59,6 +61,8 @@ object StacLinkType {
     case "predecessor-version" => PredecessorVersion
     case "successor-version"   => SuccessorVersion
     case "derived_from"        => DerivedFrom
+    case "via"                 => Via
+    case "canonical"           => Canonical
     case _                     => VendorLinkType(s)
   }
 

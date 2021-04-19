@@ -2,17 +2,17 @@ package com.azavea.stac4s.testing
 
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
+import com.azavea.stac4s.jvmTypes.TemporalExtent
 import com.azavea.stac4s.syntax._
-import com.azavea.stac4s.types.TemporalExtent
 import com.azavea.stac4s.{
   Bbox,
   Interval,
   ItemCollection,
   SpatialExtent,
+  StacAsset,
   StacCollection,
   StacExtent,
   StacItem,
-  StacItemAsset,
   StacLink,
   StacVersion
 }
@@ -83,7 +83,7 @@ trait JvmInstances {
       rectangleGen,
       TestInstances.twoDimBboxGen,
       Gen.const(Nil),
-      Gen.const(Map.empty[String, StacItemAsset]),
+      Gen.const(Map.empty[String, StacAsset]),
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -128,6 +128,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       possiblyEmptyListGen(TestInstances.stacLinkGen),
+      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
       TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 
@@ -145,6 +146,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.const(Nil),
+      Gen.option(Gen.const(Map.empty[String, StacAsset])),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 

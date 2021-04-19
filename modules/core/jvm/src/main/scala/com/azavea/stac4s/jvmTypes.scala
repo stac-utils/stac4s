@@ -3,14 +3,15 @@ package com.azavea.stac4s
 import com.azavea.stac4s.meta.HasInstant
 
 import cats.Eq
-import eu.timepit.refined._
-import eu.timepit.refined.api._
+import eu.timepit.refined.W
+import eu.timepit.refined.api.{Refined, _}
+import eu.timepit.refined.auto._
 import eu.timepit.refined.boolean._
 import eu.timepit.refined.collection.{Exists, MinSize, _}
 
 import java.time.Instant
 
-package object types {
+package object jvmTypes {
 
   type TemporalExtent =
     List[Option[Instant]] Refined And[

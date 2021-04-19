@@ -1,6 +1,6 @@
 package com.azavea.stac4s.extensions.eo
 
-import com.azavea.stac4s.extensions.ItemAssetExtension
+import com.azavea.stac4s.extensions.StacAssetExtension
 
 import cats.Eq
 import cats.data.NonEmptyList
@@ -20,5 +20,5 @@ object EOAssetExtension {
 
   implicit val decEOAssetExtension: Decoder[EOAssetExtension] = Decoder.forProduct1("eo:bands")(EOAssetExtension.apply)
 
-  implicit val assetExtension: ItemAssetExtension[EOAssetExtension] = ItemAssetExtension.instance
+  implicit val assetExtension: StacAssetExtension[EOAssetExtension] = StacAssetExtension.instance
 }

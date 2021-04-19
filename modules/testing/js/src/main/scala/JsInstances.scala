@@ -3,23 +3,25 @@ package com.azavea.stac4s.testing
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.geometry.Geometry.{MultiPolygon, Point2d, Polygon}
 import com.azavea.stac4s.geometry._
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jsTypes.TemporalExtent
+import com.azavea.stac4s.types.CollectionType
 import com.azavea.stac4s.{
   Bbox,
   Interval,
   ItemCollection,
   Proprietary,
   SpatialExtent,
+  StacAsset,
   StacCollection,
   StacExtent,
   StacItem,
-  StacItemAsset,
   StacLink,
   StacVersion
 }
 
 import cats.syntax.apply._
 import cats.syntax.option._
+import eu.timepit.refined.scalacheck.GenericInstances
 import io.circe.JsonObject
 import io.circe.syntax._
 import org.scalacheck.cats.implicits._
@@ -27,7 +29,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.Instant
 
-trait JsInstances {
+trait JsInstances extends GenericInstances {
 
   private[testing] def finiteDoubleGen: Gen[Double] = Arbitrary.arbitrary[Double].filterNot(_.isNaN)
 
@@ -78,7 +80,7 @@ trait JsInstances {
       geometryGen,
       TestInstances.twoDimBboxGen,
       Gen.const(Nil),
-      Gen.const(Map.empty[String, StacItemAsset]),
+      Gen.const(Map.empty[String, StacAsset]),
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -105,6 +107,7 @@ trait JsInstances {
 
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
+      Arbitrary.arbitrary[CollectionType],
       Gen.const("1.0.0-beta.2"),
       Gen.const(Nil),
       nonEmptyStringGen,
@@ -117,6 +120,7 @@ trait JsInstances {
       Gen.const(JsonObject.empty),
       Gen.const(JsonObject.empty),
       Gen.const(Nil),
+      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 

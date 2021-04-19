@@ -6,11 +6,12 @@ import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer.{LayerItemExtension, StacLayerProperties}
+import com.azavea.stac4s.types.CatalogType
 
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
-import eu.timepit.refined.scalacheck.NumericInstances
+import eu.timepit.refined.scalacheck.{GenericInstances, NumericInstances}
 import eu.timepit.refined.types.numeric.PosDouble
 import io.circe.JsonObject
 import io.circe.syntax._
@@ -18,17 +19,10 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck._
 import org.scalacheck.cats.implicits._
 
-trait TestInstances extends NumericInstances {
+trait TestInstances extends NumericInstances with GenericInstances {
 
-  private[testing] def assetCollectionExtensionGen: Gen[AssetCollectionExtension] =
-    possiblyEmptyMapGen(
-      (nonEmptyStringGen, stacCollectionAssetGen).tupled
-    ).map(AssetCollectionExtension.apply)
-
-  private[testing] def collectionExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
-    Gen.const(().asJsonObject),
-    assetCollectionExtensionGen.map(_.asJsonObject)
-  )
+  private[testing] def collectionExtensionFieldsGen: Gen[JsonObject] =
+    Gen.const(().asJsonObject)
 
   private[testing] def itemExtensionFieldsGen: Gen[JsonObject] = Gen.oneOf(
     Gen.const(().asJsonObject),
@@ -93,6 +87,8 @@ trait TestInstances extends NumericInstances {
     Gen.const(StacLinkType.PredecessorVersion),
     Gen.const(StacLinkType.SuccessorVersion),
     Gen.const(StacLinkType.DerivedFrom),
+    Gen.const(StacLinkType.Via),
+    Gen.const(StacLinkType.Canonical),
     nonEmptyStringGen map StacLinkType.VendorLinkType.apply
   )
 
@@ -170,7 +166,7 @@ trait TestInstances extends NumericInstances {
       Gen.option(nonEmptyStringGen)
     ).mapN(StacProvider.apply)
 
-  private[testing] def stacItemAssetGen: Gen[StacItemAsset] =
+  private[testing] def StacAssetGen: Gen[StacAsset] =
     (
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
@@ -179,7 +175,7 @@ trait TestInstances extends NumericInstances {
       Gen.option(mediaTypeGen),
       assetExtensionFieldsGen
     ) mapN {
-      StacItemAsset.apply
+      StacAsset.apply
     }
 
   private[testing] def stacCollectionAssetGen: Gen[StacCollectionAsset] =
@@ -194,17 +190,19 @@ trait TestInstances extends NumericInstances {
 
   // Only do COGs for now, since we don't handle anything else in the example server.
   // As more types of stac items are supported, relax this assumption
-  private[testing] def cogAssetGen: Gen[StacItemAsset] =
-    stacItemAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
+  private[testing] def cogAssetGen: Gen[StacAsset] =
+    StacAssetGen map { asset => asset.copy(_type = Some(`image/cog`)) }
 
   private[testing] def stacCatalogGen: Gen[StacCatalog] =
     (
+      arbitrary[CatalogType],
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,
       Gen.option(nonEmptyStringGen),
       nonEmptyStringGen,
       possiblyEmptyListGen(stacLinkGen),
+      Gen.const(().asJsonObject),
       Gen.const(().asJsonObject)
     ).mapN(StacCatalog.apply)
 
@@ -340,7 +338,7 @@ trait TestInstances extends NumericInstances {
     stacProviderGen
   }
 
-  implicit val arbItemAsset: Arbitrary[StacItemAsset] = Arbitrary { stacItemAssetGen }
+  implicit val arbStacAsset: Arbitrary[StacAsset] = Arbitrary { StacAssetGen }
 
   implicit val arbCollectionAsset: Arbitrary[StacCollectionAsset] = Arbitrary { stacCollectionAssetGen }
 
@@ -399,10 +397,6 @@ trait TestInstances extends NumericInstances {
   }
 
   implicit val arbLayerProperties: Arbitrary[LayerItemExtension] = Arbitrary { layerPropertiesGen }
-
-  implicit val arbAssetExtensionProperties: Arbitrary[AssetCollectionExtension] = Arbitrary {
-    assetCollectionExtensionGen
-  }
 
   implicit val arbEOItemExtension: Arbitrary[EOItemExtension] = Arbitrary {
     eoItemExtensionGen

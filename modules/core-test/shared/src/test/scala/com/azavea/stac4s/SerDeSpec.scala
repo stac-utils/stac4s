@@ -26,7 +26,7 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.StacAssetRole", CodecTests[StacAssetRole].unserializableCodec)
   checkAll("Codec.StacCatalog", CodecTests[StacCatalog].unserializableCodec)
   checkAll("Codec.StacCollectionAsset", CodecTests[StacCollectionAsset].unserializableCodec)
-  checkAll("Codec.StacItemAsset", CodecTests[StacItemAsset].unserializableCodec)
+  checkAll("Codec.StacAsset", CodecTests[StacAsset].unserializableCodec)
   checkAll("Codec.StacLinkType", CodecTests[StacLinkType].unserializableCodec)
   checkAll("Codec.StacMediaType", CodecTests[StacMediaType].unserializableCodec)
   checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)

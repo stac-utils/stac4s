@@ -1,6 +1,6 @@
 package com.azavea.stac4s.api.client.utils
 
-import com.azavea.stac4s.types.TemporalExtent
+import com.azavea.stac4s.jvmTypes.TemporalExtent
 
 import cats.syntax.apply._
 import cats.syntax.either._
