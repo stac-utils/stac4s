@@ -63,13 +63,13 @@ trait JvmInstances {
   private[testing] def stacItemGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("0.8.0"),
+      Gen.const("1.0.0-rc2"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       rectangleGen,
       TestInstances.twoDimBboxGen,
       nonEmptyListGen(TestInstances.stacLinkGen) map { _.toList },
-      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
+      TestInstances.assetMapGen,
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -77,7 +77,7 @@ trait JvmInstances {
   private[testing] def stacItemShortGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("0.8.0"),
+      Gen.const("1.0.0-rc2"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       rectangleGen,
@@ -91,7 +91,7 @@ trait JvmInstances {
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
@@ -101,7 +101,7 @@ trait JvmInstances {
   private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.const(Nil),
@@ -128,7 +128,7 @@ trait JvmInstances {
       Gen.const(().asJsonObject),
       Gen.const(JsonObject.fromMap(Map.empty)),
       possiblyEmptyListGen(TestInstances.stacLinkGen),
-      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
+      Gen.option(TestInstances.assetMapGen),
       TestInstances.collectionExtensionFieldsGen
     ).mapN(StacCollection.apply)
 

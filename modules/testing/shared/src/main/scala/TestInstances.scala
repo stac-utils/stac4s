@@ -324,6 +324,12 @@ trait TestInstances extends NumericInstances with GenericInstances {
       case (inst1, inst2) => StacLayerProperties(inst2, inst1)
     }
 
+  private[testing] def assetMapGen: Gen[Map[String, StacAsset]] =
+    Gen.oneOf(
+      Gen.const(Map.empty),
+      Gen.listOfN(5, (nonEmptyAlphaRefinedStringGen, cogAssetGen).tupled)
+    )
+
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
   }

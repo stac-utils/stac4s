@@ -60,13 +60,13 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacItemGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("0.8.0"),
+      Gen.const("1.0.0-rc2"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       geometryGen,
       TestInstances.twoDimBboxGen,
       nonEmptyListGen(TestInstances.stacLinkGen) map { _.toList },
-      Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled),
+      TestInstances.assetMapGen,
       Gen.option(nonEmptyStringGen),
       TestInstances.itemExtensionFieldsGen
     ).mapN(StacItem.apply)
@@ -74,7 +74,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacItemShortGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("0.8.0"),
+      Gen.const("1.0.0-rc2"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       geometryGen,
@@ -88,7 +88,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
@@ -98,7 +98,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-beta.2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
       Gen.const(Nil),
       Gen.listOfN[StacItem](2, stacItemGen),
       Gen.const(Nil),
@@ -108,7 +108,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
       Arbitrary.arbitrary[CollectionType],
-      Gen.const("1.0.0-beta.2"),
+      Gen.const("1.0.0-rc2"),
       Gen.const(Nil),
       nonEmptyStringGen,
       nonEmptyStringGen.map(_.some),
@@ -120,7 +120,7 @@ trait JsInstances extends GenericInstances {
       Gen.const(JsonObject.empty),
       Gen.const(JsonObject.empty),
       Gen.const(Nil),
-      Gen.option(Gen.nonEmptyMap((nonEmptyStringGen, TestInstances.cogAssetGen).tupled)),
+      Gen.option(TestInstances.assetMapGen),
       Gen.const(().asJsonObject)
     ).mapN(StacCollection.apply)
 
