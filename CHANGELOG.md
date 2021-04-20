@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Fixed
+- Bounded generators to prevent downstream test speed and memory issues [#290](https://github.com/azavea/stac4s/pull/290)
 
 ## [0.2.0] - 2021-04-19
 ### Added

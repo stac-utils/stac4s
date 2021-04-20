@@ -7,6 +7,10 @@ aliases:
     - run:
         name: Executing cibuild
         command: ./scripts/test
+    - store_test_results:
+        path: modules/core-test/jvm/target/test-reports
+    - store_test_results:
+        path: modules/core-test/js/target/test-reports
     - save_cache:
         key: sbt-cache-{{ checksum "project/Versions.scala" }}
         paths:
