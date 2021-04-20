@@ -326,8 +326,8 @@ trait TestInstances extends NumericInstances with GenericInstances {
 
   private[testing] def assetMapGen: Gen[Map[String, StacAsset]] =
     Gen.oneOf(
-      Gen.const(Map.empty),
-      Gen.listOfN(5, (nonEmptyAlphaRefinedStringGen, cogAssetGen).tupled)
+      Gen.const(Map.empty[String, StacAsset]),
+      Gen.listOfN(5, (nonEmptyStringGen, cogAssetGen).tupled) map { Map(_: _*) }
     )
 
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
