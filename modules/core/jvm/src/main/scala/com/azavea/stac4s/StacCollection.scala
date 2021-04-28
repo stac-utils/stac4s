@@ -1,11 +1,15 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.types.CollectionType
+
 import cats.Eq
 import cats.syntax.apply._
 import io.circe._
+import io.circe.refined._
 import io.circe.syntax._
 
 final case class StacCollection(
+    _type: CollectionType,
     stacVersion: String,
     stacExtensions: List[String],
     id: String,
@@ -28,7 +32,8 @@ object StacCollection {
   implicit val eqStacCollection: Eq[StacCollection] = Eq.fromUniversalEquals
 
   implicit val encoderStacCollection: Encoder[StacCollection] = { collection =>
-    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct13(
+    val baseEncoder: Encoder[StacCollection] = Encoder.forProduct14(
+      "type",
       "stac_version",
       "stac_extensions",
       "id",
@@ -44,6 +49,7 @@ object StacCollection {
       "assets"
     )(collection =>
       (
+        collection._type,
         collection.stacVersion,
         collection.stacExtensions,
         collection.id,
@@ -65,6 +71,7 @@ object StacCollection {
 
   implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>
     (
+      c.get[CollectionType]("type"),
       c.get[String]("stac_version"),
       c.get[Option[List[String]]]("stac_extensions"),
       c.get[String]("id"),
@@ -81,6 +88,7 @@ object StacCollection {
       c.value.as[JsonObject]
     ).mapN(
       (
+          _type: CollectionType,
           stacVersion: String,
           stacExtensions: Option[List[String]],
           id: String,
@@ -97,6 +105,7 @@ object StacCollection {
           extensionFields: JsonObject
       ) =>
         StacCollection(
+          _type,
           stacVersion,
           stacExtensions getOrElse Nil,
           id,

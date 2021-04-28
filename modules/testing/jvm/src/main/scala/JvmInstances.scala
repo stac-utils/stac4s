@@ -4,6 +4,7 @@ import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
 import com.azavea.stac4s.jvmTypes.TemporalExtent
 import com.azavea.stac4s.syntax._
+import com.azavea.stac4s.types.CollectionType
 import com.azavea.stac4s.{
   Bbox,
   Interval,
@@ -19,6 +20,7 @@ import com.azavea.stac4s.{
 
 import cats.syntax.apply._
 import cats.syntax.functor._
+import eu.timepit.refined.scalacheck.GenericInstances
 import geotrellis.vector.{Geometry, Point, Polygon}
 import io.circe.JsonObject
 import io.circe.syntax._
@@ -29,7 +31,7 @@ import org.threeten.extra.PeriodDuration
 
 import java.time.{Duration, Instant, Period}
 
-trait JvmInstances {
+trait JvmInstances extends GenericInstances {
 
   private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
@@ -116,6 +118,7 @@ trait JvmInstances {
 
   private[testing] def stacCollectionGen: Gen[StacCollection] =
     (
+      Arbitrary.arbitrary[CollectionType],
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,
@@ -134,6 +137,7 @@ trait JvmInstances {
 
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
+      Arbitrary.arbitrary[CollectionType],
       nonEmptyStringGen,
       possiblyEmptyListGen(nonEmptyStringGen),
       nonEmptyStringGen,
