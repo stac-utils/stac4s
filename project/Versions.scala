@@ -2,7 +2,7 @@ object Versions {
   val Cats                    = "2.6.0"
   val Circe                   = "0.13.0"
   val Enumeratum              = "1.6.1"
-  val GeoTrellis              = "3.5.2"
+  val GeoTrellis              = "3.6.0"
   val Jts                     = "1.16.1"
   val Refined                 = "0.9.24"
   val ScalacheckCats          = "0.3.0"
