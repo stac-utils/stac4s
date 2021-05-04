@@ -50,7 +50,7 @@ object StacCatalog {
         )
       )
 
-    baseEncoder(catalog).deepMerge(catalog.extensionFields.asJson)
+    baseEncoder(catalog).deepMerge(catalog.extensionFields.asJson).dropNullValues
   }
 
   implicit val decCatalog: Decoder[StacCatalog] = { c: HCursor =>

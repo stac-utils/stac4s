@@ -11,6 +11,6 @@ final case class StacProvider(
 )
 
 object StacProvider {
-  implicit val encStacProvider: Encoder[StacProvider] = deriveEncoder
+  implicit val encStacProvider: Encoder[StacProvider] = deriveEncoder[StacProvider].mapJson(_.dropNullValues)
   implicit val decStacProvider: Decoder[StacProvider] = deriveDecoder
 }

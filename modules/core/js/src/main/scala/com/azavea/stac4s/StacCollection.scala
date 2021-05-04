@@ -66,7 +66,7 @@ object StacCollection {
       )
     )
 
-    baseEncoder(collection).deepMerge(collection.extensionFields.asJson)
+    baseEncoder(collection).deepMerge(collection.extensionFields.asJson).dropNullValues
   }
 
   implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>

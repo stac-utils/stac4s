@@ -29,31 +29,33 @@ object StacItem {
 
   implicit val eqStacItem: Eq[StacItem] = Eq.fromUniversalEquals
 
-  implicit val encStacItem: Encoder[StacItem] = Encoder.forProduct10(
-    "id",
-    "stac_version",
-    "stac_extensions",
-    "type",
-    "geometry",
-    "bbox",
-    "links",
-    "assets",
-    "collection",
-    "properties"
-  )(item =>
-    (
-      item.id,
-      item.stacVersion,
-      item.stacExtensions,
-      item._type,
-      item.geometry,
-      item.bbox,
-      item.links,
-      item.assets,
-      item.collection,
-      item.properties
+  implicit val encStacItem: Encoder[StacItem] = Encoder
+    .forProduct10(
+      "id",
+      "stac_version",
+      "stac_extensions",
+      "type",
+      "geometry",
+      "bbox",
+      "links",
+      "assets",
+      "collection",
+      "properties"
+    )((item: StacItem) =>
+      (
+        item.id,
+        item.stacVersion,
+        item.stacExtensions,
+        item._type,
+        item.geometry,
+        item.bbox,
+        item.links,
+        item.assets,
+        item.collection,
+        item.properties
+      )
     )
-  )
+    .mapJson(_.dropNullValues)
 
   implicit val decStacItem: Decoder[StacItem] = Decoder.forProduct10(
     "id",

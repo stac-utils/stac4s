@@ -24,7 +24,7 @@ object StacLink {
         "title"
       )((link: StacLink) => (link.href, link.rel, link._type, link.title))
 
-    baseEncoder(link).deepMerge(link.extensionFields.asJson)
+    baseEncoder(link).deepMerge(link.extensionFields.asJson).dropNullValues
   }
 
   implicit val decStacLink: Decoder[StacLink] = { c: HCursor =>
