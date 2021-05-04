@@ -19,7 +19,12 @@ object EOItemExtension {
 
   implicit val encEOItemExtension: Encoder.AsObject[EOItemExtension] = Encoder
     .AsObject[Map[String, Json]]
-    .contramapObject(band => Map("eo:bands" -> band.bands.asJson, "eo:cloud_cover" -> band.cloudCover.asJson))
+    .contramapObject((band: EOItemExtension) =>
+      Map("eo:bands" -> band.bands.asJson, "eo:cloud_cover" -> band.cloudCover.asJson)
+    )
+    .mapJsonObject(_.filter({ case (_, jValue) =>
+      !jValue.isNull
+    }))
 
   implicit val decEOItemExtension: Decoder[EOItemExtension] = Decoder.forProduct2(
     "eo:bands",

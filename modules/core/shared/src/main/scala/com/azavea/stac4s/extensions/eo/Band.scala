@@ -18,13 +18,15 @@ object Band {
 
   implicit val eqBand: Eq[Band] = Eq.fromUniversalEquals
 
-  implicit val encBand: Encoder[Band] = Encoder.forProduct5(
-    "name",
-    "common_name",
-    "description",
-    "center_wavelength",
-    "full_width_half_max"
-  )(band => (band.name, band.commonName, band.description, band.centerWavelength, band.fullWidthHalfMax))
+  implicit val encBand: Encoder[Band] = Encoder
+    .forProduct5(
+      "name",
+      "common_name",
+      "description",
+      "center_wavelength",
+      "full_width_half_max"
+    )((band: Band) => (band.name, band.commonName, band.description, band.centerWavelength, band.fullWidthHalfMax))
+    .mapJson(_.dropNullValues)
 
   implicit val decBand: Decoder[Band] = Decoder.forProduct5(
     "name",

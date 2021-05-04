@@ -24,7 +24,7 @@ object StacAsset {
       Encoder.forProduct5("href", "title", "description", "roles", "type")(asset =>
         (asset.href, asset.title, asset.description, asset.roles, asset._type)
       )
-    baseEncoder(asset).deepMerge(asset.extensionFields.asJson)
+    baseEncoder(asset).deepMerge(asset.extensionFields.asJson).dropNullValues
   }
 
   implicit val decStacAsset: Decoder[StacAsset] = { c: HCursor =>

@@ -40,7 +40,7 @@ object ItemCollection {
         )
       )
 
-      baseEncoder(collection).deepMerge(collection.extensionFields.asJson)
+      baseEncoder(collection).deepMerge(collection.extensionFields.asJson).dropNullValues
     }
   }
 
