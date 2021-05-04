@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.2.3] - 2021-05-04
 ### Fixed
 - Encoders make deliberate choices about dropping or not dropping nulls [#302](https://github.com/azavea/stac4s/pull/302)
 
@@ -121,7 +123,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/azavea/stac4s/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/azavea/stac4s/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/azavea/stac4s/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/azavea/stac4s/compare/v0.1.1...v0.2.0
