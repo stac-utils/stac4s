@@ -7,7 +7,6 @@ import com.azavea.stac4s.jvmTypes.TemporalExtent
 import eu.timepit.refined.types.numeric.NonNegInt
 import geotrellis.vector.{io => _, _}
 import io.circe._
-import io.circe.generic.semiauto._
 import io.circe.refined._
 
 case class SearchFilters(
@@ -23,13 +22,13 @@ case class SearchFilters(
 
 object SearchFilters extends ClientCodecs {
 
-  implicit val searchFilterDecoder: Decoder[SearchFilters] = { c =>
+  implicit val searchFiltersDecoder: Decoder[SearchFilters] = { c =>
     for {
       bbox              <- c.downField("bbox").as[Option[Bbox]]
       datetime          <- c.downField("datetime").as[Option[TemporalExtent]]
       intersects        <- c.downField("intersects").as[Option[Geometry]]
       collectionsOption <- c.downField("collections").as[Option[List[String]]]
-      itemsOption       <- c.downField("items").as[Option[List[String]]]
+      itemsOption       <- c.downField("ids").as[Option[List[String]]]
       limit             <- c.downField("limit").as[Option[NonNegInt]]
       query             <- c.get[Option[Map[String, List[Query]]]]("query")
       paginationToken   <- c.get[Option[PaginationToken]]("next")
@@ -47,5 +46,25 @@ object SearchFilters extends ClientCodecs {
     }
   }
 
-  implicit val searchFilterEncoder: Encoder[SearchFilters] = deriveEncoder
+  implicit val searchFiltersEncoder: Encoder[SearchFilters] = Encoder.forProduct8(
+    "bbox",
+    "datetime",
+    "intersects",
+    "collections",
+    "ids",
+    "limit",
+    "query",
+    "next"
+  )(filters =>
+    (
+      filters.bbox,
+      filters.datetime,
+      filters.intersects,
+      filters.collections,
+      filters.items,
+      filters.limit,
+      filters.query,
+      filters.next
+    )
+  )
 }

@@ -6,9 +6,6 @@ import sttp.model.Uri
 
 object SttpStacClient {
 
-  def apply[F[_]: MonadError[*[_], Throwable]](
-      client: SttpBackend[F, Any],
-      baseUri: Uri
-  ): SttpStacClient[F] =
-    SttpStacClientF.instance[F, SearchFilters](client, baseUri)
+  def apply[F[_]: MonadError[*[_], Throwable]](client: SttpBackend[F, Any], baseUri: Uri): SttpStacClient[F] =
+    SttpStacClientF[F, SearchFilters](client, baseUri)
 }

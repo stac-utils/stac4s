@@ -13,18 +13,13 @@ import sttp.client3.circe.asJson
 import sttp.client3.{SttpBackend, basicRequest}
 import sttp.model.Uri
 
-abstract class SttpStacClientF[F[_]: MonadError[*[_], Throwable]](
+case class SttpStacClientF[F[_]: MonadError[*[_], Throwable], S: Encoder](
     client: SttpBackend[F, Any],
     baseUri: Uri
-) extends StacClient[F] {
-
-  type Filter
-
-  protected implicit def filterEncoder: Encoder[Filter]
-
+) extends StacClientF[F, S] {
   def search: F[List[StacItem]] = search(None)
 
-  def search(filter: Filter): F[List[StacItem]] = search(filter.asJson.some)
+  def search(filter: S): F[List[StacItem]] = search(filter.asJson.some)
 
   private def search(filter: Option[Json]): F[List[StacItem]] =
     client
@@ -90,16 +85,4 @@ abstract class SttpStacClientF[F[_]: MonadError[*[_], Throwable]](
       )
       .map(_.body)
       .flatMap(MonadError[F, Throwable].fromEither)
-}
-
-object SttpStacClientF {
-  type Aux[F[_], S] = SttpStacClientF[F] { type Filter = S }
-
-  def instance[F[_]: MonadError[*[_], Throwable], S](
-      client: SttpBackend[F, Any],
-      baseUri: Uri
-  )(implicit sencoder: Encoder[S]): Aux[F, S] = new SttpStacClientF[F](client, baseUri) {
-    type Filter = S
-    protected val filterEncoder: Encoder[Filter] = sencoder
-  }
 }

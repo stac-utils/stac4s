@@ -4,10 +4,9 @@ import com.azavea.stac4s._
 
 import eu.timepit.refined.types.string.NonEmptyString
 
-trait StacClient[F[_]] {
-  type Filter
+trait StacClientF[F[_], S] {
   def search: F[List[StacItem]]
-  def search(filter: Filter): F[List[StacItem]]
+  def search(filter: S): F[List[StacItem]]
   def collections: F[List[StacCollection]]
   def collection(collectionId: NonEmptyString): F[StacCollection]
   def items(collectionId: NonEmptyString): F[List[StacItem]]
