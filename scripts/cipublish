@@ -20,10 +20,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         echo "Publishing artifacts to Sonatype"
         if [[ -n "${CIRCLE_TAG}" ]]; then
             echo "Building with ${CIRCLE_TAG}"
-            ./sbt ";sonatypeOpen;publish;sonatypeRelease"
+            ./sbt "++$SCALA_VERSION" ";sonatypeOpen;publish;sonatypeRelease"
         else
             echo "Building untagged"
-            ./sbt publish
+            ./sbt "++$SCALA_VERSION" publish
         fi
     fi
 fi

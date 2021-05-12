@@ -1,4 +1,5 @@
 import xerial.sbt.Sonatype._
+import Dependencies._
 
 lazy val commonSettings = Seq(
   // We are overriding the default behavior of sbt-git which, by default, only
@@ -13,6 +14,7 @@ lazy val commonSettings = Seq(
       git.gitDescribedVersion.value.get
   },
   scalaVersion := "2.12.13",
+  crossScalaVersions := List("2.12.13", "2.13.5"),
   Global / cancelable := true,
   scalafmtOnCompile := true,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
@@ -100,20 +102,26 @@ lazy val credentialSettings = Seq(
   ).flatten
 )
 
-val jvmGeometryDependencies = Seq(
-  "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis
-)
+val jvmGeometryDependencies = Def.setting {
+  Seq(
+    "org.locationtech.jts" % "jts-core" % Versions.Jts,
+    geotrellis("vector").value
+  )
+}
 
-val coreDependenciesJVM = Seq(
-  "org.threeten" % "threeten-extra" % Versions.ThreeTenExtra
-) ++ jvmGeometryDependencies
+val coreDependenciesJVM = Def.setting {
+  Seq(
+    "org.threeten" % "threeten-extra" % Versions.ThreeTenExtra
+  ) ++ jvmGeometryDependencies.value
+}
 
-val testingDependenciesJVM = Seq(
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis,
-  "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
-  "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
-)
+val testingDependenciesJVM = Def.setting {
+  Seq(
+    geotrellis("vector").value,
+    "org.locationtech.jts" % "jts-core"       % Versions.Jts,
+    "org.threeten"         % "threeten-extra" % Versions.ThreeTenExtra
+  )
+}
 
 val testRunnerDependenciesJVM = Seq(
   "io.circe"          %% "circe-testing"   % Versions.Circe                   % Test,
@@ -149,7 +157,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel"              %%% "cats-kernel"      % Versions.Cats
     )
   })
-  .jvmSettings(libraryDependencies ++= coreDependenciesJVM)
+  .jvmSettings(libraryDependencies ++= coreDependenciesJVM.value)
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.2")
 
 lazy val coreJVM = core.jvm
@@ -173,7 +181,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel"     %%% "cats-core"             % Versions.Cats
     )
   )
-  .jvmSettings(libraryDependencies ++= testingDependenciesJVM)
+  .jvmSettings(libraryDependencies ++= testingDependenciesJVM.value)
   .jsSettings(
     libraryDependencies ++= Seq(
       "io.github.cquiroz" %%% "scala-java-time" % "2.2.2" % Test
@@ -228,7 +236,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.2.2")
-  .jvmSettings(libraryDependencies ++= jvmGeometryDependencies)
+  .jvmSettings(libraryDependencies ++= jvmGeometryDependencies.value)
 
 lazy val clientJVM = client.jvm
 lazy val clientJS  = client.js

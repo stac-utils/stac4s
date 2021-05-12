@@ -21,6 +21,7 @@ trait ClientCodecs {
       case Some(start) :: Some(end) :: _ if start == end => s"${start.toString}"
       case Some(start) :: None :: _                      => s"${start.toString}/.."
       case None :: Some(end) :: _                        => s"../${end.toString}"
+      case x                                             => throw new scala.MatchError(x)
     }
 
   private def temporalExtentFromString(str: String): Either[String, TemporalExtent] = {

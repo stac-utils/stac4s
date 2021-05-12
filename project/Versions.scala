@@ -1,3 +1,6 @@
+import sbt._
+import sbt.Keys._
+
 object Versions {
   val Cats                    = "2.6.0"
   val Circe                   = "0.13.0"
@@ -17,4 +20,19 @@ object Versions {
   val SttpModel               = "1.4.4"
   val SttpShared              = "1.2.2"
   val ThreeTenExtra           = "1.6.0"
+}
+
+object Dependencies {
+
+  private def ver(for212: String, for213: String) = Def.setting {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => for212
+      case Some((2, 13)) => for213
+      case _             => sys.error("not good")
+    }
+  }
+
+  def geotrellis(module: String) = Def.setting {
+    "org.locationtech.geotrellis" %% s"geotrellis-$module" % ver(Versions.GeoTrellis, "3.6.1-SNAPSHOT").value
+  }
 }
