@@ -30,6 +30,7 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
   checkAll("Codec.PeriodDuration", CodecTests[PeriodDuration].unserializableCodec)
   checkAll("Codec.PeriodicExtent", CodecTests[PeriodicExtent].unserializableCodec)
   checkAll("Codec.ItemDatetime", CodecTests[ItemDatetime].unserializableCodec)
+  checkAll("Codec.ItemProperties", CodecTests[ItemProperties].unserializableCodec)
 
   /** Ensure that the datetime field is present but null for time ranges
     *

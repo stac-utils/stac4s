@@ -25,6 +25,6 @@ object ItemExtension {
         )
 
       def addExtensionFields(item: StacItem, extensionProperties: T) =
-        item.copy(properties = item.properties.deepMerge(objectEncoder.encodeObject(extensionProperties)))
+        StacItem.propertiesExtension.modify(_.deepMerge(objectEncoder.encodeObject(extensionProperties)))(item)
     }
 }

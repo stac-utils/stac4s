@@ -135,16 +135,18 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= Seq(
-      "com.beachape"  %%% "enumeratum"       % Versions.Enumeratum,
-      "com.beachape"  %%% "enumeratum-circe" % Versions.Enumeratum,
-      "com.chuusai"   %%% "shapeless"        % Versions.Shapeless,
-      "eu.timepit"    %%% "refined"          % Versions.Refined,
-      "io.circe"      %%% "circe-core"       % Versions.Circe,
-      "io.circe"      %%% "circe-generic"    % Versions.Circe,
-      "io.circe"      %%% "circe-parser"     % Versions.Circe,
-      "io.circe"      %%% "circe-refined"    % Versions.Circe,
-      "org.typelevel" %%% "cats-core"        % Versions.Cats,
-      "org.typelevel" %%% "cats-kernel"      % Versions.Cats
+      "com.beachape"               %%% "enumeratum"       % Versions.Enumeratum,
+      "com.beachape"               %%% "enumeratum-circe" % Versions.Enumeratum,
+      "com.chuusai"                %%% "shapeless"        % Versions.Shapeless,
+      "com.github.julien-truffaut" %%% "monocle-core"     % Versions.Monocle,
+      "com.github.julien-truffaut" %%% "monocle-macro"    % Versions.Monocle,
+      "eu.timepit"                 %%% "refined"          % Versions.Refined,
+      "io.circe"                   %%% "circe-core"       % Versions.Circe,
+      "io.circe"                   %%% "circe-generic"    % Versions.Circe,
+      "io.circe"                   %%% "circe-parser"     % Versions.Circe,
+      "io.circe"                   %%% "circe-refined"    % Versions.Circe,
+      "org.typelevel"              %%% "cats-core"        % Versions.Cats,
+      "org.typelevel"              %%% "cats-kernel"      % Versions.Cats
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM)

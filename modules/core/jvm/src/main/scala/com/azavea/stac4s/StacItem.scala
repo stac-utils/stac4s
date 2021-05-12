@@ -5,6 +5,8 @@ import com.azavea.stac4s.meta._
 import cats.Eq
 import geotrellis.vector.Geometry
 import io.circe._
+import monocle.Lens
+import monocle.macros.GenLens
 
 final case class StacItem(
     id: String,
@@ -16,7 +18,7 @@ final case class StacItem(
     links: List[StacLink],
     assets: Map[String, StacAsset],
     collection: Option[String],
-    properties: JsonObject
+    properties: ItemProperties
 ) {
 
   val cogUri: Option[String] = assets
@@ -26,6 +28,8 @@ final case class StacItem(
 }
 
 object StacItem {
+
+  val propertiesExtension: Lens[StacItem, JsonObject] = GenLens[StacItem](_.properties.extensionFields)
 
   implicit val eqStacItem: Eq[StacItem] = Eq.fromUniversalEquals
 
@@ -79,7 +83,7 @@ object StacItem {
         links: List[StacLink],
         assets: Map[String, StacAsset],
         collection: Option[String],
-        properties: JsonObject
+        properties: ItemProperties
     ) => {
       StacItem(
         id,

@@ -1,12 +1,12 @@
 package com.azavea.stac4s
 
+import cats.kernel.Eq
 import cats.syntax.apply._
 import cats.syntax.functor._
-import io.circe.{Decoder, Encoder, HCursor}
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder, HCursor}
 
 import java.time.Instant
-import cats.kernel.Eq
 
 sealed abstract class ItemDatetime
 
