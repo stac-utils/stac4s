@@ -21,10 +21,10 @@ object ItemExtension {
 
       def getExtensionFields(item: StacItem): ExtensionResult[T] =
         decoder.decodeAccumulating(
-          item.properties.asJson.hcursor
+          item.properties.extensionFields.asJson.hcursor
         )
 
       def addExtensionFields(item: StacItem, extensionProperties: T) =
-        item.copy(properties = item.properties.deepMerge(objectEncoder.encodeObject(extensionProperties)))
+        StacItem.propertiesExtension.modify(_.deepMerge(objectEncoder.encodeObject(extensionProperties)))(item)
     }
 }
