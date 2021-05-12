@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Add Scala 2.13 cross compilation [#310](https://github.com/azavea/stac4s/pull/310)
 
 ## [0.4.0] - 2021-05-12
 ### Fixed

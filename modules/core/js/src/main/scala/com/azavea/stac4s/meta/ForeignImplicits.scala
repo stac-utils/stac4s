@@ -65,6 +65,7 @@ trait ForeignImplicits {
       case parts if parts.length < 2 =>
         val message = s"Too few elements for temporal extent: $parts"
         throw new ParsingFailure(message, new Exception(message))
+      case x => throw new scala.MatchError(x)
     }
   }
 
