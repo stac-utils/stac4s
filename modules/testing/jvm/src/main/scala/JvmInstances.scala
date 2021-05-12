@@ -9,6 +9,7 @@ import com.azavea.stac4s.{
   Bbox,
   Interval,
   ItemCollection,
+  ItemDatetime,
   SpatialExtent,
   StacAsset,
   StacCollection,
@@ -184,6 +185,14 @@ trait JvmInstances extends GenericInstances {
     PeriodicExtent.apply
   }
 
+  private def itemDateTimeGen: Gen[ItemDatetime] = Gen.oneOf[ItemDatetime](
+    instantGen map { ItemDatetime.PointInTime },
+    (instantGen, instantGen) mapN {
+      case (i1, i2) if i2.isAfter(i1) => ItemDatetime.TimeRange(i1, i2)
+      case (i1, i2)                   => ItemDatetime.TimeRange(i2, i1)
+    }
+  )
+
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
 
   val arbItemShort: Arbitrary[StacItem] = Arbitrary { stacItemShortGen }
@@ -228,6 +237,10 @@ trait JvmInstances extends GenericInstances {
 
   implicit val arbInterval: Arbitrary[Interval] = Arbitrary {
     intervalGen
+  }
+
+  implicit val arbItemDatetime: Arbitrary[ItemDatetime] = Arbitrary {
+    itemDateTimeGen
   }
 }
 
