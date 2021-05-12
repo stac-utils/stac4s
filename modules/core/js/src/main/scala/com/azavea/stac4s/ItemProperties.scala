@@ -12,18 +12,18 @@ import java.time.Instant
 
 case class ItemProperties(
     datetime: ItemDatetime,
-    title: Option[string.NonEmptyString],
-    description: Option[string.NonEmptyString],
-    created: Option[Instant],
-    updated: Option[Instant],
-    license: Option[StacLicense],
-    providers: Option[NonEmptyList[StacProvider]],
-    platform: Option[string.NonEmptyString],
-    instruments: Option[NonEmptyList[string.NonEmptyString]],
-    constellation: Option[string.NonEmptyString],
-    mission: Option[string.NonEmptyString],
-    gsd: Option[Double],
-    extensionFields: JsonObject
+    title: Option[string.NonEmptyString] = None,
+    description: Option[string.NonEmptyString] = None,
+    created: Option[Instant] = None,
+    updated: Option[Instant] = None,
+    license: Option[StacLicense] = None,
+    providers: Option[NonEmptyList[StacProvider]] = None,
+    platform: Option[string.NonEmptyString] = None,
+    instruments: Option[NonEmptyList[string.NonEmptyString]] = None,
+    constellation: Option[string.NonEmptyString] = None,
+    mission: Option[string.NonEmptyString] = None,
+    gsd: Option[Double] = None,
+    extensionFields: JsonObject = JsonObject.empty
 )
 
 object ItemProperties {
