@@ -4,8 +4,8 @@ import com.azavea.stac4s.geometry.Geometry
 
 import cats.Eq
 import io.circe._
-import monocle.{Lens, Optional}
 import monocle.macros.{GenLens, GenPrism}
+import monocle.{Lens, Optional}
 
 final case class StacItem(
     id: String,
