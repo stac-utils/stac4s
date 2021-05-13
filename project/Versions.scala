@@ -2,7 +2,7 @@ import sbt._
 import sbt.Keys._
 
 object Versions {
-  val Cats                    = "2.6.0"
+  val Cats                    = "2.6.1"
   val Circe                   = "0.13.0"
   val Enumeratum              = "1.6.1"
   val GeoTrellis              = "3.6.0"
