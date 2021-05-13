@@ -84,5 +84,19 @@ workflows:
               only:
                 - /^(v.*)$/
             branches:
+              only:
+                - master
+      - openjdk8-deploy:
+          matrix:
+            parameters:
+              scala-version: ["2.13.5"]
+          context: sonatype-azavea-signing-key
+          requires:
+            - openjdk8-build
+          filters:
+            tags:
               ignore:
                 - /^(.*)$/
+            branches:
+              only:
+                - master
