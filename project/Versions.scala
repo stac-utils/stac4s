@@ -12,7 +12,7 @@ object Versions {
   val ScalacheckCats          = "0.3.0"
   val Scalacheck              = "1.15.4"
   val ScalatestPlusScalacheck = "3.2.2.0"
-  val Scalatest               = "3.2.8"
+  val Scalatest               = "3.2.9"
   val Scapegoat               = "1.4.8"
   val Shapeless               = "2.3.6"
   val SpdxChecker             = "1.0.0"
