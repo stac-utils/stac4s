@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
       git.gitDescribedVersion.value.get
   },
   scalaVersion := "2.12.13",
-  crossScalaVersions := List("2.12.13", "2.13.5"),
+  crossScalaVersions := List("2.12.13", "2.13.6"),
   Global / cancelable := true,
   scalafmtOnCompile := true,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
