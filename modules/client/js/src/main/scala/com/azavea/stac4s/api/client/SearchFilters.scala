@@ -8,6 +8,8 @@ import com.azavea.stac4s.jsTypes.TemporalExtent
 import eu.timepit.refined.types.numeric.NonNegInt
 import io.circe._
 import io.circe.refined._
+import monocle.Lens
+import monocle.macros.GenLens
 
 case class SearchFilters(
     bbox: Option[Bbox] = None,
@@ -21,6 +23,7 @@ case class SearchFilters(
 )
 
 object SearchFilters extends ClientCodecs {
+  implicit val paginationTokenLens: Lens[SearchFilters, Option[PaginationToken]] = GenLens[SearchFilters](_.next)
 
   implicit val searchFiltersDecoder: Decoder[SearchFilters] = { c =>
     for {

@@ -209,6 +209,8 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
+      "com.github.julien-truffaut"    %%% "monocle-core"  % Versions.Monocle,
+      "com.github.julien-truffaut"    %%% "monocle-macro" % Versions.Monocle,
       "io.circe"                      %%% "circe-core"    % Versions.Circe,
       "io.circe"                      %%% "circe-generic" % Versions.Circe,
       "io.circe"                      %%% "circe-refined" % Versions.Circe,

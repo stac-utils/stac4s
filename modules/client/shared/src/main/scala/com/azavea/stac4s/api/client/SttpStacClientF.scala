@@ -6,23 +6,25 @@ import cats.MonadThrow
 import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.flatMap._
+import cats.syntax.functor._
 import cats.syntax.option._
 import eu.timepit.refined.types.string.NonEmptyString
 import fs2.Stream
-import io.circe
 import io.circe.syntax._
-import io.circe.{Encoder, Json}
+import io.circe.{Encoder, Error, Json, JsonObject}
+import monocle.Lens
 import sttp.client3.circe.asJson
 import sttp.client3.{ResponseException, SttpBackend, UriContext, basicRequest}
 import sttp.model.Uri
 
-case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
+case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]: Encoder](
     client: SttpBackend[F, Any],
     baseUri: Uri
 ) extends StreamingStacClientF[F, Stream[F, *], S] {
+  private val paginationTokenLens = implicitly[Lens[S, Option[PaginationToken]]]
 
-  /** Get the next page [[Uri]] from the received [[Json]] body. */
-  private def getNextLink(body: Either[ResponseException[String, circe.Error], Json]): F[Option[Uri]] =
+  /** Get the next page [[Uri]] from the retrieved [[Json]] body. */
+  private def getNextLink(body: Either[ResponseException[String, Error], Json]): F[Option[Uri]] =
     body
       .flatMap {
         _.hcursor
@@ -34,22 +36,27 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
 
   def search: Stream[F, StacItem] = search(None)
 
-  def search(filter: S): Stream[F, StacItem] = search(filter.asJson.some)
+  def search(filter: S): Stream[F, StacItem] = search(filter.some)
 
-  private def search(filter: Option[Json]): Stream[F, StacItem] =
+  private def search(filter: Option[S]): Stream[F, StacItem] = {
+    val emptyJson = JsonObject.empty.asJson
+    // the initial filter may contain the paginationToken that is used for the initial query
+    val initialBody = filter.map(_.asJson).getOrElse(emptyJson)
+    // the same filter would be used as a body for all pagination requests
+    val noPaginationBody = filter.map(paginationTokenLens.set(None)(_).asJson).getOrElse(emptyJson)
     Stream
-      .unfoldLoopEval(baseUri.withPath("search")) { link =>
+      .unfoldLoopEval((baseUri.withPath("search"), initialBody)) { case (link, request) =>
         client
-          .send(filter.fold(basicRequest)(f => basicRequest.body(f.asJson.noSpaces)).post(link).response(asJson[Json]))
+          .send(basicRequest.body(request.noSpaces).post(link).response(asJson[Json]))
           .flatMap { response =>
-            val body     = response.body
-            val items    = body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
-            val nextLink = getNextLink(body)
-
-            (items, nextLink).tupled
+            val body  = response.body
+            val items = body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
+            val next  = getNextLink(body).map(_.map(_ -> noPaginationBody))
+            (items, next).tupled
           }
       }
       .flatMap(Stream.emits)
+  }
 
   def collections: Stream[F, StacCollection] =
     Stream
