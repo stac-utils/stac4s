@@ -19,7 +19,7 @@ import sttp.model.Uri
 case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
     client: SttpBackend[F, Any],
     baseUri: Uri
-) extends StacClientF[F, S] {
+) extends StreamingStacClientF[F, Stream[F, *], S] {
 
   /** Get the next page [[Uri]] from the received [[Json]] body. */
   private def getNextLink(body: Either[ResponseException[String, circe.Error], Json]): F[Option[Uri]] =
