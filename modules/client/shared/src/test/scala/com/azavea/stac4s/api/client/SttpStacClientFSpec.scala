@@ -16,7 +16,7 @@ import sttp.client3.testing.SttpBackendStub
 import sttp.model.Method
 import sttp.monad.EitherMonad
 
-trait SttpStacClientFSpec[S] extends AnyFunSpec with Matchers with BeforeAndAfterAll {
+trait SttpStacClientFSpec[S] extends AnyFunSpec with Matchers with BeforeAndAfterAll with SttpEitherInstances {
 
   def arbCollectionShort: Arbitrary[StacCollection]
   def arbItemCollectionShort: Arbitrary[ItemCollection]
@@ -24,6 +24,7 @@ trait SttpStacClientFSpec[S] extends AnyFunSpec with Matchers with BeforeAndAfte
 
   def client: SttpStacClientF[Either[Throwable, *], S]
 
+  /** We use the default synchronous Either backend to use the same tests set for the Scala JS backend. */
   lazy val backend =
     SttpBackendStub(EitherMonad)
       .whenRequestMatches(_.uri.path == Seq("search"))
@@ -86,31 +87,37 @@ trait SttpStacClientFSpec[S] extends AnyFunSpec with Matchers with BeforeAndAfte
 
   describe("SttpStacClientSpec") {
     it("search") {
-      client.search
+      client.search.compile.toList
         .valueOr(throw _)
     }
 
     it("collections") {
-      client.collections
+      client.collections.compile.toList
         .valueOr(throw _)
+        .map(_.id should not be empty)
     }
 
     it("collection") {
       client
         .collection(NonEmptyString.unsafeFrom("collection_id"))
         .valueOr(throw _)
+        .id should not be empty
     }
 
     it("items") {
       client
         .items(NonEmptyString.unsafeFrom("collection_id"))
+        .compile
+        .toList
         .valueOr(throw _)
+        .map(_.id should not be empty)
     }
 
     it("item") {
       client
         .item(NonEmptyString.unsafeFrom("collection_id"), NonEmptyString.unsafeFrom("item_id"))
         .valueOr(throw _)
+        .id should not be empty
     }
 
     it("itemCreate") {

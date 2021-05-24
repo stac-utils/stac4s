@@ -1,5 +1,4 @@
 import xerial.sbt.Sonatype._
-import Dependencies._
 
 lazy val commonSettings = Seq(
   // We are overriding the default behavior of sbt-git which, by default, only
@@ -104,22 +103,20 @@ lazy val credentialSettings = Seq(
 
 val jvmGeometryDependencies = Def.setting {
   Seq(
-    "org.locationtech.jts" % "jts-core" % Versions.Jts,
-    geotrellis("vector").value
+    "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
+    "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis.value
   )
 }
 
 val coreDependenciesJVM = Def.setting {
-  Seq(
-    "org.threeten" % "threeten-extra" % Versions.ThreeTenExtra
-  ) ++ jvmGeometryDependencies.value
+  Seq("org.threeten" % "threeten-extra" % Versions.ThreeTenExtra) ++ jvmGeometryDependencies.value
 }
 
 val testingDependenciesJVM = Def.setting {
   Seq(
-    geotrellis("vector").value,
-    "org.locationtech.jts" % "jts-core"       % Versions.Jts,
-    "org.threeten"         % "threeten-extra" % Versions.ThreeTenExtra
+    "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis.value,
+    "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
+    "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
   )
 }
 
@@ -131,7 +128,7 @@ val testRunnerDependenciesJVM = Seq(
 
 lazy val root = project
   .in(file("."))
-  .settings(moduleName := "root")
+  .settings(name := "stac4s")
   .settings(commonSettings)
   .settings(publishSettings)
   .settings(noPublishSettings)
@@ -182,11 +179,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM.value)
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test
-    )
-  )
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -203,11 +196,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
       "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
     )
   )
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test
-    )
-  )
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
@@ -220,6 +209,8 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
+      "com.github.julien-truffaut"    %%% "monocle-core"  % Versions.Monocle,
+      "com.github.julien-truffaut"    %%% "monocle-macro" % Versions.Monocle,
       "io.circe"                      %%% "circe-core"    % Versions.Circe,
       "io.circe"                      %%% "circe-generic" % Versions.Circe,
       "io.circe"                      %%% "circe-refined" % Versions.Circe,
@@ -232,6 +223,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "com.softwaremill.sttp.client3" %%% "json-common"   % Versions.Sttp,
       "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
       "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
+      "co.fs2"                        %%% "fs2-core"      % Versions.Fs2,
       "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
