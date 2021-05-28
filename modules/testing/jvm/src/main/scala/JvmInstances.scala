@@ -43,8 +43,6 @@ import java.time.{Duration, Instant, Period}
 
 trait JvmInstances extends GenericInstances {
 
-  // this is parse + triple-quote instead of circe-literal json macro because
-  @nowarn
   private val schema: Json = json"""
   {
   "$$schema": "http://json-schema.org/draft-07/schema#",
