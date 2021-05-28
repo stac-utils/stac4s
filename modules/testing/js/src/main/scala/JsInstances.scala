@@ -90,7 +90,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
@@ -100,7 +100,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0")),
       Gen.const(Nil),
       Gen.listOfN[StacItem](2, stacItemGen),
       Gen.const(Nil),

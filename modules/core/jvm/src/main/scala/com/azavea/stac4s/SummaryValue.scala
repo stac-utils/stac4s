@@ -1,5 +1,6 @@
 package com.azavea.stac4s
 
+import cats.kernel.Eq
 import cats.syntax.all._
 import eu.timepit.refined.types.string
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -8,7 +9,6 @@ import io.circe.schema.Schema
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
 
 import scala.util.Try
-import cats.kernel.Eq
 
 sealed abstract class SummaryValue
 

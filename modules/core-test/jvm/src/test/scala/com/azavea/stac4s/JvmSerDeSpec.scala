@@ -2,7 +2,6 @@ package com.azavea.stac4s
 
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
-import com.azavea.stac4s.jvmTypes._
 import com.azavea.stac4s.meta._
 import com.azavea.stac4s.testing.JvmInstances._
 

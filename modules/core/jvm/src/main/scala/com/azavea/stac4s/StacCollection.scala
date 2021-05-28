@@ -4,10 +4,10 @@ import com.azavea.stac4s.types.CollectionType
 
 import cats.Eq
 import cats.syntax.apply._
+import eu.timepit.refined.types.string
 import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
-import eu.timepit.refined.types.string
 
 final case class StacCollection(
     _type: CollectionType,
