@@ -37,8 +37,6 @@ import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
 import org.threeten.extra.PeriodDuration
 
-import scala.annotation.nowarn
-
 import java.time.{Duration, Instant, Period}
 
 trait JvmInstances extends GenericInstances {
