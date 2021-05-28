@@ -3,7 +3,6 @@ package com.azavea.stac4s.testing
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.geometry.Geometry.{MultiPolygon, Point2d, Polygon}
 import com.azavea.stac4s.geometry._
-import com.azavea.stac4s.jsTypes.TemporalExtent
 import com.azavea.stac4s.types.CollectionType
 import com.azavea.stac4s.{
   Bbox,
@@ -18,7 +17,8 @@ import com.azavea.stac4s.{
   StacExtent,
   StacItem,
   StacLink,
-  StacVersion
+  StacVersion,
+  TemporalExtent
 }
 
 import cats.syntax.apply._

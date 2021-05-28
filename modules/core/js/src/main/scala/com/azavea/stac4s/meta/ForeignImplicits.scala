@@ -1,13 +1,9 @@
 package com.azavea.stac4s.meta
 
-import com.azavea.stac4s.jsTypes.TemporalExtent
-
 import cats.Eq
 import cats.syntax.either._
-import eu.timepit.refined.api.RefType
 import io.circe._
 import io.circe.parser.decode
-import io.circe.syntax._
 
 import scala.util.Try
 
@@ -44,11 +40,6 @@ trait ForeignImplicits {
         .fromTry(Try(OffsetDateTime.parse(s, RFC3339formatter).toInstant))
         .leftMap(_ => s"$s was not a valid string format")
     )
-
-  implicit val encodeTemporalExtent: Encoder[TemporalExtent] = _.value.map(x => x.asJson).asJson
-
-  implicit val decodeTemporalExtent =
-    Decoder.decodeList[Option[Instant]].emap { l => RefType.applyRef[TemporalExtent](l) }
 
   implicit val decTimeRange: Decoder[(Option[Instant], Option[Instant])] = Decoder[String] map { str =>
     val components = str.replace("[", "").replace("]", "").split(",") map {
