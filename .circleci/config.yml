@@ -64,7 +64,7 @@ workflows:
       - openjdk8-build:
           matrix:
             parameters:
-              scala-version: ["2.12.13", "2.13.5"]
+              scala-version: ["2.12.14", "2.13.5"]
           # required since openjdk8-deploy has tag filters AND requires
           # openjdk8
           # https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag
@@ -75,7 +75,7 @@ workflows:
       - openjdk8-deploy:
           matrix:
             parameters:
-              scala-version: ["2.12.13"]
+              scala-version: ["2.12.14"]
           context: sonatype-azavea-signing-key
           requires:
             - openjdk8-build
