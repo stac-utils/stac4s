@@ -109,7 +109,10 @@ val jvmGeometryDependencies = Def.setting {
 }
 
 val coreDependenciesJVM = Def.setting {
-  Seq("org.threeten" % "threeten-extra" % Versions.ThreeTenExtra) ++ jvmGeometryDependencies.value
+  Seq(
+    "org.threeten" % "threeten-extra"    % Versions.ThreeTenExtra,
+    "io.circe"    %% "circe-json-schema" % Versions.CirceJsonSchema
+  ) ++ jvmGeometryDependencies.value
 }
 
 val testingDependenciesJVM = Def.setting {

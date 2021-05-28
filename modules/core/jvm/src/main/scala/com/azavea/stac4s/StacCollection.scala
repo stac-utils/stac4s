@@ -19,7 +19,7 @@ final case class StacCollection(
     license: StacLicense,
     providers: List[StacProvider],
     extent: StacExtent,
-    summaries: JsonObject,
+    summaries: Map[String, SummaryValue],
     properties: JsonObject,
     links: List[StacLink],
     assets: Option[Map[String, StacAsset]],
