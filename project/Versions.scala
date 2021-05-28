@@ -12,7 +12,7 @@ object Versions {
   }
 
   val Cats                    = "2.6.1"
-  val Circe                   = "0.13.0"
+  val Circe                   = "0.14.1"
   val Enumeratum              = "1.6.1"
   val GeoTrellis              = Def.setting(ver("3.6.0", "3.6.1-SNAPSHOT").value)
   val Jts                     = "1.16.1"
