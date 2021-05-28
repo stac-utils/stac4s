@@ -177,6 +177,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit"        %%% "refined"               % Versions.Refined,
       "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCats,
       "io.circe"          %%% "circe-core"            % Versions.Circe,
+      "io.circe"          %%% "circe-literal"         % Versions.Circe,
       "org.scalacheck"    %%% "scalacheck"            % Versions.Scalacheck,
       "org.typelevel"     %%% "cats-core"             % Versions.Cats
     )

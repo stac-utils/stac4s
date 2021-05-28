@@ -8,6 +8,7 @@ import io.circe.schema.Schema
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
 
 import scala.util.Try
+import cats.kernel.Eq
 
 sealed abstract class SummaryValue
 
@@ -21,13 +22,15 @@ case class NumericRangeSummary(
     maximum: Double
 ) extends SummaryValue
 
-case class SchemaSummary private (
+case class SchemaSummary private[stac4s] (
     underlying: Json
 ) extends SummaryValue {
   val schema: Schema = Schema.load(underlying)
 }
 
 object SummaryValue {
+
+  implicit val eqSummaryValue: Eq[SummaryValue] = Eq.fromUniversalEquals
 
   val decStringRangeSummary: Decoder[StringRangeSummary] = deriveDecoder
   val encStringRangeSummary: Encoder[StringRangeSummary] = deriveEncoder
@@ -46,7 +49,7 @@ object SummaryValue {
       .map(_ => SchemaSummary(c.value))
   }
 
-  val encSchemaSummary: Encoder[SchemaSummary] = deriveEncoder
+  val encSchemaSummary: Encoder[SchemaSummary] = { _.underlying }
 
   // more horrible type inference 🙄, so had to annotate the first one
   implicit val decSummaryValue: Decoder[SummaryValue] =

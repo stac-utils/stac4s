@@ -7,6 +7,7 @@ import cats.syntax.apply._
 import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
+import eu.timepit.refined.types.string
 
 final case class StacCollection(
     _type: CollectionType,
@@ -19,7 +20,7 @@ final case class StacCollection(
     license: StacLicense,
     providers: List[StacProvider],
     extent: StacExtent,
-    summaries: Map[String, SummaryValue],
+    summaries: Map[string.NonEmptyString, SummaryValue],
     properties: JsonObject,
     links: List[StacLink],
     assets: Option[Map[String, StacAsset]],
@@ -81,7 +82,7 @@ object StacCollection {
       c.get[StacLicense]("license"),
       c.get[Option[List[StacProvider]]]("providers"),
       c.get[StacExtent]("extent"),
-      c.get[Option[JsonObject]]("summaries"),
+      c.get[Option[Map[string.NonEmptyString, SummaryValue]]]("summaries"),
       c.get[Option[JsonObject]]("properties"),
       c.get[List[StacLink]]("links"),
       c.get[Option[Map[String, StacAsset]]]("assets"),
@@ -98,7 +99,7 @@ object StacCollection {
           license: StacLicense,
           providers: Option[List[StacProvider]],
           extent: StacExtent,
-          summaries: Option[JsonObject],
+          summaries: Option[Map[string.NonEmptyString, SummaryValue]],
           properties: Option[JsonObject],
           links: List[StacLink],
           assets: Option[Map[String, StacAsset]],
@@ -115,7 +116,7 @@ object StacCollection {
           license,
           providers getOrElse List.empty,
           extent,
-          summaries getOrElse JsonObject.fromMap(Map.empty),
+          summaries getOrElse Map.empty,
           properties getOrElse JsonObject.fromMap(Map.empty),
           links,
           assets,
