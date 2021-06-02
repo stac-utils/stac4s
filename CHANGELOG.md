@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.5.0] - 2021-06-02
 ### Added
 - Add Scala 2.13 cross compilation [#310](https://github.com/azavea/stac4s/pull/310)
 - STAC Client pagination support [#327](https://github.com/azavea/stac4s/pull/327)
@@ -138,7 +140,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/azavea/stac4s/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/azavea/stac4s/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/azavea/stac4s/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/azavea/stac4s/compare/v0.2.2...v0.2.3
