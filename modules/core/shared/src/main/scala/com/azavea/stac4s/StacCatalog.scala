@@ -16,7 +16,6 @@ final case class StacCatalog(
     title: Option[String],
     description: String,
     links: List[StacLink],
-    summaries: JsonObject,
     extensionFields: JsonObject = ().asJsonObject
 )
 
@@ -28,15 +27,14 @@ object StacCatalog {
 
   implicit val encCatalog: Encoder[StacCatalog] = { catalog =>
     val baseEncoder: Encoder[StacCatalog] =
-      Encoder.forProduct8(
+      Encoder.forProduct7(
         "type",
         "stac_version",
         "stac_extensions",
         "id",
         "title",
         "description",
-        "links",
-        "summaries"
+        "links"
       )(catalog =>
         (
           catalog._type,
@@ -45,8 +43,7 @@ object StacCatalog {
           catalog.id,
           catalog.title,
           catalog.description,
-          catalog.links,
-          catalog.summaries
+          catalog.links
         )
       )
 
@@ -62,7 +59,6 @@ object StacCatalog {
       c.get[Option[String]]("title"),
       c.get[String]("description"),
       c.get[List[StacLink]]("links"),
-      c.get[Option[JsonObject]]("summaries"),
       c.value.as[JsonObject]
     ).mapN(
       (
@@ -73,7 +69,6 @@ object StacCatalog {
           title: Option[String],
           description: String,
           links: List[StacLink],
-          summaries: Option[JsonObject],
           document: JsonObject
       ) =>
         StacCatalog.apply(
@@ -84,7 +79,6 @@ object StacCatalog {
           title,
           description,
           links,
-          summaries getOrElse Map.empty[String, Json].asJsonObject,
           document.filter({ case (k, _) =>
             !catalogFields.contains(k)
           })

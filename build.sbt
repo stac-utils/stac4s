@@ -109,7 +109,10 @@ val jvmGeometryDependencies = Def.setting {
 }
 
 val coreDependenciesJVM = Def.setting {
-  Seq("org.threeten" % "threeten-extra" % Versions.ThreeTenExtra) ++ jvmGeometryDependencies.value
+  Seq(
+    "org.threeten" % "threeten-extra"    % Versions.ThreeTenExtra,
+    "io.circe"    %% "circe-json-schema" % Versions.CirceJsonSchema
+  ) ++ jvmGeometryDependencies.value
 }
 
 val testingDependenciesJVM = Def.setting {
@@ -174,6 +177,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit"        %%% "refined"               % Versions.Refined,
       "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCats,
       "io.circe"          %%% "circe-core"            % Versions.Circe,
+      "io.circe"          %%% "circe-literal"         % Versions.Circe,
       "org.scalacheck"    %%% "scalacheck"            % Versions.Scalacheck,
       "org.typelevel"     %%% "cats-core"             % Versions.Cats
     )
@@ -191,9 +195,10 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"          %%% "circe-testing"   % Versions.Circe                   % Test,
-      "org.scalatest"     %%% "scalatest"       % Versions.Scalatest               % Test,
-      "org.scalatestplus" %%% "scalacheck-1-14" % Versions.ScalatestPlusScalacheck % Test
+      "io.circe"          %%% "circe-testing"        % Versions.Circe                   % Test,
+      "org.scalatest"     %%% "scalatest"            % Versions.Scalatest               % Test,
+      "org.scalatestplus" %%% "scalacheck-1-14"      % Versions.ScalatestPlusScalacheck % Test,
+      "org.typelevel"     %%% "discipline-scalatest" % Versions.DisciplineScalatest     % Test
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)

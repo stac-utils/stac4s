@@ -1,12 +1,9 @@
 package com.azavea.stac4s
 
-import com.azavea.stac4s.jvmTypes._
-
 import cats.Eq
 import cats.syntax.apply._
 import io.circe._
 import io.circe.generic.semiauto._
-import io.circe.refined._
 import io.circe.syntax._
 
 final case class SpatialExtent(bbox: List[Bbox])

@@ -2,7 +2,6 @@ package com.azavea.stac4s.testing
 
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
-import com.azavea.stac4s.jvmTypes.TemporalExtent
 import com.azavea.stac4s.syntax._
 import com.azavea.stac4s.types.CollectionType
 import com.azavea.stac4s.{
@@ -11,21 +10,28 @@ import com.azavea.stac4s.{
   ItemCollection,
   ItemDatetime,
   ItemProperties,
+  NumericRangeSummary,
+  SchemaSummary,
   SpatialExtent,
   StacAsset,
   StacCollection,
   StacExtent,
   StacItem,
   StacLink,
-  StacVersion
+  StacVersion,
+  StringRangeSummary,
+  SummaryValue,
+  TemporalExtent
 }
 
 import cats.syntax.apply._
 import cats.syntax.functor._
 import eu.timepit.refined.scalacheck.GenericInstances
+import eu.timepit.refined.types.string
 import geotrellis.vector.{Geometry, Point, Polygon}
-import io.circe.JsonObject
+import io.circe.literal._
 import io.circe.syntax._
+import io.circe.{Json, JsonObject}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
@@ -34,6 +40,117 @@ import org.threeten.extra.PeriodDuration
 import java.time.{Duration, Instant, Period}
 
 trait JvmInstances extends GenericInstances {
+
+  private val schema: Json = json"""
+  {
+  "$$schema": "http://json-schema.org/draft-07/schema#",
+  "$$id": "https://schemas.stacspec.org/v1.0.0/catalog-spec/json-schema/catalog.json#",
+  "title": "STAC Catalog Specification",
+  "description": "This object represents Catalogs in a SpatioTemporal Asset Catalog.",
+  "allOf": [
+    {
+      "$$ref": "#/definitions/catalog"
+    }
+  ],
+  "definitions": {
+    "catalog": {
+      "title": "STAC Catalog",
+      "type": "object",
+      "required": [
+        "stac_version",
+        "type",
+        "id",
+        "description",
+        "links"
+      ],
+      "properties": {
+        "stac_version": {
+          "title": "STAC version",
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "stac_extensions": {
+          "title": "STAC extensions",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "title": "Reference to a JSON Schema",
+            "type": "string",
+            "format": "iri"
+          }
+        },
+        "type": {
+          "title": "Type of STAC entity",
+          "const": "Catalog"
+        },
+        "id": {
+          "title": "Identifier",
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "title": "Links",
+          "type": "array",
+          "items": {
+            "$$ref": "#/definitions/link"
+          }
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": [
+        "rel",
+        "href"
+      ],
+      "properties": {
+        "href": {
+          "title": "Link reference",
+          "type": "string",
+          "format": "iri-reference",
+          "minLength": 1
+        },
+        "rel": {
+          "title": "Link relation type",
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "title": "Link type",
+          "type": "string"
+        },
+        "title": {
+          "title": "Link title",
+          "type": "string"
+        }
+      }
+    }
+  }
+}"""
+
+  // generate way fewer schema summaries, since that's just a const
+  private[testing] def summaryValueGen: Gen[SummaryValue] = Gen.frequency(
+    (1, Gen.const(SchemaSummary(schema))),
+    (5, (TestInstances.finiteDoubleGen, TestInstances.finiteDoubleGen) mapN { NumericRangeSummary(_, _) }),
+    (
+      5,
+      (nonEmptyAlphaRefinedStringGen, nonEmptyAlphaRefinedStringGen) mapN {
+        StringRangeSummary(_, _)
+      }
+    )
+  )
+
+  private[testing] def summariesGen: Gen[Map[string.NonEmptyString, SummaryValue]] =
+    Gen.mapOfN(3, (nonEmptyAlphaRefinedStringGen, summaryValueGen).tupled)
 
   private[testing] def temporalExtentGen: Gen[TemporalExtent] = {
     (arbitrary[Instant], arbitrary[Instant]).tupled
@@ -81,7 +198,7 @@ trait JvmInstances extends GenericInstances {
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.listOf[StacLink](TestInstances.stacLinkGen),
@@ -91,7 +208,7 @@ trait JvmInstances extends GenericInstances {
   private[testing] def itemCollectionShortGen: Gen[ItemCollection] =
     (
       Gen.const("FeatureCollection"),
-      Gen.const(StacVersion.unsafeFrom("1.0.0-rc2")),
+      Gen.const(StacVersion.unsafeFrom("1.0.0")),
       Gen.const(Nil),
       Gen.listOf[StacItem](stacItemGen),
       Gen.const(Nil),
@@ -116,7 +233,7 @@ trait JvmInstances extends GenericInstances {
       TestInstances.stacLicenseGen,
       possiblyEmptyListGen(TestInstances.stacProviderGen),
       stacExtentGen,
-      Gen.const(().asJsonObject),
+      summariesGen,
       Gen.const(JsonObject.fromMap(Map.empty)),
       possiblyEmptyListGen(TestInstances.stacLinkGen),
       Gen.option(TestInstances.assetMapGen),
@@ -135,7 +252,7 @@ trait JvmInstances extends GenericInstances {
       TestInstances.stacLicenseGen,
       Gen.const(Nil),
       stacExtentGen,
-      Gen.const(().asJsonObject),
+      summariesGen,
       Gen.const(JsonObject.fromMap(Map.empty)),
       Gen.const(Nil),
       Gen.option(Gen.const(Map.empty[String, StacAsset])),
@@ -262,6 +379,10 @@ trait JvmInstances extends GenericInstances {
 
   implicit val arbItemProperties: Arbitrary[ItemProperties] = Arbitrary {
     itemPropertiesGen
+  }
+
+  implicit val arbSummaryValue: Arbitrary[SummaryValue] = Arbitrary {
+    summaryValueGen
   }
 }
 
