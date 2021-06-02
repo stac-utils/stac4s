@@ -1,6 +1,6 @@
 package com.azavea.stac4s.api.client.utils
 
-import com.azavea.stac4s.jvmTypes.TemporalExtent
+import com.azavea.stac4s.TemporalExtent
 
 import cats.syntax.apply._
 import cats.syntax.either._
@@ -16,12 +16,12 @@ trait ClientCodecs {
     Either.catchNonFatal(Instant.parse(s))
 
   private def temporalExtentToString(te: TemporalExtent): String =
-    te.value match {
-      case Some(start) :: Some(end) :: _ if start != end => s"${start.toString}/${end.toString}"
-      case Some(start) :: Some(end) :: _ if start == end => s"${start.toString}"
-      case Some(start) :: None :: _                      => s"${start.toString}/.."
-      case None :: Some(end) :: _                        => s"../${end.toString}"
-      case x                                             => throw new scala.MatchError(x)
+    te match {
+      case TemporalExtent(Some(start), Some(end)) if start != end => s"${start.toString}/${end.toString}"
+      case TemporalExtent(Some(start), Some(end)) if start == end => s"${start.toString}"
+      case TemporalExtent(Some(start), _)                         => s"${start.toString}/.."
+      case TemporalExtent(_, Some(end))                           => s"../${end.toString}"
+      case _                                                      => "../.."
     }
 
   private def temporalExtentFromString(str: String): Either[String, TemporalExtent] = {

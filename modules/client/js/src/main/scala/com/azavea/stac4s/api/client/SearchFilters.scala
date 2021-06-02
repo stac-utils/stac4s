@@ -1,9 +1,8 @@
 package com.azavea.stac4s.api.client
 
-import com.azavea.stac4s.Bbox
 import com.azavea.stac4s.api.client.utils.ClientCodecs
 import com.azavea.stac4s.geometry.Geometry
-import com.azavea.stac4s.jsTypes.TemporalExtent
+import com.azavea.stac4s.{Bbox, TemporalExtent}
 
 import eu.timepit.refined.types.numeric.NonNegInt
 import io.circe._
