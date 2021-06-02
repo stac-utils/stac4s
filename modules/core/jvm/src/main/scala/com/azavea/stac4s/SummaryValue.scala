@@ -22,11 +22,10 @@ case class NumericRangeSummary(
     maximum: Double
 ) extends SummaryValue
 
+// This constructor isn't exported because not all JSON is valid JSON Schema
 case class SchemaSummary private[stac4s] (
     underlying: Json
-) extends SummaryValue {
-  val schema: Schema = Schema.load(underlying)
-}
+) extends SummaryValue
 
 object SummaryValue {
 
