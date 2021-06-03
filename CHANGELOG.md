@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+- Add STACClient itemUpdate, itemPatch and itemDelete methods [#346](https://github.com/azavea/stac4s/pull/346)
+
 ## [0.5.0] - 2021-06-02
 ### Added
 - Add Scala 2.13 cross compilation [#310](https://github.com/azavea/stac4s/pull/310)

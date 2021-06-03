@@ -1,4 +1,4 @@
-package com.azavea.stac4s.api.client.utils
+package com.azavea.stac4s.api.client.util
 
 import com.azavea.stac4s.TemporalExtent
 

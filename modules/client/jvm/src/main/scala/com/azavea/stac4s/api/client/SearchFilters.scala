@@ -1,6 +1,6 @@
 package com.azavea.stac4s.api.client
 
-import com.azavea.stac4s.api.client.utils.ClientCodecs
+import com.azavea.stac4s.api.client.util.ClientCodecs
 import com.azavea.stac4s.{Bbox, TemporalExtent}
 
 import eu.timepit.refined.types.numeric.NonNegInt
