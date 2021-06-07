@@ -1,5 +1,6 @@
 package com.azavea.stac4s.api.client
 
+import com.azavea.stac4s.api.client.util.syntax._
 import com.azavea.stac4s.{StacCollection, StacItem, StacLink, StacLinkType}
 
 import cats.MonadThrow
@@ -7,32 +8,24 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import cats.syntax.nested._
 import cats.syntax.option._
 import eu.timepit.refined.types.string.NonEmptyString
 import fs2.Stream
 import io.circe.syntax._
-import io.circe.{Encoder, Error, Json, JsonObject}
+import io.circe.{Encoder, Json, JsonObject}
 import monocle.Lens
 import sttp.client3.circe.asJson
-import sttp.client3.{ResponseException, SttpBackend, UriContext, basicRequest}
+import sttp.client3.{Response, SttpBackend, UriContext, basicRequest}
 import sttp.model.Uri
 
 case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]: Encoder](
     client: SttpBackend[F, Any],
     baseUri: Uri
 ) extends StreamingStacClientF[F, Stream[F, *], S] {
-  private val paginationTokenLens = implicitly[Lens[S, Option[PaginationToken]]]
+  import SttpStacClientF._
 
-  /** Get the next page [[Uri]] from the retrieved [[Json]] body. */
-  private def getNextLink(body: Either[ResponseException[String, Error], Json]): F[Option[Uri]] =
-    body
-      .flatMap {
-        _.hcursor
-          .downField("links")
-          .as[Option[List[StacLink]]]
-          .map(_.flatMap(_.collectFirst { case l if l.rel == StacLinkType.Next => uri"${l.href}" }))
-      }
-      .liftTo[F]
+  private val paginationTokenLens = implicitly[Lens[S, Option[PaginationToken]]]
 
   def search: Stream[F, StacItem] = search(None)
 
@@ -49,9 +42,8 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
         client
           .send(basicRequest.body(request.noSpaces).post(link).response(asJson[Json]))
           .flatMap { response =>
-            val body  = response.body
-            val items = body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
-            val next  = getNextLink(body).map(_.map(_ -> noPaginationBody))
+            val items = response.stacItems
+            val next  = response.nextLink.nested.map(_ -> noPaginationBody).value
             (items, next).tupled
           }
       }
@@ -64,10 +56,8 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
         client
           .send(basicRequest.get(link).response(asJson[Json]))
           .flatMap { response =>
-            val body     = response.body
-            val items    = body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
-            val nextLink = getNextLink(body)
-
+            val items    = response.stacCollections
+            val nextLink = response.nextLink
             (items, nextLink).tupled
           }
       }
@@ -82,41 +72,6 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
       )
       .flatMap(_.body.liftTo[F])
 
-  def items(collectionId: NonEmptyString): Stream[F, StacItem] = {
-    Stream
-      .unfoldLoopEval(baseUri.withPath("collections", collectionId.value, "items")) { link =>
-        client
-          .send(basicRequest.get(link).response(asJson[Json]))
-          .flatMap { response =>
-            val body     = response.body
-            val items    = body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
-            val nextLink = getNextLink(body)
-
-            (items, nextLink).tupled
-          }
-      }
-      .flatMap(Stream.emits)
-  }
-
-  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[StacItem] =
-    client
-      .send(
-        basicRequest
-          .get(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
-          .response(asJson[StacItem])
-      )
-      .flatMap(_.body.liftTo[F])
-
-  def itemCreate(collectionId: NonEmptyString, item: StacItem): F[StacItem] =
-    client
-      .send(
-        basicRequest
-          .post(baseUri.withPath("collections", collectionId.value, "items"))
-          .body(item.asJson.noSpaces)
-          .response(asJson[StacItem])
-      )
-      .flatMap(_.body.liftTo[F])
-
   def collectionCreate(collection: StacCollection): F[StacCollection] =
     client
       .send(
@@ -126,4 +81,88 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
           .response(asJson[StacCollection])
       )
       .flatMap(_.body.liftTo[F])
+
+  def items(collectionId: NonEmptyString): Stream[F, StacItem] =
+    Stream
+      .unfoldLoopEval(baseUri.withPath("collections", collectionId.value, "items")) { link =>
+        client
+          .send(basicRequest.get(link).response(asJson[Json]))
+          .flatMap { response =>
+            val items    = response.stacItems
+            val nextLink = response.nextLink
+            (items, nextLink).tupled
+          }
+      }
+      .flatMap(Stream.emits)
+
+  def item(collectionId: NonEmptyString, itemId: NonEmptyString): F[ETag[StacItem]] =
+    client
+      .send(
+        basicRequest
+          .get(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
+          .response(asJson[StacItem])
+      )
+      .flatMap(_.bodyETag.liftTo[F])
+
+  def itemCreate(collectionId: NonEmptyString, item: StacItem): F[ETag[StacItem]] =
+    client
+      .send(
+        basicRequest
+          .post(baseUri.withPath("collections", collectionId.value, "items"))
+          .body(item.asJson.noSpaces)
+          .response(asJson[StacItem])
+      )
+      .flatMap(_.bodyETag.liftTo[F])
+
+  def itemUpdate(collectionId: NonEmptyString, item: ETag[StacItem]): F[ETag[StacItem]] =
+    client
+      .send(
+        basicRequest
+          .put(baseUri.withPath("collections", collectionId.value, "items", item.entity.id))
+          .headerIfMatch(item.tag)
+          .body(item.entity.asJson.noSpaces)
+          .response(asJson[StacItem])
+      )
+      .flatMap(_.bodyETag.liftTo[F])
+
+  def itemPatch(collectionId: NonEmptyString, itemId: NonEmptyString, patch: ETag[Json]): F[ETag[StacItem]] =
+    client
+      .send(
+        basicRequest
+          .patch(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
+          .headerIfMatch(patch.tag)
+          .body(patch.entity.noSpaces)
+          .response(asJson[StacItem])
+      )
+      .flatMap(_.bodyETag.liftTo[F])
+
+  def itemDelete(collectionId: NonEmptyString, itemId: NonEmptyString): F[Either[String, String]] =
+    client
+      .send(basicRequest.delete(baseUri.withPath("collections", collectionId.value, "items", itemId.value)))
+      .map(_.body)
+}
+
+object SttpStacClientF {
+
+  implicit class ResponseEitherJsonOps[E <: Exception](val self: Response[Either[E, Json]]) extends AnyVal {
+
+    /** Get the next page Uri from the retrieved Json body. */
+    def nextLink[F[_]: MonadThrow]: F[Option[Uri]] =
+      self.body
+        .flatMap {
+          _.hcursor
+            .downField("links")
+            .as[Option[List[StacLink]]]
+            .map(_.flatMap(_.collectFirst { case l if l.rel == StacLinkType.Next => uri"${l.href}" }))
+        }
+        .liftTo[F]
+
+    /** Decode List of StacItem from the retrieved Json body. */
+    def stacItems[F[_]: MonadThrow]: F[List[StacItem]] =
+      self.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
+
+    /** Decode List of StacCollections from the retrieved Json body. */
+    def stacCollections[F[_]: MonadThrow]: F[List[StacCollection]] =
+      self.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
+  }
 }
