@@ -14,6 +14,8 @@ jobs:
       scala-version:
         type: string
     executor: executor-openjdk8
+    environment:
+      SCALA_VERSION: << parameters.scala-version >>
     steps: 
       - checkout
       - restore_cache:
@@ -21,9 +23,7 @@ jobs:
             - sbt-cache-{{ checksum "project/Versions.scala" }}
       - run:
           name: Executing cibuild
-          command: |
-            export SCALA_VERSION=<< parameters.scala-version >>
-            ./scripts/test
+          command: ./scripts/test
       - store_test_results:
           path: modules/core-test/jvm/target/test-reports
       - store_test_results:
@@ -40,6 +40,8 @@ jobs:
       scala-version:
         type: string
     executor: executor-openjdk8
+    environment:
+      SCALA_VERSION: << parameters.scala-version >>
     steps: 
       - checkout
       - restore_cache:
@@ -54,9 +56,7 @@ jobs:
             gpg --import signing_key.asc
       - run:
           name: Executing cipublish
-          command: |
-            export SCALA_VERSION=<< parameters.scala-version >>
-            ./scripts/cipublish
+          command: ./scripts/cipublish
 
 workflows:
   build:
