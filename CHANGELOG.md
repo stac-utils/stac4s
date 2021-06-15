@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Add STACClient itemUpdate, itemPatch and itemDelete methods [#346](https://github.com/azavea/stac4s/pull/346)
+- Replace withPath with addPath to allow paths in the STAC API URI [#351](https://github.com/azavea/stac4s/pull/351)
 
 ## [0.5.0] - 2021-06-02
 ### Added
