@@ -38,7 +38,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     // the same filter would be used as a body for all pagination requests
     val noPaginationBody = filter.map(paginationTokenLens.set(None)(_).asJson).getOrElse(emptyJson)
     Stream
-      .unfoldLoopEval((baseUri.withPath("search"), initialBody)) { case (link, request) =>
+      .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
         client
           .send(basicRequest.body(request.noSpaces).post(link).response(asJson[Json]))
           .flatMap { response =>
@@ -52,7 +52,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
 
   def collections: Stream[F, StacCollection] =
     Stream
-      .unfoldLoopEval(baseUri.withPath("collections")) { link =>
+      .unfoldLoopEval(baseUri.addPath("collections")) { link =>
         client
           .send(basicRequest.get(link).response(asJson[Json]))
           .flatMap { response =>
@@ -67,7 +67,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .get(baseUri.withPath("collections", collectionId.value))
+          .get(baseUri.addPath("collections", collectionId.value))
           .response(asJson[StacCollection])
       )
       .flatMap(_.body.liftTo[F])
@@ -76,7 +76,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .post(baseUri.withPath("collections"))
+          .post(baseUri.addPath("collections"))
           .body(collection.asJson.noSpaces)
           .response(asJson[StacCollection])
       )
@@ -84,7 +84,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
 
   def items(collectionId: NonEmptyString): Stream[F, StacItem] =
     Stream
-      .unfoldLoopEval(baseUri.withPath("collections", collectionId.value, "items")) { link =>
+      .unfoldLoopEval(baseUri.addPath("collections", collectionId.value, "items")) { link =>
         client
           .send(basicRequest.get(link).response(asJson[Json]))
           .flatMap { response =>
@@ -99,7 +99,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .get(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
+          .get(baseUri.addPath("collections", collectionId.value, "items", itemId.value))
           .response(asJson[StacItem])
       )
       .flatMap(_.bodyETag.liftTo[F])
@@ -108,7 +108,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .post(baseUri.withPath("collections", collectionId.value, "items"))
+          .post(baseUri.addPath("collections", collectionId.value, "items"))
           .body(item.asJson.noSpaces)
           .response(asJson[StacItem])
       )
@@ -118,7 +118,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .put(baseUri.withPath("collections", collectionId.value, "items", item.entity.id))
+          .put(baseUri.addPath("collections", collectionId.value, "items", item.entity.id))
           .headerIfMatch(item.tag)
           .body(item.entity.asJson.noSpaces)
           .response(asJson[StacItem])
@@ -129,7 +129,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     client
       .send(
         basicRequest
-          .patch(baseUri.withPath("collections", collectionId.value, "items", itemId.value))
+          .patch(baseUri.addPath("collections", collectionId.value, "items", itemId.value))
           .headerIfMatch(patch.tag)
           .body(patch.entity.noSpaces)
           .response(asJson[StacItem])
@@ -138,7 +138,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
 
   def itemDelete(collectionId: NonEmptyString, itemId: NonEmptyString): F[Either[String, String]] =
     client
-      .send(basicRequest.delete(baseUri.withPath("collections", collectionId.value, "items", itemId.value)))
+      .send(basicRequest.delete(baseUri.addPath("collections", collectionId.value, "items", itemId.value)))
       .map(_.body)
 }
 
