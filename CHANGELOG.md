@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2021-07-01
 ### Added
 - Add STACClient itemUpdate, itemPatch and itemDelete methods [#346](https://github.com/azavea/stac4s/pull/346)
 
