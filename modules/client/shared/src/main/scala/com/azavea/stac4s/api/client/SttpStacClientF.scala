@@ -17,7 +17,7 @@ import io.circe.{Encoder, Json, JsonObject}
 import monocle.Lens
 import sttp.client3.circe.asJson
 import sttp.client3.{Response, SttpBackend, UriContext, basicRequest}
-import sttp.model.Uri
+import sttp.model.{MediaType, Uri}
 
 case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]: Encoder](
     client: SttpBackend[F, Any],
@@ -40,7 +40,13 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     Stream
       .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
         client
-          .send(basicRequest.body(request.noSpaces).post(link).response(asJson[Json]))
+          .send(
+            basicRequest
+              .post(link)
+              .contentType(MediaType.ApplicationJson)
+              .body(request.noSpaces)
+              .response(asJson[Json])
+          )
           .flatMap { response =>
             val items = response.stacItems
             val next  = response.nextLink.nested.map(_ -> noPaginationBody).value
@@ -77,6 +83,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
       .send(
         basicRequest
           .post(baseUri.addPath("collections"))
+          .contentType(MediaType.ApplicationJson)
           .body(collection.asJson.noSpaces)
           .response(asJson[StacCollection])
       )
@@ -109,6 +116,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
       .send(
         basicRequest
           .post(baseUri.addPath("collections", collectionId.value, "items"))
+          .contentType(MediaType.ApplicationJson)
           .body(item.asJson.noSpaces)
           .response(asJson[StacItem])
       )
