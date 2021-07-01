@@ -14,10 +14,10 @@ case class SearchFilters(
     bbox: Option[Bbox] = None,
     datetime: Option[TemporalExtent] = None,
     intersects: Option[Geometry] = None,
-    collections: List[String] = Nil,
-    items: List[String] = Nil,
+    collections: Option[List[String]] = None,
+    items: Option[List[String]] = None,
     limit: Option[NonNegInt] = None,
-    query: Map[String, List[Query]] = Map.empty,
+    query: Option[Map[String, List[Query]]] = None,
     next: Option[PaginationToken] = None
 )
 
@@ -39,10 +39,10 @@ object SearchFilters extends ClientCodecs {
         bbox,
         datetime,
         intersects,
-        collectionsOption.getOrElse(Nil),
-        itemsOption.getOrElse(Nil),
+        collectionsOption,
+        itemsOption,
         limit,
-        query getOrElse Map.empty,
+        query,
         paginationToken
       )
     }
