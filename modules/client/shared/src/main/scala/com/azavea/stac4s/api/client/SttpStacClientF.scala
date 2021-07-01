@@ -84,7 +84,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
         basicRequest
           .post(baseUri.addPath("collections"))
           .contentType(MediaType.ApplicationJson)
-          .body(collection.asJson.deepDropNullValues.noSpaces)
+          .body(collection.asJson.noSpaces)
           .response(asJson[StacCollection])
       )
       .flatMap(_.body.liftTo[F])
@@ -117,7 +117,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
         basicRequest
           .post(baseUri.addPath("collections", collectionId.value, "items"))
           .contentType(MediaType.ApplicationJson)
-          .body(item.asJson.deepDropNullValues.noSpaces)
+          .body(item.asJson.noSpaces)
           .response(asJson[StacItem])
       )
       .flatMap(_.bodyETag.liftTo[F])
