@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Changed
+- Add a correct content type to POST requests and SearchFilters adjustments [#359](https://github.com/azavea/stac4s/pull/359)
 
 ## [0.6.0] - 2021-07-01
 ### Added

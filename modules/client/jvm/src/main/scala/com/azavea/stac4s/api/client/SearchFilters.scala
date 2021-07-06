@@ -3,6 +3,7 @@ package com.azavea.stac4s.api.client
 import com.azavea.stac4s.api.client.util.ClientCodecs
 import com.azavea.stac4s.{Bbox, TemporalExtent}
 
+import cats.syntax.option._
 import eu.timepit.refined.types.numeric.NonNegInt
 import geotrellis.vector.{io => _, _}
 import io.circe._
@@ -39,8 +40,8 @@ object SearchFilters extends ClientCodecs {
         bbox,
         datetime,
         intersects,
-        collectionsOption.getOrElse(Nil),
-        itemsOption.getOrElse(Nil),
+        collectionsOption getOrElse Nil,
+        itemsOption getOrElse Nil,
         limit,
         query getOrElse Map.empty,
         paginationToken
@@ -62,10 +63,10 @@ object SearchFilters extends ClientCodecs {
       filters.bbox,
       filters.datetime,
       filters.intersects,
-      filters.collections,
-      filters.items,
+      filters.collections.some.filter(_.nonEmpty),
+      filters.items.some.filter(_.nonEmpty),
       filters.limit,
-      filters.query,
+      filters.query.some.filter(_.nonEmpty),
       filters.next
     )
   )
