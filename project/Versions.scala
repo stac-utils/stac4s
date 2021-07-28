@@ -19,7 +19,7 @@ object Versions {
   val GeoTrellis              = Def.setting(ver("3.6.0", "3.6.1-SNAPSHOT").value)
   val Jts                     = "1.16.1"
   val Monocle                 = "2.1.0"
-  val Refined                 = "0.9.26"
+  val Refined                 = "0.9.27"
   val ScalacheckCats          = "0.3.0"
   val Scalacheck              = "1.15.4"
   val ScalatestPlusScalacheck = "3.2.2.0"
