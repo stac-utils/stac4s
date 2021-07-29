@@ -127,7 +127,10 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   }
 
   test("Assets accumulate errors") {
-    accumulatingDecodeTest[StacAsset]
+    // StacAssets actually only have one required field, so an empty json object only
+    // decodes with one error even with accumulation
+    decodeAccumulating[StacAsset]("""{"href": 1234, "title": 1234}""")
+      .fold(errs => errs.size shouldBe 2, _ => fail("Decoding should not have succeeded"))
   }
 
   test("Extents accumulate errors") {
