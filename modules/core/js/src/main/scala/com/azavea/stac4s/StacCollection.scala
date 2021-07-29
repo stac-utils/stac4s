@@ -4,6 +4,7 @@ import com.azavea.stac4s.types.CollectionType
 
 import cats.Eq
 import cats.syntax.apply._
+import cats.syntax.either._
 import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
@@ -69,23 +70,24 @@ object StacCollection {
     baseEncoder(collection).deepMerge(collection.extensionFields.asJson).dropNullValues
   }
 
-  implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>
-    (
-      c.get[CollectionType]("type"),
-      c.get[String]("stac_version"),
-      c.get[Option[List[String]]]("stac_extensions"),
-      c.get[String]("id"),
-      c.get[Option[String]]("title"),
-      c.get[String]("description"),
-      c.get[Option[List[String]]]("keywords"),
-      c.get[StacLicense]("license"),
-      c.get[Option[List[StacProvider]]]("providers"),
-      c.get[StacExtent]("extent"),
-      c.get[Option[JsonObject]]("summaries"),
-      c.get[Option[JsonObject]]("properties"),
-      c.get[List[StacLink]]("links"),
-      c.get[Option[Map[String, StacAsset]]]("assets"),
-      c.value.as[JsonObject]
+  implicit val decoderStacCollection: Decoder[StacCollection] = new Decoder[StacCollection] {
+
+    override def decodeAccumulating(c: HCursor) = (
+      c.get[CollectionType]("type").toValidatedNel,
+      c.get[String]("stac_version").toValidatedNel,
+      c.get[Option[List[String]]]("stac_extensions").toValidatedNel,
+      c.get[String]("id").toValidatedNel,
+      c.get[Option[String]]("title").toValidatedNel,
+      c.get[String]("description").toValidatedNel,
+      c.get[Option[List[String]]]("keywords").toValidatedNel,
+      c.get[StacLicense]("license").toValidatedNel,
+      c.get[Option[List[StacProvider]]]("providers").toValidatedNel,
+      c.get[StacExtent]("extent").toValidatedNel,
+      c.get[Option[JsonObject]]("summaries").toValidatedNel,
+      c.get[Option[JsonObject]]("properties").toValidatedNel,
+      c.get[List[StacLink]]("links").toValidatedNel,
+      c.get[Option[Map[String, StacAsset]]]("assets").toValidatedNel,
+      c.value.as[JsonObject].toValidatedNel
     ).mapN(
       (
           _type: CollectionType,
@@ -124,5 +126,7 @@ object StacCollection {
           })
         )
     )
+
+    def apply(c: HCursor) = decodeAccumulating(c).toEither.leftMap(_.head)
   }
 }

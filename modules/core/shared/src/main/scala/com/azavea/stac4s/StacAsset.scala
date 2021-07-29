@@ -2,6 +2,7 @@ package com.azavea.stac4s
 
 import cats.Eq
 import cats.syntax.apply._
+import cats.syntax.either._
 import io.circe._
 import io.circe.syntax._
 
@@ -27,14 +28,15 @@ object StacAsset {
     baseEncoder(asset).deepMerge(asset.extensionFields.asJson).dropNullValues
   }
 
-  implicit val decStacAsset: Decoder[StacAsset] = { c: HCursor =>
-    (
-      c.get[String]("href"),
-      c.get[Option[String]]("title"),
-      c.get[Option[String]]("description"),
-      c.get[Option[Set[StacAssetRole]]]("roles"),
-      c.get[Option[StacMediaType]]("type"),
-      c.value.as[JsonObject]
+  implicit val decStacAsset: Decoder[StacAsset] = new Decoder[StacAsset] {
+
+    override def decodeAccumulating(c: HCursor) = (
+      c.get[String]("href").toValidatedNel,
+      c.get[Option[String]]("title").toValidatedNel,
+      c.get[Option[String]]("description").toValidatedNel,
+      c.get[Option[Set[StacAssetRole]]]("roles").toValidatedNel,
+      c.get[Option[StacMediaType]]("type").toValidatedNel,
+      c.value.as[JsonObject].toValidatedNel
     ).mapN(
       (
           href: String,
@@ -55,5 +57,7 @@ object StacAsset {
           })
         )
     )
+
+    def apply(c: HCursor) = decodeAccumulating(c).toEither.leftMap(_.head)
   }
 }

@@ -4,6 +4,7 @@ import com.azavea.stac4s.types.CatalogType
 
 import cats.Eq
 import cats.syntax.apply._
+import cats.syntax.either._
 import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
@@ -50,39 +51,44 @@ object StacCatalog {
     baseEncoder(catalog).deepMerge(catalog.extensionFields.asJson).dropNullValues
   }
 
-  implicit val decCatalog: Decoder[StacCatalog] = { c: HCursor =>
-    (
-      c.get[CatalogType]("type"),
-      c.get[String]("stac_version"),
-      c.get[Option[List[String]]]("stac_extensions"),
-      c.get[String]("id"),
-      c.get[Option[String]]("title"),
-      c.get[String]("description"),
-      c.get[List[StacLink]]("links"),
-      c.value.as[JsonObject]
-    ).mapN(
+  implicit val decCatalog: Decoder[StacCatalog] = new Decoder[StacCatalog] {
+
+    override def decodeAccumulating(c: HCursor) = {
       (
-          catalogType: CatalogType,
-          version: String,
-          extensions: Option[List[String]],
-          id: String,
-          title: Option[String],
-          description: String,
-          links: List[StacLink],
-          document: JsonObject
-      ) =>
-        StacCatalog.apply(
-          catalogType,
-          version,
-          extensions getOrElse Nil,
-          id,
-          title,
-          description,
-          links,
-          document.filter({ case (k, _) =>
-            !catalogFields.contains(k)
-          })
-        )
-    )
+        c.get[CatalogType]("type").toValidatedNel,
+        c.get[String]("stac_version").toValidatedNel,
+        c.get[Option[List[String]]]("stac_extensions").toValidatedNel,
+        c.get[String]("id").toValidatedNel,
+        c.get[Option[String]]("title").toValidatedNel,
+        c.get[String]("description").toValidatedNel,
+        c.get[List[StacLink]]("links").toValidatedNel,
+        c.value.as[JsonObject].toValidatedNel
+      ).mapN(
+        (
+            catalogType: CatalogType,
+            version: String,
+            extensions: Option[List[String]],
+            id: String,
+            title: Option[String],
+            description: String,
+            links: List[StacLink],
+            document: JsonObject
+        ) =>
+          StacCatalog.apply(
+            catalogType,
+            version,
+            extensions getOrElse Nil,
+            id,
+            title,
+            description,
+            links,
+            document.filter({ case (k, _) =>
+              !catalogFields.contains(k)
+            })
+          )
+      )
+    }
+
+    def apply(c: HCursor) = decodeAccumulating(c).toEither.leftMap(_.head)
   }
 }

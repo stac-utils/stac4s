@@ -4,6 +4,7 @@ import com.azavea.stac4s.types.CollectionType
 
 import cats.Eq
 import cats.syntax.apply._
+import cats.syntax.either._
 import eu.timepit.refined.types.string
 import io.circe._
 import io.circe.refined._
@@ -70,60 +71,65 @@ object StacCollection {
     baseEncoder(collection).deepMerge(collection.extensionFields.asJson).dropNullValues
   }
 
-  implicit val decoderStacCollection: Decoder[StacCollection] = { c: HCursor =>
-    (
-      c.get[CollectionType]("type"),
-      c.get[String]("stac_version"),
-      c.get[Option[List[String]]]("stac_extensions"),
-      c.get[String]("id"),
-      c.get[Option[String]]("title"),
-      c.get[String]("description"),
-      c.get[Option[List[String]]]("keywords"),
-      c.get[StacLicense]("license"),
-      c.get[Option[List[StacProvider]]]("providers"),
-      c.get[StacExtent]("extent"),
-      c.get[Option[Map[string.NonEmptyString, SummaryValue]]]("summaries"),
-      c.get[Option[JsonObject]]("properties"),
-      c.get[List[StacLink]]("links"),
-      c.get[Option[Map[String, StacAsset]]]("assets"),
-      c.value.as[JsonObject]
-    ).mapN(
+  implicit val decoderStacCollection: Decoder[StacCollection] = new Decoder[StacCollection] {
+
+    override def decodeAccumulating(c: HCursor) = {
       (
-          _type: CollectionType,
-          stacVersion: String,
-          stacExtensions: Option[List[String]],
-          id: String,
-          title: Option[String],
-          description: String,
-          keywords: Option[List[String]],
-          license: StacLicense,
-          providers: Option[List[StacProvider]],
-          extent: StacExtent,
-          summaries: Option[Map[string.NonEmptyString, SummaryValue]],
-          properties: Option[JsonObject],
-          links: List[StacLink],
-          assets: Option[Map[String, StacAsset]],
-          extensionFields: JsonObject
-      ) =>
-        StacCollection(
-          _type,
-          stacVersion,
-          stacExtensions getOrElse Nil,
-          id,
-          title,
-          description,
-          keywords getOrElse List.empty,
-          license,
-          providers getOrElse List.empty,
-          extent,
-          summaries getOrElse Map.empty,
-          properties getOrElse JsonObject.fromMap(Map.empty),
-          links,
-          assets,
-          extensionFields.filter({ case (k, _) =>
-            !collectionFields.contains(k)
-          })
-        )
-    )
+        c.get[CollectionType]("type").toValidatedNel,
+        c.get[String]("stac_version").toValidatedNel,
+        c.get[Option[List[String]]]("stac_extensions").toValidatedNel,
+        c.get[String]("id").toValidatedNel,
+        c.get[Option[String]]("title").toValidatedNel,
+        c.get[String]("description").toValidatedNel,
+        c.get[Option[List[String]]]("keywords").toValidatedNel,
+        c.get[StacLicense]("license").toValidatedNel,
+        c.get[Option[List[StacProvider]]]("providers").toValidatedNel,
+        c.get[StacExtent]("extent").toValidatedNel,
+        c.get[Option[Map[string.NonEmptyString, SummaryValue]]]("summaries").toValidatedNel,
+        c.get[Option[JsonObject]]("properties").toValidatedNel,
+        c.get[List[StacLink]]("links").toValidatedNel,
+        c.get[Option[Map[String, StacAsset]]]("assets").toValidatedNel,
+        c.value.as[JsonObject].toValidatedNel
+      ).mapN(
+        (
+            _type: CollectionType,
+            stacVersion: String,
+            stacExtensions: Option[List[String]],
+            id: String,
+            title: Option[String],
+            description: String,
+            keywords: Option[List[String]],
+            license: StacLicense,
+            providers: Option[List[StacProvider]],
+            extent: StacExtent,
+            summaries: Option[Map[string.NonEmptyString, SummaryValue]],
+            properties: Option[JsonObject],
+            links: List[StacLink],
+            assets: Option[Map[String, StacAsset]],
+            extensionFields: JsonObject
+        ) =>
+          StacCollection(
+            _type,
+            stacVersion,
+            stacExtensions getOrElse Nil,
+            id,
+            title,
+            description,
+            keywords getOrElse List.empty,
+            license,
+            providers getOrElse List.empty,
+            extent,
+            summaries getOrElse Map.empty,
+            properties getOrElse JsonObject.fromMap(Map.empty),
+            links,
+            assets,
+            extensionFields.filter({ case (k, _) =>
+              !collectionFields.contains(k)
+            })
+          )
+      )
+    }
+
+    def apply(c: HCursor) = decodeAccumulating(c).toEither.leftMap(_.head)
   }
 }
