@@ -29,6 +29,6 @@ object Versions {
   val Sttp                    = "3.3.13"
   val SttpModel               = "1.4.10"
   val SttpShared              = "1.2.6"
-  val Fs2                     = "2.5.9"
+  val Fs2                     = "3.1.1"
   val ThreeTenExtra           = "1.7.0"
 }
