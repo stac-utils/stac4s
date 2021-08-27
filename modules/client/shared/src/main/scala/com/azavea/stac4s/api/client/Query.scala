@@ -7,7 +7,8 @@ import io.circe._
 import io.circe.refined._
 import io.circe.syntax._
 
-/** https://github.com/azavea/franklin/blob/286c5c755585cf743eae5bd176609d8c125ad2b9/application/src/main/scala/com/azavea/franklin/datamodel/Query.scala */
+/** https://github.com/azavea/franklin/blob/286c5c755585cf743eae5bd176609d8c125ad2b9/application/src/main/scala/com/azavea/franklin/datamodel/Query.scala
+  */
 sealed abstract class Query
 
 case class Equals(value: Json)                    extends Query
