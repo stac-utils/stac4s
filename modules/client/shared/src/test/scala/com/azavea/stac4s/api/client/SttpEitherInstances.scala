@@ -4,8 +4,8 @@ import cats.effect.{ExitCase, Sync}
 
 trait SttpEitherInstances {
 
-  /** [[Sync]] instance defined for Either[Throwable, *].
-    * It is required (sadly) to derive [[fs2.Stream.Compiler]] which is necessary for the [[fs2.Stream.compile]] function.
+  /** [[Sync]] instance defined for Either[Throwable, *]. It is required (sadly) to derive [[fs2.Stream.Compiler]] which
+    * is necessary for the [[fs2.Stream.compile]] function.
     */
   implicit val eitherSync: Sync[Either[Throwable, *]] = new Sync[Either[Throwable, *]] {
     lazy val me = cats.instances.either.catsStdInstancesForEither[Throwable]

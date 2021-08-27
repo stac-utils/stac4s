@@ -1,16 +1,12 @@
-/** This file contains a list of SPDX ids generated from data files available
-  * in https://github.com/spdx/license-list-data/tree/master/json.
-  * To repeat the exercise if we are told we're missing a license in the future,
-  * these are the steps:
+/** This file contains a list of SPDX ids generated from data files available in
+  * https://github.com/spdx/license-list-data/tree/master/json. To repeat the exercise if we are told we're missing a
+  * license in the future, these are the steps:
   *
-  * 1. read the json
-  * 2. for each id in the list, turn it into a case object wrapped in back ticks
-  *    that extends SpdxId
-  * 3. replace the current list with your new list
+  *   1. read the json 2. for each id in the list, turn it into a case object wrapped in back ticks that extends SpdxId
+  *      3. replace the current list with your new list
   *
-  * This process _could be automated_ but it's unclear whether that's worth the
-  * software development effort. It takes about twenty minutes and we can do
-  * it on demand until that becomes a problem.
+  * This process _could be automated_ but it's unclear whether that's worth the software development effort. It takes
+  * about twenty minutes and we can do it on demand until that becomes a problem.
   */
 
 package com.azavea.stac4s

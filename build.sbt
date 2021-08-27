@@ -12,10 +12,10 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion := "2.12.14",
-  crossScalaVersions := List("2.12.14", "2.13.6"),
-  Global / cancelable := true,
-  scalafmtOnCompile := true,
+  scalaVersion                 := "2.12.14",
+  crossScalaVersions           := List("2.12.14", "2.13.6"),
+  Global / cancelable          := true,
+  scalafmtOnCompile            := true,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
@@ -42,22 +42,22 @@ lazy val commonSettings = Seq(
 )
 
 lazy val noPublishSettings = Seq(
-  publish := {},
-  publishLocal := {},
+  publish         := {},
+  publishLocal    := {},
   publishArtifact := false
 )
 
 lazy val publishSettings = Seq(
-  organization := "com.azavea.stac4s",
-  organizationName := "Azavea",
+  organization         := "com.azavea.stac4s",
+  organizationName     := "Azavea",
   organizationHomepage := Some(new URL("https://azavea.com/")),
   description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
   Test / publishArtifact := false
 ) ++ sonatypeSettings ++ credentialSettings
 
 lazy val sonatypeSettings = Seq(
-  publishMavenStyle := true,
-  sonatypeProfileName := "com.azavea",
+  publishMavenStyle      := true,
+  sonatypeProfileName    := "com.azavea",
   sonatypeProjectHosting := Some(GitHubHosting(user = "azavea", repository = "stac4s", email = "systems@azavea.com")),
   developers := List(
     Developer(
@@ -85,7 +85,7 @@ lazy val sonatypeSettings = Seq(
       url = url("https://www.azavea.com")
     )
   ),
-  licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  licenses  := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   publishTo := sonatypePublishTo.value
 )
 

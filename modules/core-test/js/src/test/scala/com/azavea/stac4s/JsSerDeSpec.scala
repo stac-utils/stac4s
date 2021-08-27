@@ -21,7 +21,8 @@ class JsSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with
 
   /** Ensure that the datetime field is present but null for time ranges
     *
-    * Specification: https://github.com/radiantearth/stac-spec/blob/v1.0.0-rc.4/item-spec/common-metadata.md#date-and-time-range
+    * Specification:
+    * https://github.com/radiantearth/stac-spec/blob/v1.0.0-rc.4/item-spec/common-metadata.md#date-and-time-range
     */
   test("Encoded time ranges print null datetime") {
     val tr = ItemDatetime.TimeRange(
