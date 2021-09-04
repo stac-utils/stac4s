@@ -19,7 +19,7 @@ lazy val commonSettings = Seq(
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.1" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
