@@ -17,7 +17,7 @@ object Versions {
   val DisciplineScalatest     = "2.1.5"
   val Enumeratum              = "1.7.0"
   val GeoTrellis              = Def.setting(ver("3.6.0", "3.6.1-SNAPSHOT").value)
-  val Jts                     = "1.16.1"
+  val Jts                     = Def.setting(ver("1.16.1", "1.17.0").value)
   val Monocle                 = "2.1.0"
   val Refined                 = "0.9.27"
   val ScalacheckCats          = "0.3.1"
