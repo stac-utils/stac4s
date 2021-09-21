@@ -1,5 +1,7 @@
 package com.azavea.stac4s
 
+import com.azavea.stac4s.types._
+
 import cats.data.NonEmptyList
 import cats.kernel.Eq
 import cats.syntax.apply._

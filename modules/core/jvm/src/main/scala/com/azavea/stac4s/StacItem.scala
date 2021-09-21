@@ -5,8 +5,8 @@ import com.azavea.stac4s.meta._
 import cats.Eq
 import geotrellis.vector.Geometry
 import io.circe._
-import monocle.macros.{GenLens, GenPrism}
-import monocle.{Lens, Optional}
+import monocle.Lens
+import monocle.macros.GenLens
 
 final case class StacItem(
     id: String,
@@ -29,19 +29,7 @@ final case class StacItem(
 
 object StacItem {
 
-  private val datetimeField: Lens[StacItem, ItemDatetime] = GenLens[StacItem](_.properties.datetime)
-
-  private val toDatetime = GenPrism[ItemDatetime, ItemDatetime.PointInTime]
-
-  private val toTimeRange = GenPrism[ItemDatetime, ItemDatetime.TimeRange]
-
   val propertiesExtension: Lens[StacItem, JsonObject] = GenLens[StacItem](_.properties.extensionFields)
-
-  val datetimePrism: Optional[StacItem, ItemDatetime.PointInTime] =
-    datetimeField.composePrism(toDatetime)
-
-  val timeRangePrism: Optional[StacItem, ItemDatetime.TimeRange] =
-    datetimeField.composePrism(toTimeRange)
 
   implicit val eqStacItem: Eq[StacItem] = Eq.fromUniversalEquals
 

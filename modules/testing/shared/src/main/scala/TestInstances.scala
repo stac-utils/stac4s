@@ -6,8 +6,9 @@ import com.azavea.stac4s.extensions.eo._
 import com.azavea.stac4s.extensions.label.LabelClassClasses._
 import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer.{LayerItemExtension, StacLayerProperties}
-import com.azavea.stac4s.types.CatalogType
+import com.azavea.stac4s.types._
 
+import cats.data.Ior
 import cats.syntax.apply._
 import cats.syntax.functor._
 import enumeratum.scalacheck._
@@ -329,6 +330,37 @@ trait TestInstances extends NumericInstances with GenericInstances {
       Gen.listOfN(5, (nonEmptyStringGen, cogAssetGen).tupled) map { Map(_: _*) }
     )
 
+  private[testing] def itemDateTimeGen: Gen[ItemDatetime] = Gen.oneOf[ItemDatetime](
+    instantGen map { inst => Ior.Left(PointInTime(inst)) },
+    (instantGen, instantGen) mapN {
+      case (i1, i2) if i2.isAfter(i1) => Ior.Right(TimeRange(i1, i2))
+      case (i1, i2)                   => Ior.Right(TimeRange(i2, i1))
+    },
+    (instantGen, instantGen, instantGen) mapN { case (i1, i2, i3) =>
+      val instants = List(i1, i2, i3)
+      val start    = instants.min
+      val end      = instants.max
+      val middle   = instants.filter(inst => (inst != start && inst != end)).head
+      Ior.Both(PointInTime(middle), TimeRange(start, end))
+    }
+  )
+
+  private[testing] def itemPropertiesGen: Gen[ItemProperties] = (
+    itemDateTimeGen,
+    Gen.option(nonEmptyAlphaRefinedStringGen),
+    Gen.option(nonEmptyAlphaRefinedStringGen),
+    Gen.option(instantGen),
+    Gen.option(instantGen),
+    Gen.option(stacLicenseGen),
+    Gen.option(nonEmptyListGen(stacProviderGen)),
+    Gen.option(nonEmptyAlphaRefinedStringGen),
+    Gen.option(nonEmptyListGen(nonEmptyAlphaRefinedStringGen)),
+    Gen.option(nonEmptyAlphaRefinedStringGen),
+    Gen.option(nonEmptyAlphaRefinedStringGen),
+    Gen.option(finiteDoubleGen),
+    itemExtensionFieldsGen
+  ) mapN { ItemProperties.apply }
+
   implicit val arbMediaType: Arbitrary[StacMediaType] = Arbitrary {
     mediaTypeGen
   }
@@ -417,6 +449,14 @@ trait TestInstances extends NumericInstances with GenericInstances {
 
   implicit val arbStacLayerProperties: Arbitrary[StacLayerProperties] = Arbitrary {
     stacLayerPropertiesGen
+  }
+
+  implicit val arbItemDatetime: Arbitrary[ItemDatetime] = Arbitrary {
+    itemDateTimeGen
+  }
+
+  implicit val arbItemProperties: Arbitrary[ItemProperties] = Arbitrary {
+    itemPropertiesGen
   }
 }
 

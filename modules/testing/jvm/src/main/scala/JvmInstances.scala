@@ -3,13 +3,11 @@ package com.azavea.stac4s.testing
 import com.azavea.stac4s.extensions.layer.StacLayer
 import com.azavea.stac4s.extensions.periodic.PeriodicExtent
 import com.azavea.stac4s.syntax._
-import com.azavea.stac4s.types.CollectionType
+import com.azavea.stac4s.types._
 import com.azavea.stac4s.{
   Bbox,
   Interval,
   ItemCollection,
-  ItemDatetime,
-  ItemProperties,
   NumericRangeSummary,
   SchemaSummary,
   SpatialExtent,
@@ -192,7 +190,7 @@ trait JvmInstances extends GenericInstances {
       Gen.const(Nil),
       Gen.const(Map.empty[String, StacAsset]),
       Gen.option(nonEmptyStringGen),
-      itemPropertiesGen
+      TestInstances.itemPropertiesGen
     ).mapN(StacItem.apply)
 
   private[testing] def itemCollectionGen: Gen[ItemCollection] =
@@ -289,30 +287,6 @@ trait JvmInstances extends GenericInstances {
     PeriodicExtent.apply
   }
 
-  private def itemDateTimeGen: Gen[ItemDatetime] = Gen.oneOf[ItemDatetime](
-    instantGen map { ItemDatetime.PointInTime },
-    (instantGen, instantGen) mapN {
-      case (i1, i2) if i2.isAfter(i1) => ItemDatetime.TimeRange(i1, i2)
-      case (i1, i2)                   => ItemDatetime.TimeRange(i2, i1)
-    }
-  )
-
-  private def itemPropertiesGen: Gen[ItemProperties] = (
-    itemDateTimeGen,
-    Gen.option(nonEmptyAlphaRefinedStringGen),
-    Gen.option(nonEmptyAlphaRefinedStringGen),
-    Gen.option(instantGen),
-    Gen.option(instantGen),
-    Gen.option(TestInstances.stacLicenseGen),
-    Gen.option(nonEmptyListGen(TestInstances.stacProviderGen)),
-    Gen.option(nonEmptyAlphaRefinedStringGen),
-    Gen.option(nonEmptyListGen(nonEmptyAlphaRefinedStringGen)),
-    Gen.option(nonEmptyAlphaRefinedStringGen),
-    Gen.option(nonEmptyAlphaRefinedStringGen),
-    Gen.option(TestInstances.finiteDoubleGen),
-    TestInstances.itemExtensionFieldsGen
-  ) mapN { ItemProperties.apply }
-
   private[testing] def stacItemGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
@@ -324,7 +298,7 @@ trait JvmInstances extends GenericInstances {
       nonEmptyListGen(TestInstances.stacLinkGen) map { _.toList },
       TestInstances.assetMapGen,
       Gen.option(nonEmptyStringGen),
-      itemPropertiesGen
+      TestInstances.itemPropertiesGen
     ).mapN(StacItem.apply)
 
   implicit val arbItem: Arbitrary[StacItem] = Arbitrary { stacItemGen }
@@ -371,14 +345,6 @@ trait JvmInstances extends GenericInstances {
 
   implicit val arbInterval: Arbitrary[Interval] = Arbitrary {
     intervalGen
-  }
-
-  implicit val arbItemDatetime: Arbitrary[ItemDatetime] = Arbitrary {
-    itemDateTimeGen
-  }
-
-  implicit val arbItemProperties: Arbitrary[ItemProperties] = Arbitrary {
-    itemPropertiesGen
   }
 
   implicit val arbSummaryValue: Arbitrary[SummaryValue] = Arbitrary {

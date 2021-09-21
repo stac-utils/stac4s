@@ -29,8 +29,6 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
   checkAll("Codec.StacLayer", CodecTests[StacLayer].unserializableCodec)
   checkAll("Codec.PeriodDuration", CodecTests[PeriodDuration].unserializableCodec)
   checkAll("Codec.PeriodicExtent", CodecTests[PeriodicExtent].unserializableCodec)
-  checkAll("Codec.ItemDatetime", CodecTests[ItemDatetime].unserializableCodec)
-  checkAll("Codec.ItemProperties", CodecTests[ItemProperties].unserializableCodec)
 
   /** Ensure that the datetime field is present but null for time ranges
     *
@@ -38,7 +36,7 @@ class JvmSerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers wit
     * https://github.com/radiantearth/stac-spec/blob/v1.0.0-rc.4/item-spec/common-metadata.md#date-and-time-range
     */
   test("Encoded time ranges print null datetime") {
-    val tr = ItemDatetime.TimeRange(
+    val tr = TimeRange(
       Instant.parse("2021-01-01T00:00:00Z"),
       Instant.parse("2022-01-01T00:00:00Z")
     )
