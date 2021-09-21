@@ -6,6 +6,7 @@ import com.azavea.stac4s.extensions.label._
 import com.azavea.stac4s.extensions.layer._
 import com.azavea.stac4s.meta.ForeignImplicits._
 import com.azavea.stac4s.testing.TestInstances._
+import com.azavea.stac4s.types._
 
 import io.circe.Decoder
 import io.circe.parser._
@@ -33,6 +34,8 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   checkAll("Codec.StacProviderRole", CodecTests[StacProviderRole].unserializableCodec)
   checkAll("Codec.ThreeDimBbox", CodecTests[ThreeDimBbox].unserializableCodec)
   checkAll("Codec.TwoDimBbox", CodecTests[TwoDimBbox].unserializableCodec)
+  checkAll("Codec.ItemDatetime", CodecTests[ItemDatetime].unserializableCodec)
+  checkAll("Codec.ItemProperties", CodecTests[ItemProperties].unserializableCodec)
 
   // extensions
 
@@ -72,7 +75,6 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   private def accumulatingDecodeTest[T: Decoder]: Assertion =
     decodeAccumulating[T]("{}").fold(
       errs => {
-        println(s"Errs: $errs")
         errs.size should be > 1
       },
       _ => fail("Decoding succeeded but should not have")
