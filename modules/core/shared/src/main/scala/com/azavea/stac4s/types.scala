@@ -18,7 +18,11 @@ package object types {
   implicit val encItemDateTime: Encoder[ItemDatetime] = {
     case Ior.Left(pit @ PointInTime(_))                       => pit.asJson
     case Ior.Right(tr @ TimeRange(_, _))                      => tr.asJson
-    case Ior.Both(pit @ PointInTime(_), tr @ TimeRange(_, _)) => pit.asJson.deepMerge(tr.asJson)
+    case Ior.Both(pit @ PointInTime(_), tr @ TimeRange(_, _)) =>
+      // order is important here! the time range encoder also writes a `null` value to the
+      // datetime field, which overwrites what the point-in-time encoder wants to write.
+      val out = tr.asJson.deepMerge(pit.asJson)
+      out
   }
 
   implicit val decItemDateTime: Decoder[ItemDatetime] = { c: HCursor =>
