@@ -330,6 +330,9 @@ trait TestInstances extends NumericInstances with GenericInstances {
       Gen.listOfN(5, (nonEmptyStringGen, cogAssetGen).tupled) map { Map(_: _*) }
     )
 
+  // we know that the list of instances will have a min and max because we're constructing
+  // it within this method and it always has three elements.
+  @SuppressWarnings(Array("UnsafeTraversableMethods"))
   private[testing] def itemDateTimeGen: Gen[ItemDatetime] = Gen.oneOf[ItemDatetime](
     instantGen map { inst => Ior.Left(PointInTime(inst)) },
     (instantGen, instantGen) mapN {
