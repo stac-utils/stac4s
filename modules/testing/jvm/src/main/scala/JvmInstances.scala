@@ -182,7 +182,7 @@ trait JvmInstances extends GenericInstances {
   private[testing] def stacItemShortGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("1.0.0-rc2"),
+      Gen.const("1.0.0"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       rectangleGen,
@@ -290,7 +290,7 @@ trait JvmInstances extends GenericInstances {
   private[testing] def stacItemGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("1.0.0-rc2"),
+      Gen.const("1.0.0"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       rectangleGen,

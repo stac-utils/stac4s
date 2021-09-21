@@ -60,7 +60,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacItemGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("1.0.0-rc2"),
+      Gen.const("1.0.0"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       geometryGen,
@@ -74,7 +74,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacItemShortGen: Gen[StacItem] =
     (
       nonEmptyStringGen,
-      Gen.const("1.0.0-rc2"),
+      Gen.const("1.0.0"),
       Gen.const(List.empty[String]),
       Gen.const("Feature"),
       geometryGen,
@@ -108,7 +108,7 @@ trait JsInstances extends GenericInstances {
   private[testing] def stacCollectionShortGen: Gen[StacCollection] =
     (
       Arbitrary.arbitrary[CollectionType],
-      Gen.const("1.0.0-rc2"),
+      Gen.const("1.0.0"),
       Gen.const(Nil),
       nonEmptyStringGen,
       nonEmptyStringGen.map(_.some),
