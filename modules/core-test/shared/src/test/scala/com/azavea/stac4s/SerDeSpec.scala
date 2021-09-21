@@ -75,7 +75,6 @@ class SerDeSpec extends AnyFunSuite with FunSuiteDiscipline with Checkers with M
   private def accumulatingDecodeTest[T: Decoder]: Assertion =
     decodeAccumulating[T]("{}").fold(
       errs => {
-        println(s"Errs: $errs")
         errs.size should be > 1
       },
       _ => fail("Decoding succeeded but should not have")
