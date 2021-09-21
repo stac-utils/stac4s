@@ -340,7 +340,7 @@ trait TestInstances extends NumericInstances with GenericInstances {
       val instants = List(i1, i2, i3)
       val start    = instants.min
       val end      = instants.max
-      val middle   = instants.filter(inst => (inst != start && inst != end)).head
+      val middle   = instants.filter(inst => (inst != start && inst != end)).headOption.getOrElse(start)
       Ior.Both(PointInTime(middle), TimeRange(start, end))
     }
   )
