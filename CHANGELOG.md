@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.7.1] - 2021-09-23
 ### Changed
 - Expose client.search overload with an optional filter argument [#406](https://github.com/azavea/stac4s/pull/406)
 
@@ -161,7 +163,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/azavea/stac4s/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/azavea/stac4s/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/azavea/stac4s/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/azavea/stac4s/compare/v0.6.0...v0.6.1
