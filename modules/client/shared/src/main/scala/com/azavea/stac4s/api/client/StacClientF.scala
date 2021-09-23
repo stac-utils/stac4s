@@ -19,5 +19,6 @@ trait StreamingStacClientF[F[_], G[_], S] extends StacClientF[F, S] {
   def collections: G[StacCollection]
   def search: G[StacItem]
   def search(filter: S): G[StacItem]
+  def search(filter: Option[S]): G[StacItem]
   def items(collectionId: NonEmptyString): G[StacItem]
 }

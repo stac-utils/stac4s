@@ -31,7 +31,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
 
   def search(filter: S): Stream[F, StacItem] = search(filter.some)
 
-  private def search(filter: Option[S]): Stream[F, StacItem] = {
+  def search(filter: Option[S]): Stream[F, StacItem] = {
     val emptyJson = JsonObject.empty.asJson
     // the initial filter may contain the paginationToken that is used for the initial query
     val initialBody = filter.map(_.asJson).getOrElse(emptyJson)
