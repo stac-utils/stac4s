@@ -12,8 +12,8 @@ lazy val commonSettings = Seq(
     else
       git.gitDescribedVersion.value.get
   },
-  scalaVersion                 := "2.12.14",
-  crossScalaVersions           := List("2.12.14", "2.13.6"),
+  scalaVersion                 := "2.12.15",
+  crossScalaVersions           := List("2.12.15", "2.13.6"),
   Global / cancelable          := true,
   scalafmtOnCompile            := true,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
@@ -77,6 +77,12 @@ lazy val sonatypeSettings = Seq(
       name = "Aaron Su",
       email = "asu@azavea.com",
       url = url("https://github.com/aaronxsu")
+    ),
+    Developer(
+      id = "pomadchin",
+      name = "Grigory Pomadchin",
+      email = "gpomadchin@azavea.com",
+      url = url("https://github.com/pomadchin")
     ),
     Developer(
       id = "azavea",

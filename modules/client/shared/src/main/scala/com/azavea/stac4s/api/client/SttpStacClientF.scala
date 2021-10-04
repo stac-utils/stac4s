@@ -163,7 +163,7 @@ object SttpStacClientF {
             .as[Option[List[StacLink]]]
             .map(_.flatMap(_.collectFirst {
               case l if l.rel == StacLinkType.Next =>
-                // The STAC API server may return the next page token as a part of the extensionsFields,
+                // The STAC API server may return the next page token as a part of the extensionFields,
                 // it is just a string that should be used in the next page request body.
                 // Some STAC API implementations (i.e. Franklin)
                 // encode pagination into the next page Uri (put it into the l.href):

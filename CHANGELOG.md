@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+- Make pagination more generic and not Franklin specific [#413](https://github.com/azavea/stac4s/pull/413)
+
 ## [0.7.1] - 2021-09-23
 ### Changed
 - Expose client.search overload with an optional filter argument [#406](https://github.com/azavea/stac4s/pull/406)
