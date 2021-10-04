@@ -3,6 +3,7 @@ package com.azavea.stac4s.api.client
 import com.azavea.stac4s.api.client.util.ClientCodecs
 import com.azavea.stac4s.geometry.Geometry
 import com.azavea.stac4s.{Bbox, TemporalExtent}
+import SttpStacClientF.PaginationToken
 
 import cats.syntax.option._
 import eu.timepit.refined.types.numeric.NonNegInt
@@ -19,7 +20,8 @@ case class SearchFilters(
     items: List[String] = Nil,
     limit: Option[NonNegInt] = None,
     query: Map[String, List[Query]] = Map.empty,
-    next: Option[PaginationToken] = None
+    next: Option[PaginationToken] = None,
+    merge: Boolean = false
 )
 
 object SearchFilters extends ClientCodecs {
@@ -35,6 +37,7 @@ object SearchFilters extends ClientCodecs {
       limit             <- c.downField("limit").as[Option[NonNegInt]]
       query             <- c.get[Option[Map[String, List[Query]]]]("query")
       paginationToken   <- c.get[Option[PaginationToken]]("next")
+      merge             <- c.get[Option[Boolean]]("merge")
     } yield {
       SearchFilters(
         bbox,
@@ -44,12 +47,13 @@ object SearchFilters extends ClientCodecs {
         itemsOption getOrElse Nil,
         limit,
         query getOrElse Map.empty,
-        paginationToken
+        paginationToken,
+        merge getOrElse false
       )
     }
   }
 
-  implicit val searchFiltersEncoder: Encoder[SearchFilters] = Encoder.forProduct8(
+  implicit val searchFiltersEncoder: Encoder[SearchFilters] = Encoder.forProduct9(
     "bbox",
     "datetime",
     "intersects",
@@ -57,7 +61,8 @@ object SearchFilters extends ClientCodecs {
     "ids",
     "limit",
     "query",
-    "next"
+    "next",
+    "merge"
   )(filters =>
     (
       filters.bbox,
@@ -67,7 +72,8 @@ object SearchFilters extends ClientCodecs {
       filters.items.some.filter(_.nonEmpty),
       filters.limit,
       filters.query.some.filter(_.nonEmpty),
-      filters.next
+      filters.next,
+      filters.merge
     )
   )
 }
