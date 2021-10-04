@@ -225,7 +225,6 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "io.circe"                      %%% "circe-core"    % Versions.Circe,
       "io.circe"                      %%% "circe-generic" % Versions.Circe,
       "io.circe"                      %%% "circe-refined" % Versions.Circe,
-      "io.circe"                      %%% "circe-parser"  % Versions.Circe,
       "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
       "eu.timepit"                    %%% "refined"       % Versions.Refined,
       "org.typelevel"                 %%% "cats-core"     % Versions.Cats,

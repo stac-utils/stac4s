@@ -1,8 +1,8 @@
 package com.azavea.stac4s.api.client
 
+import com.azavea.stac4s.api.client.SttpStacClientF.PaginationToken
 import com.azavea.stac4s.api.client.util.syntax._
 import com.azavea.stac4s.{StacCollection, StacItem, StacLink, StacLinkType}
-import SttpStacClientF.PaginationToken
 
 import cats.MonadThrow
 import cats.syntax.apply._
@@ -13,9 +13,9 @@ import cats.syntax.nested._
 import cats.syntax.option._
 import eu.timepit.refined.types.string.NonEmptyString
 import fs2.Stream
-import io.circe.{Encoder, Json, JsonObject}
-import io.circe.syntax._
 import io.circe.refined._
+import io.circe.syntax._
+import io.circe.{Encoder, Json, JsonObject}
 import monocle.Lens
 import sttp.client3.circe.asJson
 import sttp.client3.{Response, SttpBackend, UriContext, basicRequest}
@@ -180,33 +180,31 @@ object SttpStacClientF {
         }
         .liftTo[F]
 
-    /** Get the next page Uri and the next page request body (that has a correctly set next page token). */
+    /** Get the next page [[Uri]] and the next page [[Json]] request body (that has a correctly set next page token). */
     def nextPage[F[_]: MonadThrow, S](
         filter: Option[S]
     )(implicit l: Lens[S, Option[PaginationToken]], enc: Encoder[S]): F[Option[(Uri, Json)]] =
-      nextPage[F].nested.map { case (uri, token) => (uri, filter.setPaginationToken(token)) }.value
+      nextPage.nested.map { case (uri, token) => (uri, filter.setPaginationToken(token)) }.value
 
-    /** Get the next page Uri and drop the next page token / body. Useful for get requests with no POST pagination
+    /** Get the next page [[Uri]] and drop the next page token / body. Useful for get requests with no POST pagination
       * support.
       */
-    def nextLink[F[_]: MonadThrow]: F[Option[Uri]] = nextPage[F].nested.map(_._1).value
+    def nextLink[F[_]: MonadThrow]: F[Option[Uri]] = nextPage.nested.map(_._1).value
 
-    /** Decode List of StacItem from the retrieved Json body. */
+    /** Decode List of [[StacItem]] from the retrieved [[Json]] body. */
     def stacItems[F[_]: MonadThrow]: F[List[StacItem]] =
       self.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
 
-    /** Decode List of StacCollections from the retrieved Json body. */
+    /** Decode List of [[StacCollection]] from the retrieved [[Json]] body. */
     def stacCollections[F[_]: MonadThrow]: F[List[StacCollection]] =
       self.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
   }
 
-  implicit class SearchFiltersOps[S](val self: Option[S]) extends AnyVal {
+  implicit class StacFilterOps[S](val self: Option[S]) extends AnyVal {
 
     def setPaginationToken(
         token: Option[PaginationToken]
-    )(implicit l: Lens[S, Option[PaginationToken]], enc: Encoder[S]): Json = {
-      val paginationTokenLens = implicitly[Lens[S, Option[PaginationToken]]]
-      self.map(paginationTokenLens.set(token)(_).asJson).getOrElse(JsonObject.empty.asJson)
-    }
+    )(implicit l: Lens[S, Option[PaginationToken]], enc: Encoder[S]): Json =
+      self.map(l.set(token)(_).asJson).getOrElse(JsonObject.empty.asJson)
   }
 }

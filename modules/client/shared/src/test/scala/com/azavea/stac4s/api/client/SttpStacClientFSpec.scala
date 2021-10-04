@@ -4,15 +4,15 @@ import com.azavea.stac4s.{ItemCollection, StacCollection, StacItem}
 
 import cats.syntax.either._
 import eu.timepit.refined.types.all.NonEmptyString
-import io.circe.{JsonObject, parser}
 import io.circe.syntax._
+import io.circe.{JsonObject, parser}
 import org.scalacheck.Arbitrary
 import org.scalacheck.resample._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import sttp.client3.{Response, StringBody}
 import sttp.client3.testing.SttpBackendStub
+import sttp.client3.{Response, StringBody}
 import sttp.model.Method
 import sttp.monad.EitherMonad
 
