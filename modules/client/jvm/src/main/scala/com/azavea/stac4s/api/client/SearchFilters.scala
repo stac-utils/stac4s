@@ -1,5 +1,6 @@
 package com.azavea.stac4s.api.client
 
+import com.azavea.stac4s.api.client.SttpStacClientF.PaginationToken
 import com.azavea.stac4s.api.client.util.ClientCodecs
 import com.azavea.stac4s.{Bbox, TemporalExtent}
 
