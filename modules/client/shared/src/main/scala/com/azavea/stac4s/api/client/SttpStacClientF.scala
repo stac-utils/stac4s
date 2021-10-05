@@ -154,7 +154,7 @@ object SttpStacClientF {
 
   implicit class ResponseEitherJsonOps[E <: Exception](val self: Response[Either[E, Json]]) extends AnyVal {
 
-    /** Get the next page [[Uri]] from the retrieved [[Json]] body and the next [[PaginationToken]]. */
+    /** Get the next page Uri from the retrieved Json body and the next PaginationToken. */
     def nextPage[F[_]: MonadThrow]: F[Option[(Uri, Option[PaginationToken])]] =
       self.body
         .flatMap {
@@ -180,22 +180,22 @@ object SttpStacClientF {
         }
         .liftTo[F]
 
-    /** Get the next page [[Uri]] and the next page [[Json]] request body (that has a correctly set next page token). */
+    /** Get the next page Uri and the next page Json request body (that has a correctly set next page token). */
     def nextPage[F[_]: MonadThrow, S](
         filter: Option[S]
     )(implicit l: Lens[S, Option[PaginationToken]], enc: Encoder[S]): F[Option[(Uri, Json)]] =
       nextPage.nested.map { case (uri, token) => (uri, filter.setPaginationToken(token)) }.value
 
-    /** Get the next page [[Uri]] and drop the next page token / body. Useful for get requests with no POST pagination
+    /** Get the next page Uri and drop the next page token / body. Useful for get requests with no POST pagination
       * support.
       */
     def nextLink[F[_]: MonadThrow]: F[Option[Uri]] = nextPage.nested.map(_._1).value
 
-    /** Decode List of [[StacItem]] from the retrieved [[Json]] body. */
+    /** Decode List of StacItem from the retrieved Json body. */
     def stacItems[F[_]: MonadThrow]: F[List[StacItem]] =
       self.body.flatMap(_.hcursor.downField("features").as[List[StacItem]]).liftTo[F]
 
-    /** Decode List of [[StacCollection]] from the retrieved [[Json]] body. */
+    /** Decode List of StacCollection from the retrieved Json body. */
     def stacCollections[F[_]: MonadThrow]: F[List[StacCollection]] =
       self.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
   }
