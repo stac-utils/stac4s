@@ -2,7 +2,8 @@ pull_request_rules:
   - name: Automatic merge on approval
     conditions:
       - author=scala-steward
-      - "status-success=ci/circleci: openjdk8-scala2.12"
+      - check-success=continuous-integration/circle-ci
     actions:
       merge:
         method: squash
+        strict: smart
