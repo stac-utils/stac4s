@@ -166,16 +166,11 @@ object SttpStacClientF {
                 // Some STAC API implementations (i.e. Franklin)
                 // encode pagination into the next page Uri (put it into the l.href):
                 // in this case, the pagination token is always set to None and only Uri is used for the pagination purposes.
-                /*val paginationToken: Option[PaginationToken] =
-                  l
-                    .extensionFields("body")
-                    .flatMap(_.asObject)
-                    .flatMap(_("next"))
-                    .flatMap(_.as[PaginationToken].toOption)*/
 
                 // to make the case described above more generic, we can take the entire body
                 // and pass it forward by merging with the body (SearchFilters in a form of Json)
                 // with the paginationBody
+                // see https://github.com/azavea/stac4s/pull/496 for details
                 val paginationBody: Option[Json] = l.extensionFields("body").map(_.deepDropNullValues)
 
                 uri"${l.href}" -> paginationBody
@@ -220,10 +215,13 @@ object SttpStacClientF {
       // bbox and intersection can't be present at the same time
       if (filter.hcursor.downField("bbox").succeeded && filter.hcursor.downField("intersects").succeeded) {
         // let's see which field is present in the nextPageBody
-        if (bodyNotNull.hcursor.downField("bbox").succeeded && bodyNotNull.hcursor.downField("intersects").failed)
-          filter.hcursor.downField("intersects").delete.top.getOrElse(filter)
-        else
-          filter.hcursor.downField("bbox").delete.top.getOrElse(filter)
+        val field =
+          if (bodyNotNull.hcursor.downField("bbox").succeeded && bodyNotNull.hcursor.downField("intersects").failed)
+            filter.hcursor.downField("intersects")
+          else
+            filter.hcursor.downField("bbox")
+
+        field.delete.top.getOrElse(filter)
       } else filter
     }
   }
