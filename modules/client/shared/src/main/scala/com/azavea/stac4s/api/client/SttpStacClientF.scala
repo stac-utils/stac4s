@@ -35,7 +35,6 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
     val initialBody = filter.map(_.asJson).getOrElse(emptyJson)
     Stream
       .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
-        println(s"request: ${request}")
         client
           .send(
             basicRequest
@@ -220,7 +219,7 @@ object SttpStacClientF {
 
       // bbox and intersection can't be present at the same time
       if (filter.hcursor.downField("bbox").succeeded && filter.hcursor.downField("intersects").succeeded) {
-        // oops, let's see which field is present in the nextPageBody
+        // let's see which field is present in the nextPageBody
         if (bodyNotNull.hcursor.downField("bbox").succeeded && bodyNotNull.hcursor.downField("intersects").failed)
           filter.hcursor.downField("intersects").delete.top.getOrElse(filter)
         else

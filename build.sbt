@@ -234,8 +234,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
       "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
       "co.fs2"                        %%% "fs2-core"      % Versions.Fs2,
-      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test,
-      "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats-ce2" % Versions.Sttp % Test
+      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
   .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0")
