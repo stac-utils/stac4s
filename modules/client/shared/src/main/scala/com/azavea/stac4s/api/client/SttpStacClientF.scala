@@ -37,6 +37,8 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Lens[*, Option[PaginationToken]]
     val initialBody = filter.map(_.asJson).getOrElse(emptyJson)
     Stream
       .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
+        println(s"link: ${link}")
+        println(s"request: ${request.spaces2}")
         client
           .send(
             basicRequest
@@ -175,7 +177,18 @@ object SttpStacClientF {
                     .flatMap(_("next"))
                     .flatMap(_.as[PaginationToken].toOption)
 
-                uri"${l.href}" -> paginationToken
+                val body: Option[Json] =
+                  l
+                    .extensionFields("body")
+                    .flatMap(_.asObject)
+                    .flatMap(_("body"))
+
+                println(s"body: ${body}")
+
+                val res = uri"${l.href}" -> paginationToken
+                println(l)
+                println(s"nextPage: ${res}")
+                res
             }))
         }
         .liftTo[F]
