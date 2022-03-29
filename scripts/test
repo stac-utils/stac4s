@@ -18,20 +18,32 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         usage
     else
         echo "Linting Scala source code and executing tests"
-        ./sbt "++$SCALA_VERSION" ";\
-            scalafix --check; \
-            scalafmtCheck; \
-            scalafmtSbtCheck; \
-            scapegoat; \
-            coreJVM/undeclaredCompileDependenciesTest; \
-            testingJVM/undeclaredCompileDependenciesTest; \
-            coreTestJVM/undeclaredCompileDependenciesTest; \
-            clientJVM/undeclaredCompileDependenciesTest; \
-            coreJVM/unusedCompileDependenciesTest; \
-            testingJVM/unusedCompileDependenciesTest; \
-            coreTestJVM/unusedCompileDependenciesTest; \
-            clientJVM/unusedCompileDependenciesTest; \
-            test
-        "
+
+        # due to a specific deps in the class path, we verify declared deps only for the 2.12 builds
+        if [[ "$SCALA_VERSION" =~ ^2.12.* ]]; then
+          ./sbt "++$SCALA_VERSION" ";\
+              scalafix --check; \
+              scalafmtCheck; \
+              scalafmtSbtCheck; \
+              scapegoat; \
+              coreJVM/undeclaredCompileDependenciesTest; \
+              testingJVM/undeclaredCompileDependenciesTest; \
+              coreTestJVM/undeclaredCompileDependenciesTest; \
+              clientJVM/undeclaredCompileDependenciesTest; \
+              coreJVM/unusedCompileDependenciesTest; \
+              testingJVM/unusedCompileDependenciesTest; \
+              coreTestJVM/unusedCompileDependenciesTest; \
+              clientJVM/unusedCompileDependenciesTest; \
+              test
+          "
+        else
+          ./sbt "++$SCALA_VERSION" ";\
+              scalafix --check; \
+              scalafmtCheck; \
+              scalafmtSbtCheck; \
+              scapegoat; \
+              test
+          "
+        fi
     fi
 fi

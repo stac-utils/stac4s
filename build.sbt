@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
       git.gitDescribedVersion.value.get
   },
   scalaVersion                 := "2.12.15",
-  crossScalaVersions           := List("2.12.15", "2.13.7"),
+  crossScalaVersions           := List("2.12.15", "2.13.8"),
   Global / cancelable          := true,
   scalafmtOnCompile            := true,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
@@ -109,7 +109,7 @@ lazy val credentialSettings = Seq(
 
 val jvmGeometryDependencies = Def.setting {
   Seq(
-    "org.locationtech.jts"         % "jts-core"          % Versions.Jts.value,
+    "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
     "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis.value
   )
 }
@@ -124,7 +124,7 @@ val coreDependenciesJVM = Def.setting {
 val testingDependenciesJVM = Def.setting {
   Seq(
     "org.locationtech.geotrellis" %% "geotrellis-vector" % Versions.GeoTrellis.value,
-    "org.locationtech.jts"         % "jts-core"          % Versions.Jts.value,
+    "org.locationtech.jts"         % "jts-core"          % Versions.Jts,
     "org.threeten"                 % "threeten-extra"    % Versions.ThreeTenExtra
   )
 }
