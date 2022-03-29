@@ -1,13 +1,13 @@
 package com.azavea.stac4s.api.client
 
 import cats.effect.IO
+import cats.syntax.either._
+import io.circe.parser._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import sttp.client3.UriContext
-import io.circe.parser._
-import cats.syntax.either._
+import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
 
 import scala.concurrent.ExecutionContext
 
@@ -18,7 +18,7 @@ class SyntheticTest extends AnyFunSpec with Matchers with BeforeAndAfterAll with
   geotrellis.vector.conf.JtsConfig.conf
 
   describe("Integration test") {
-    it("should query by bbox") {
+    ignore("should query by bbox") {
       val filtersString =
         """
           |{
@@ -37,6 +37,46 @@ class SyntheticTest extends AnyFunSpec with Matchers with BeforeAndAfterAll with
         .unsafeRunSync()
 
       println(res.length)
+    }
+
+    ignore("should paginate Franklin") {
+      val filtersString =
+        """
+          |{
+          |    "collections": ["aviris-l1-cogs"],
+          |    "limit": 10
+          |}""".stripMargin
+
+      val filters = parse(filtersString).flatMap(_.as[SearchFilters]).valueOr(throw _)
+
+      val res = SttpStacClient(backend, uri"https://franklin.nasa-hsi.azavea.com/")
+        .search(filters)
+        // .take(30)
+        .compile
+        .toList
+        .unsafeRunSync()
+
+      println(res.length)
+    }
+
+    it("should paginate MSFTPC") {
+      val filtersString =
+        """
+          |{
+          |    "collections" : ["aster-l1t"],
+          |    "limit": 10
+          |}""".stripMargin
+
+      val filters = parse(filtersString).flatMap(_.as[SearchFilters]).valueOr(throw _)
+
+      val res = SttpStacClient(backend, uri"https://planetarycomputer.microsoft.com/api/stac/v1/")
+        .search(filters)
+        .take(30)
+        .compile
+        .toList
+        .unsafeRunSync()
+
+      println(res.map(_.id).distinct.length)
     }
   }
 
