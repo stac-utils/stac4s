@@ -29,9 +29,8 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
   def search(filter: S): Stream[F, StacItem] = search(filter.some)
 
   def search(filter: Option[S]): Stream[F, StacItem] = {
-    val emptyJson = JsonObject.empty.asJson
     // the initial filter may contain the paginationBody that is used for the initial query
-    val initialBody = filter.map(_.asJson.deepDropNullValues).getOrElse(emptyJson)
+    val initialBody = filter.map(_.asJson.deepDropNullValues).getOrElse(JsonObject.empty.asJson)
     Stream
       .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
         client
@@ -193,7 +192,7 @@ object SttpStacClientF {
       self.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
   }
 
-  implicit class JsonOps[S](val self: Json) extends AnyVal {
+  implicit class JsonOps(val self: Json) extends AnyVal {
 
     def setPaginationBody(body: Option[Json]): Json = {
       val selfNotNull = self.deepDropNullValues
