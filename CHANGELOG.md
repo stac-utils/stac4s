@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Changed
 - Pagination Improvements [#496](https://github.com/azavea/stac4s/pull/496)
+- Make SearchFilters pagination agnostic [#502](https://github.com/azavea/stac4s/pull/502) 
 
 ## [0.7.2] - 2021-10-12
 ### Changed

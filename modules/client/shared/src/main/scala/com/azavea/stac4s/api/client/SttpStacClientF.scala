@@ -14,7 +14,6 @@ import eu.timepit.refined.types.string.NonEmptyString
 import fs2.Stream
 import io.circe.syntax._
 import io.circe.{Encoder, Json, JsonObject}
-import monocle.Lens
 import sttp.client3.circe.asJson
 import sttp.client3.{Response, SttpBackend, UriContext, basicRequest}
 import sttp.model.{MediaType, Uri}
@@ -31,8 +30,8 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
 
   def search(filter: Option[S]): Stream[F, StacItem] = {
     val emptyJson = JsonObject.empty.asJson
-    // the initial filter may contain the paginationToken that is used for the initial query
-    val initialBody = filter.map(_.asJson).getOrElse(emptyJson)
+    // the initial filter may contain the paginationBody that is used for the initial query
+    val initialBody = filter.map(_.asJson.deepDropNullValues).getOrElse(emptyJson)
     Stream
       .unfoldLoopEval((baseUri.addPath("search"), initialBody)) { case (link, request) =>
         client
@@ -40,7 +39,7 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
             basicRequest
               .post(link)
               .contentType(MediaType.ApplicationJson)
-              .body(request.deepDropNullValues.noSpaces)
+              .body(request.noSpaces)
               .response(asJson[Json])
           )
           .flatMap { response =>
@@ -147,8 +146,6 @@ case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
 }
 
 object SttpStacClientF {
-  // TODO: should be a newtype
-  type PaginationToken = NonEmptyString
 
   implicit class ResponseEitherJsonOps[E <: Exception](val self: Response[Either[E, Json]]) extends AnyVal {
 
@@ -170,7 +167,7 @@ object SttpStacClientF {
                 // to make the case described above more generic, we can take the entire body
                 // and pass it forward by merging with the body (SearchFilters in a form of Json)
                 // with the paginationBody
-                // see https://github.com/azavea/stac4s/pull/496 for details
+                // see https://github.com/azavea/stac4s/pull/496 and https://github.com/azavea/stac4s/pull/502 for details
                 val paginationBody: Option[Json] = l.extensionFields("body").map(_.deepDropNullValues)
 
                 uri"${l.href}" -> paginationBody
@@ -194,14 +191,6 @@ object SttpStacClientF {
     /** Decode List of StacCollection from the retrieved Json body. */
     def stacCollections[F[_]: MonadThrow]: F[List[StacCollection]] =
       self.body.flatMap(_.hcursor.downField("collections").as[List[StacCollection]]).liftTo[F]
-  }
-
-  implicit class StacFilterOps[S](val self: Option[S]) extends AnyVal {
-
-    def setPaginationToken(
-        token: Option[PaginationToken]
-    )(implicit l: Lens[S, Option[PaginationToken]], enc: Encoder[S]): Json =
-      self.map(l.set(token)(_).asJson).getOrElse(JsonObject.empty.asJson)
   }
 
   implicit class JsonOps[S](val self: Json) extends AnyVal {
