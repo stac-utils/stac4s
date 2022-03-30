@@ -18,6 +18,8 @@ case class SearchFilters(
     items: List[String] = Nil,
     limit: Option[NonNegInt] = None,
     query: Map[String, List[Query]] = Map.empty,
+    // according to the STAC Spec, any fields can be used to represent pagination
+    // for more details see https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search#pagination
     paginationBody: JsonObject = JsonObject.empty
 )
 
@@ -26,12 +28,12 @@ object SearchFilters extends ClientCodecs {
 
   implicit val searchFiltersDecoder: Decoder[SearchFilters] = { c =>
     for {
-      bbox              <- c.downField("bbox").as[Option[Bbox]]
-      datetime          <- c.downField("datetime").as[Option[TemporalExtent]]
-      intersects        <- c.downField("intersects").as[Option[Geometry]]
-      collectionsOption <- c.downField("collections").as[Option[List[String]]]
-      itemsOption       <- c.downField("ids").as[Option[List[String]]]
-      limit             <- c.downField("limit").as[Option[NonNegInt]]
+      bbox              <- c.get[Option[Bbox]]("bbox")
+      datetime          <- c.get[Option[TemporalExtent]]("datetime")
+      intersects        <- c.get[Option[Geometry]]("intersects")
+      collectionsOption <- c.get[Option[List[String]]]("collections")
+      itemsOption       <- c.get[Option[List[String]]]("ids")
+      limit             <- c.get[Option[NonNegInt]]("limit")
       query             <- c.get[Option[Map[String, List[Query]]]]("query")
       document          <- c.value.as[JsonObject]
     } yield {
