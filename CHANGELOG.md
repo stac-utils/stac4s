@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.8.0] - 2022-03-30
 ### Changed
 - Pagination Improvements [#496](https://github.com/azavea/stac4s/pull/496)
 - Make SearchFilters pagination agnostic [#502](https://github.com/azavea/stac4s/pull/502) 
@@ -170,7 +172,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - Removed `core` from package naming [#5](https://github.com/azavea/stac4s/pull/5)
 
-[Unreleased]: https://github.com/azavea/stac4s/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/azavea/stac4s/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/azavea/stac4s/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/azavea/stac4s/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/azavea/stac4s/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/azavea/stac4s/compare/v0.6.2...v0.7.0
