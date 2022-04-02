@@ -16,7 +16,7 @@ object Versions {
   val CirceJsonSchema         = "0.2.0"
   val DisciplineScalatest     = "2.1.5"
   val Enumeratum              = "1.7.0"
-  val GeoTrellis              = Def.setting(ver("3.6.1", "3.6.1+2-9cc96096-SNAPSHOT").value)
+  val GeoTrellis              = Def.setting(ver("3.6.1", "3.6.1+9-fdefb1d3-SNAPSHOT").value)
   val Jts                     = "1.18.1"
   val Monocle                 = "2.1.0"
   val Refined                 = "0.9.28"
