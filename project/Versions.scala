@@ -28,7 +28,7 @@ object Versions {
   val Shapeless               = "2.3.7"
   val Sttp                    = "3.5.2"
   val SttpModel               = "1.4.25"
-  val SttpShared              = "1.3.4"
+  val SttpShared              = "1.3.5"
   val Fs2                     = "2.5.10"
   val ThreeTenExtra           = "1.7.0"
 }
