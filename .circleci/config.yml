@@ -3,17 +3,26 @@ version: 2.1
 executors:
   executor-openjdk8:
     docker:
-      - image: circleci/openjdk:8-jdk-node
+      - image: cimg/openjdk:8.0-node
+        environment:
+          # https://circleci.com/docs/2.0/java-oom/
+          _JAVA_OPTIONS: "-Xms128m -Xmx2g"
+
+  executor-openjdk11:
+    docker:
+      - image: cimg/openjdk:11.0-node
         environment:
           # https://circleci.com/docs/2.0/java-oom/
           _JAVA_OPTIONS: "-Xms128m -Xmx2g"
 
 jobs:
-  openjdk8-build:
+  openjdk-build:
     parameters:
       scala-version:
         type: string
-    executor: executor-openjdk8
+      executor-type:
+        type: string
+    executor: << parameters.executor-type >>
     environment:
       SCALA_VERSION: << parameters.scala-version >>
     steps: 
@@ -35,11 +44,13 @@ jobs:
             - "~/.sbt"
             - "~/.cache/coursier"
 
-  openjdk8-deploy:
+  openjdk-deploy:
     parameters:
       scala-version:
         type: string
-    executor: executor-openjdk8
+      executor-type:
+        type: string
+    executor: << parameters.executor-type >>
     environment:
       SCALA_VERSION: << parameters.scala-version >>
     steps: 
@@ -61,10 +72,11 @@ jobs:
 workflows:
   build:
     jobs:
-      - openjdk8-build:
+      - openjdk-build:
           matrix:
             parameters:
-              scala-version: ["2.12.15", "2.13.8"]
+              scala-version: ["2.12.15"]
+              executor-type: ["executor-openjdk8"]
           # required since openjdk8-deploy has tag filters AND requires
           # openjdk8
           # https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag
@@ -72,13 +84,26 @@ workflows:
             tags:
               only:
                 - /^(v.*)$/
-      - openjdk8-deploy:
+      - openjdk-build:
+          matrix:
+            parameters:
+              scala-version: ["2.13.8"]
+              executor-type: ["executor-openjdk11"]
+          # required since openjdk8-deploy has tag filters AND requires
+          # openjdk8
+          # https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag
+          filters:
+            tags:
+              only:
+                - /^(v.*)$/
+      - openjdk-deploy:
           matrix:
             parameters:
               scala-version: ["2.12.15"]
+              executor-type: ["executor-openjdk8"]
           context: sonatype-azavea-signing-key
           requires:
-            - openjdk8-build
+            - openjdk-build-executor-openjdk8-2.12.15
           filters:
             tags:
               only:
@@ -86,13 +111,14 @@ workflows:
             branches:
               only:
                 - master
-      - openjdk8-deploy:
+      - openjdk-deploy:
           matrix:
             parameters:
               scala-version: ["2.13.8"]
+              executor-type: ["executor-openjdk11"]
           context: sonatype-azavea-signing-key
           requires:
-            - openjdk8-build
+            - openjdk-build-executor-openjdk11-2.13.8
           filters:
             tags:
               ignore:
