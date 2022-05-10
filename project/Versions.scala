@@ -19,7 +19,7 @@ object Versions {
   val GeoTrellis              = "3.6.2"
   val Jts                     = "1.18.1"
   val Monocle                 = "2.1.0"
-  val Refined                 = "0.9.28"
+  val Refined                 = "0.9.29"
   val ScalacheckCats          = "0.3.1"
   val Scalacheck              = "1.16.0"
   val ScalatestPlusScalacheck = "3.2.2.0"
