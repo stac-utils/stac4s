@@ -121,8 +121,8 @@ workflows:
             - openjdk-build-executor-openjdk11-2.13.8
           filters:
             tags:
-              ignore:
-                - /^(.*)$/
+              only:
+                - /^(v.*)$/
             branches:
               only:
                 - master
