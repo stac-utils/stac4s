@@ -164,7 +164,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.4.0")
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -189,7 +189,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.4.0" % Test)
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -207,7 +207,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel"     %%% "discipline-scalatest" % Versions.DisciplineScalatest     % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.4.0" % Test)
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
@@ -235,7 +235,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.4.0")
   .jvmSettings(libraryDependencies ++= jvmGeometryDependencies.value)
 
 lazy val clientJVM = client.jvm
