@@ -21,7 +21,7 @@ object Versions {
   val Monocle                 = "2.1.0"
   val Refined                 = "0.9.28"
   val ScalacheckCats          = "0.3.1"
-  val Scalacheck              = "1.16.0"
+  val Scalacheck              = "1.17.0"
   val ScalatestPlusScalacheck = "3.2.2.0"
   val Scalatest               = "3.2.12"
   val Scapegoat               = "1.4.13"
