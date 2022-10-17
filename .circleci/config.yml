@@ -87,7 +87,7 @@ workflows:
       - openjdk-build:
           matrix:
             parameters:
-              scala-version: ["2.13.8"]
+              scala-version: ["2.13.10"]
               executor-type: ["executor-openjdk11"]
           # required since openjdk8-deploy has tag filters AND requires
           # openjdk8
@@ -114,7 +114,7 @@ workflows:
       - openjdk-deploy:
           matrix:
             parameters:
-              scala-version: ["2.13.8"]
+              scala-version: ["2.13.10"]
               executor-type: ["executor-openjdk11"]
           context: sonatype-azavea-signing-key
           requires:
