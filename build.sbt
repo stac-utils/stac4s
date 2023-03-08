@@ -1,5 +1,7 @@
 import xerial.sbt.Sonatype._
 
+ThisBuild / versionScheme := Some("semver-spec")
+
 lazy val commonSettings = Seq(
   // We are overriding the default behavior of sbt-git which, by default, only
   // appends the `-SNAPSHOT` suffix if there are uncommitted changes in the
