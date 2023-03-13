@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+- Update to GeoTrellis 3.7, cats-effect 3 [#602](https://github.com/azavea/stac4s/pull/602)
 
 ## [0.8.0] - 2022-03-30
 ### Changed
 - Pagination Improvements [#496](https://github.com/azavea/stac4s/pull/496)
-- Make SearchFilters pagination agnostic [#502](https://github.com/azavea/stac4s/pull/502) 
+- Make SearchFilters pagination agnostic [#502](https://github.com/azavea/stac4s/pull/502)
 
 ## [0.7.2] - 2021-10-12
 ### Changed
