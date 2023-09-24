@@ -25,8 +25,7 @@ lazy val commonSettings = Seq(
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
     )
-  ),
-  ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+  )
 )
 
 lazy val noPublishSettings = Seq(
@@ -79,7 +78,7 @@ lazy val sonatypeSettings = Seq(
       url = url("https://www.azavea.com")
     )
   ),
-  licenses  := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+  licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 )
 
 val jvmGeometryDependencies = Def.setting {

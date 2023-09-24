@@ -1,8 +1,9 @@
 package com.azavea.stac4s.api.client
 
-import cats.effect.kernel.{CancelScope, Poll}
 import cats.effect.Sync
+import cats.effect.kernel.{CancelScope, Poll}
 import cats.syntax.apply._
+import cats.syntax.either._
 
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
@@ -31,11 +32,11 @@ trait SttpEitherInstances {
 
     def pure[A](x: A): Either[Throwable, A] = me.pure(x)
 
-    def suspend[A](hint: Sync.Type)(thunk: => A): Either[Throwable, A] = Right(thunk)
+    def suspend[A](hint: Sync.Type)(thunk: => A): Either[Throwable, A] = thunk.asRight
 
-    def monotonic: Either[Throwable, FiniteDuration] = Right(1.second)
+    def monotonic: Either[Throwable, FiniteDuration] = 1.second.asRight
 
-    def realTime: Either[Throwable, FiniteDuration] = Right(1.second)
+    def realTime: Either[Throwable, FiniteDuration] = 1.second.asRight
 
     def rootCancelScope: CancelScope = CancelScope.Uncancelable
 
@@ -45,7 +46,7 @@ trait SttpEitherInstances {
     def uncancelable[A](body: Poll[Either[Throwable, *]] => Either[Throwable, A]): Either[Throwable, A] =
       body(IdPoll)
 
-    def canceled: Either[Throwable, Unit] = Right(())
+    def canceled: Either[Throwable, Unit] = ().asRight
 
     def onCancel[A](fa: Either[Throwable, A], fin: Either[Throwable, Unit]): Either[Throwable, A] = fa
   }
