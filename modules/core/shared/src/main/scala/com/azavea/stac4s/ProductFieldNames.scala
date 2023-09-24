@@ -13,9 +13,9 @@ trait ProductFieldNames[T] {
 object ProductFieldNames {
   def apply[T](implicit ev: ProductFieldNames[T]): ProductFieldNames[T] = ev
 
-  @nowarn // parameter value evidence$1 in method fromLabelledGeneric is never used
   @SuppressWarnings(Array("all"))
-  implicit def fromLabelledGeneric[T: LabelledGeneric.Aux[*, L], L <: HList, K <: HList](implicit
+  implicit def fromLabelledGeneric[T, L <: HList, K <: HList](implicit
+      @nowarn lg: LabelledGeneric.Aux[T, L],
       keys: Keys.Aux[L, K],
       toList: ToTraversable.Aux[K, List, Symbol]
   ): ProductFieldNames[T] =
