@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
-- Update to GeoTrellis 3.7, cats-effect 3 [#602](https://github.com/azavea/stac4s/pull/602)
+- Dependencies update and GitHub Actions Configuration [#607](https://github.com/stac-utils/stac4s/pull/607) (@pomadchin)
+- GeoTrellis 3.7.0, CE 3 [#602](https://github.com/stac-utils/stac4s/pull/602) (@echeipesh)
 
 ## [0.8.0] - 2022-03-30
 ### Changed
