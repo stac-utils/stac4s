@@ -3,10 +3,10 @@ import xerial.sbt.Sonatype._
 ThisBuild / versionScheme := Some("semver-spec")
 
 lazy val commonSettings = Seq(
-  scalaVersion                 := "2.12.18",
-  crossScalaVersions           := List("2.12.18", "2.13.12"),
+  scalaVersion                 := "2.13.12",
+  crossScalaVersions           := List("2.13.12", "2.12.18"),
   Global / cancelable          := true,
-  scalafmtOnCompile            := true,
+  scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
