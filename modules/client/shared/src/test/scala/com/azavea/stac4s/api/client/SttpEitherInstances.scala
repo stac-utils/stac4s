@@ -1,21 +1,23 @@
 package com.azavea.stac4s.api.client
 
-import cats.effect.{ExitCase, Sync}
+import cats.effect.Sync
+import cats.effect.kernel.{CancelScope, Poll}
+import cats.syntax.apply._
+import cats.syntax.either._
+
+import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
 trait SttpEitherInstances {
+
+  private[this] val IdPoll = new Poll[Either[Throwable, *]] {
+    def apply[A](fa: Either[Throwable, A]): Either[Throwable, A] = fa
+  }
 
   /** [[Sync]] instance defined for Either[Throwable, *]. It is required (sadly) to derive [[fs2.Stream.Compiler]] which
     * is necessary for the [[fs2.Stream.compile]] function.
     */
   implicit val eitherSync: Sync[Either[Throwable, *]] = new Sync[Either[Throwable, *]] {
     lazy val me = cats.instances.either.catsStdInstancesForEither[Throwable]
-
-    def suspend[A](thunk: => Either[Throwable, A]): Either[Throwable, A] = thunk
-
-    def bracketCase[A, B](acquire: Either[Throwable, A])(use: A => Either[Throwable, B])(
-        release: (A, ExitCase[Throwable]) => Either[Throwable, Unit]
-    ): Either[Throwable, B] =
-      flatMap(acquire)(use)
 
     def flatMap[A, B](fa: Either[Throwable, A])(f: A => Either[Throwable, B]): Either[Throwable, B] =
       fa.flatMap(f)
@@ -29,5 +31,23 @@ trait SttpEitherInstances {
       me.handleErrorWith(fa)(f)
 
     def pure[A](x: A): Either[Throwable, A] = me.pure(x)
+
+    def suspend[A](hint: Sync.Type)(thunk: => A): Either[Throwable, A] = thunk.asRight
+
+    def monotonic: Either[Throwable, FiniteDuration] = 1.second.asRight
+
+    def realTime: Either[Throwable, FiniteDuration] = 1.second.asRight
+
+    def rootCancelScope: CancelScope = CancelScope.Uncancelable
+
+    def forceR[A, B](fa: Either[Throwable, A])(fb: Either[Throwable, B]): Either[Throwable, B] =
+      fa.productR(fb)
+
+    def uncancelable[A](body: Poll[Either[Throwable, *]] => Either[Throwable, A]): Either[Throwable, A] =
+      body(IdPoll)
+
+    def canceled: Either[Throwable, Unit] = ().asRight
+
+    def onCancel[A](fa: Either[Throwable, A], fin: Either[Throwable, Unit]): Either[Throwable, A] = fa
   }
 }

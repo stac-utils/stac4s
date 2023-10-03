@@ -3,31 +3,17 @@ import xerial.sbt.Sonatype._
 ThisBuild / versionScheme := Some("semver-spec")
 
 lazy val commonSettings = Seq(
-  // We are overriding the default behavior of sbt-git which, by default, only
-  // appends the `-SNAPSHOT` suffix if there are uncommitted changes in the
-  // workspace.
-  version := {
-    if (git.gitDescribedVersion.value.isEmpty)
-      git.gitHeadCommit.value.get.substring(0, 7) + "-SNAPSHOT"
-    else if (git.gitCurrentTags.value.isEmpty || git.gitUncommittedChanges.value)
-      git.gitDescribedVersion.value.get + "-SNAPSHOT"
-    else
-      git.gitDescribedVersion.value.get
-  },
-  scalaVersion                 := "2.12.17",
-  crossScalaVersions           := List("2.12.17", "2.13.10"),
+  scalaVersion                 := "2.13.12",
+  crossScalaVersions           := List("2.13.12", "2.12.18"),
   Global / cancelable          := true,
-  scalafmtOnCompile            := true,
+  scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
-  unusedCompileDependenciesFilter -= moduleFilter("com.sksamuel.scapegoat", "scalac-scapegoat-plugin"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
-  externalResolvers := Seq(
-    DefaultMavenRepository,
-    Resolver.sonatypeRepo("snapshots"),
+  externalResolvers := Seq(DefaultMavenRepository) ++ Resolver.sonatypeOssRepos("snapshots") ++ Seq(
     Resolver.typesafeIvyRepo("releases"),
     Resolver.bintrayRepo("azavea", "maven"),
     Resolver.bintrayRepo("azavea", "geotrellis"),
@@ -39,8 +25,7 @@ lazy val commonSettings = Seq(
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
     )
-  ),
-  ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+  )
 )
 
 lazy val noPublishSettings = Seq(
@@ -55,7 +40,7 @@ lazy val publishSettings = Seq(
   organizationHomepage := Some(new URL("https://azavea.com/")),
   description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
   Test / publishArtifact := false
-) ++ sonatypeSettings ++ credentialSettings
+) ++ sonatypeSettings
 
 lazy val sonatypeSettings = Seq(
   publishMavenStyle      := true,
@@ -93,20 +78,7 @@ lazy val sonatypeSettings = Seq(
       url = url("https://www.azavea.com")
     )
   ),
-  licenses  := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-  publishTo := sonatypePublishTo.value
-)
-
-lazy val credentialSettings = Seq(
-  credentials ++= List(
-    for {
-      id <- sys.env.get("GPG_KEY_ID")
-    } yield Credentials("GnuPG Key ID", "gpg", id, "ignored"),
-    for {
-      user <- sys.env.get("SONATYPE_USERNAME")
-      pass <- sys.env.get("SONATYPE_PASSWORD")
-    } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
-  ).flatten
+  licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 )
 
 val jvmGeometryDependencies = Def.setting {
@@ -166,7 +138,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -191,7 +163,7 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime % Test)
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -209,7 +181,7 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel"     %%% "discipline-scalatest" % Versions.DisciplineScalatest     % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime % Test)
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
@@ -237,7 +209,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
       "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0")
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime)
   .jvmSettings(libraryDependencies ++= jvmGeometryDependencies.value)
 
 lazy val clientJVM = client.jvm
