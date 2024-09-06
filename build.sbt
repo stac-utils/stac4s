@@ -4,7 +4,7 @@ ThisBuild / versionScheme := Some("semver-spec")
 
 lazy val commonSettings = Seq(
   scalaVersion                 := "2.13.14",
-  crossScalaVersions           := List("2.13.14", "2.12.19"),
+  crossScalaVersions           := List("2.13.14", "2.12.20"),
   Global / cancelable          := true,
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
