@@ -17,7 +17,7 @@ object Versions {
   val DisciplineScalatest     = "2.3.0"
   val Enumeratum              = "1.7.4"
   val GeoTrellis              = "3.7.1"
-  val Jts                     = "1.19.0"
+  val Jts                     = "1.20.0"
   val Monocle                 = "2.1.0"
   val Refined                 = "0.11.2"
   val ScalacheckCats          = "0.3.2"
