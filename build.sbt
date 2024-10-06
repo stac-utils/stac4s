@@ -3,8 +3,8 @@ import xerial.sbt.Sonatype._
 ThisBuild / versionScheme := Some("semver-spec")
 
 lazy val commonSettings = Seq(
-  scalaVersion                 := "2.13.14",
-  crossScalaVersions           := List("2.13.14", "2.12.20"),
+  scalaVersion                 := "2.13.15",
+  crossScalaVersions           := List("2.13.15", "2.12.20"),
   Global / cancelable          := true,
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
