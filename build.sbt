@@ -132,7 +132,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe"                   %%% "circe-core"       % Versions.Circe,
       "io.circe"                   %%% "circe-generic"    % Versions.Circe,
       "io.circe"                   %%% "circe-parser"     % Versions.Circe,
-      "io.circe"                   %%% "circe-refined"    % Versions.Circe,
+      "io.circe"                   %%% "circe-refined"    % Versions.CirceRefined,
       "org.typelevel"              %%% "cats-core"        % Versions.Cats,
       "org.typelevel"              %%% "cats-kernel"      % Versions.Cats
     )
@@ -196,7 +196,7 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "io.circe"                      %%% "circe-core"    % Versions.Circe,
       "io.circe"                      %%% "circe-generic" % Versions.Circe,
-      "io.circe"                      %%% "circe-refined" % Versions.Circe,
+      "io.circe"                      %%% "circe-refined" % Versions.CirceRefined,
       "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
       "eu.timepit"                    %%% "refined"       % Versions.Refined,
       "org.typelevel"                 %%% "cats-core"     % Versions.Cats,
