@@ -25,6 +25,9 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
 
+      - name: Install sbt
+        uses: sbt/setup-sbt@v1
+
       - name: Check formatting
         run: sbt ";scalafix --check; scalafmtCheck; scalafmtSbtCheck; scapegoat;"
 
@@ -50,6 +53,9 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
+
+      - name: Install sbt
+        uses: sbt/setup-sbt@v1
 
       - name: Release
         run: sbt ci-release
