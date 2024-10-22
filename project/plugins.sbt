@@ -1,5 +1,5 @@
 addDependencyTreePlugin
-addSbtPlugin("com.github.sbt"          % "sbt-ci-release"            % "1.8.0")
+addSbtPlugin("com.github.sbt"          % "sbt-ci-release"            % "1.9.0")
 addSbtPlugin("com.github.cb372"        % "sbt-explicit-dependencies" % "0.3.1")
 addSbtPlugin("org.scalameta"           % "sbt-scalafmt"              % "2.5.2")
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat"             % "1.2.6")
