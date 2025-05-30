@@ -27,9 +27,9 @@ package object types {
 
   implicit val decItemDateTime: Decoder[ItemDatetime] = { c: HCursor =>
     (c.as[PointInTime], c.as[TimeRange]) match {
-      case (Right(pit), Right(tr)) => Right(Ior.Both(pit, tr))
-      case (_, Right(tr))          => Right(Ior.Right(tr))
-      case (Right(pit), _)         => Right(Ior.Left(pit))
+      case (Right(pit), Right(tr))  => Right(Ior.Both(pit, tr))
+      case (_, Right(tr))           => Right(Ior.Right(tr))
+      case (Right(pit), _)          => Right(Ior.Left(pit))
       case (Left(err1), Left(err2)) =>
         (err1, err2) match {
           case (DecodingFailure(decFailure1, h1), DecodingFailure(decFailure2, h2)) =>
