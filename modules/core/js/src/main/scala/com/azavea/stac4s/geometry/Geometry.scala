@@ -104,7 +104,7 @@ object Geometry {
   implicit val decGeometry: Decoder[Geometry] = { c =>
     for {
       geomType <- c.get[String]("type")
-      result <- geomType.toLowerCase match {
+      result   <- geomType.toLowerCase match {
         case "polygon"      => Decoder[Polygon].decodeJson(c.value)
         case "point"        => Decoder[Point2d].decodeJson(c.value)
         case "multipolygon" => Decoder[MultiPolygon].decodeJson(c.value)
