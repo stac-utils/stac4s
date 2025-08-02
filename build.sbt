@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin(scalafixSemanticdb),
   autoCompilerPlugins := true,
-  externalResolvers := Seq(DefaultMavenRepository) ++ Resolver.sonatypeOssRepos("snapshots") ++ Seq(
+  externalResolvers   := Seq(DefaultMavenRepository) ++ Resolver.sonatypeOssRepos("snapshots") ++ Seq(
     Resolver.typesafeIvyRepo("releases"),
     Resolver.bintrayRepo("azavea", "maven"),
     Resolver.bintrayRepo("azavea", "geotrellis"),
@@ -46,7 +46,7 @@ lazy val sonatypeSettings = Seq(
   publishMavenStyle      := true,
   sonatypeProfileName    := "com.azavea",
   sonatypeProjectHosting := Some(GitHubHosting(user = "azavea", repository = "stac4s", email = "systems@azavea.com")),
-  developers := List(
+  developers             := List(
     Developer(
       id = "cbrown",
       name = "Christopher Brown",
