@@ -1,26 +1,21 @@
-import xerial.sbt.Sonatype._
-
-ThisBuild / versionScheme := Some("semver-spec")
+ThisBuild / versionScheme     := Some("semver-spec")
+ThisBuild / semanticdbVersion := "4.13.9"
 
 lazy val commonSettings = Seq(
-  scalaVersion                 := "2.13.15",
-  crossScalaVersions           := List("2.13.15", "2.12.20"),
+  scalaVersion                 := "2.13.16",
+  crossScalaVersions           := List("2.13.16", "2.12.20"),
   Global / cancelable          := true,
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin(scalafixSemanticdb),
+  addCompilerPlugin("org.scalameta"  % "semanticdb-scalac"  % "4.13.9" cross CrossVersion.full),
   autoCompilerPlugins := true,
-  externalResolvers   := Seq(DefaultMavenRepository) ++ Resolver.sonatypeOssRepos("snapshots") ++ Seq(
+  externalResolvers   := Seq(DefaultMavenRepository, Resolver.sonatypeCentralSnapshots) ++ Seq(
     Resolver.typesafeIvyRepo("releases"),
-    Resolver.bintrayRepo("azavea", "maven"),
-    Resolver.bintrayRepo("azavea", "geotrellis"),
     "locationtech-releases" at "https://repo.locationtech.org/content/groups/releases",
     "locationtech-snapshots" at "https://repo.locationtech.org/content/groups/snapshots",
-    Resolver.bintrayRepo("guizmaii", "maven"),
-    Resolver.bintrayRepo("colisweb", "maven"),
     "jitpack".at("https://jitpack.io"),
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
@@ -37,16 +32,14 @@ lazy val noPublishSettings = Seq(
 lazy val publishSettings = Seq(
   organization         := "com.azavea.stac4s",
   organizationName     := "Azavea",
-  organizationHomepage := Some(new URL("https://azavea.com/")),
+  organizationHomepage := Some(url("https://azavea.com/")),
   description := "stac4s is a scala library with primitives to build applications using the SpatioTemporal Asset Catalogs specification",
   Test / publishArtifact := false
 ) ++ sonatypeSettings
 
 lazy val sonatypeSettings = Seq(
-  publishMavenStyle      := true,
-  sonatypeProfileName    := "com.azavea",
-  sonatypeProjectHosting := Some(GitHubHosting(user = "azavea", repository = "stac4s", email = "systems@azavea.com")),
-  developers             := List(
+  publishMavenStyle := true,
+  developers        := List(
     Developer(
       id = "cbrown",
       name = "Christopher Brown",
