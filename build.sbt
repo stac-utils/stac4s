@@ -8,7 +8,7 @@ lazy val commonSettings = Seq(
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.4" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
   addCompilerPlugin("org.scalameta"  % "semanticdb-scalac"  % "4.13.10" cross CrossVersion.full),
   autoCompilerPlugins := true,
