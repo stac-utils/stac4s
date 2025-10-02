@@ -12,7 +12,7 @@ object Versions {
   }
 
   val Cats                    = "2.13.0"
-  val Circe                   = "0.14.14"
+  val Circe                   = "0.14.15"
   val CirceRefined            = "0.15.1"
   val CirceJsonSchema         = "0.2.0"
   val DisciplineScalatest     = "2.3.0"
