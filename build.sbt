@@ -3,7 +3,7 @@ ThisBuild / semanticdbVersion := "4.13.9"
 
 lazy val commonSettings = Seq(
   scalaVersion                 := "2.13.16",
-  crossScalaVersions           := List("2.13.16", "2.12.20"),
+  crossScalaVersions           := List("2.13.16", "2.12.21"),
   Global / cancelable          := true,
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
