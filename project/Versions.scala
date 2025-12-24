@@ -16,7 +16,7 @@ object Versions {
   val CirceRefined            = "0.15.1"
   val CirceJsonSchema         = "0.2.0"
   val DisciplineScalatest     = "2.3.0"
-  val Enumeratum              = "1.9.0"
+  val Enumeratum              = "1.9.2"
   val GeoTrellis              = "3.8.0"
   val Jts                     = "1.20.0"
   val Monocle                 = "2.1.0"
