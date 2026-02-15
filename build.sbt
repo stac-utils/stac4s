@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
   scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.4" cross CrossVersion.full),
   addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin("org.scalameta"  % "semanticdb-scalac"  % "4.14.7" cross CrossVersion.full),
+  addCompilerPlugin("org.scalameta"  % "semanticdb-scalac"  % "4.15.2" cross CrossVersion.full),
   autoCompilerPlugins := true,
   externalResolvers   := Seq(DefaultMavenRepository, Resolver.sonatypeCentralSnapshots) ++ Seq(
     Resolver.typesafeIvyRepo("releases"),
