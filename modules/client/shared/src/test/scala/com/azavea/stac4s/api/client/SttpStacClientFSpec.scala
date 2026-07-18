@@ -11,8 +11,8 @@ import org.scalacheck.resample._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import sttp.client3.testing.SttpBackendStub
-import sttp.client3.{Response, StringBody}
+import sttp.client4.testing.BackendStub
+import sttp.client4.{Response, StringBody}
 import sttp.model.Method
 import sttp.monad.EitherMonad
 
@@ -31,7 +31,7 @@ trait SttpStacClientFSpec[S]
 
   /** We use the default synchronous Either backend to use the same tests set for the Scala JS backend. */
   lazy val backend =
-    SttpBackendStub(EitherMonad)
+    BackendStub(EitherMonad)
       .whenRequestMatches(_.uri.path == Seq("search"))
       .thenRespondF { _ => Response.json(arbItemCollectionShort.arbitrary.resample().asJson) }
       .whenRequestMatches {
