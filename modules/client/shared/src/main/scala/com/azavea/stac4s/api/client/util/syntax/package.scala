@@ -3,20 +3,20 @@ package com.azavea.stac4s.api.client.util
 import com.azavea.stac4s.api.client.ETag
 
 import eu.timepit.refined.types.string.NonEmptyString
-import sttp.client3.{RequestT, Response}
+import sttp.client4.{Request, Response}
 import sttp.model.HeaderNames
 
 package object syntax {
 
-  implicit class RequestTOps[U[_], T, -R](val self: RequestT[U, T, R]) extends AnyVal {
-    def header(k: String, v: Option[String]): RequestT[U, T, R] = v.fold(self)(self.header(k, _))
+  implicit class RequestOps[T](val self: Request[T]) extends AnyVal {
+    def header(k: String, v: Option[String]): Request[T] = v.fold(self)(self.header(k, _))
 
     @SuppressWarnings(Array("UnusedMethodParameter"))
-    def header(k: String, v: Option[NonEmptyString])(implicit d: DummyImplicit): RequestT[U, T, R] =
+    def header(k: String, v: Option[NonEmptyString])(implicit d: DummyImplicit): Request[T] =
       v.fold(self)(e => self.header(k, e.value))
 
-    def headerIfMatch(v: Option[NonEmptyString]): RequestT[U, T, R] = header(HeaderNames.IfMatch, v)
-    def headerETag(v: Option[NonEmptyString]): RequestT[U, T, R]    = header(HeaderNames.Etag, v)
+    def headerIfMatch(v: Option[NonEmptyString]): Request[T] = header(HeaderNames.IfMatch, v)
+    def headerETag(v: Option[NonEmptyString]): Request[T]    = header(HeaderNames.Etag, v)
   }
 
   implicit class ResponseOps[T](val self: Response[T]) extends AnyVal {

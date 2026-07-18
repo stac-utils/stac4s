@@ -14,12 +14,12 @@ import eu.timepit.refined.types.string.NonEmptyString
 import fs2.Stream
 import io.circe.syntax._
 import io.circe.{Encoder, Json, JsonObject}
-import sttp.client3.circe.asJson
-import sttp.client3.{Response, SttpBackend, UriContext, basicRequest}
+import sttp.client4.circe.asJson
+import sttp.client4.{Backend, Response, UriContext, basicRequest}
 import sttp.model.{MediaType, Uri}
 
 case class SttpStacClientF[F[_]: MonadThrow, S: Encoder](
-    client: SttpBackend[F, Any],
+    client: Backend[F],
     baseUri: Uri
 ) extends StreamingStacClientF[F, Stream[F, *], S] {
   import SttpStacClientF._
