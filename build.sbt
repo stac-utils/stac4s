@@ -2,8 +2,8 @@ ThisBuild / versionScheme     := Some("semver-spec")
 ThisBuild / semanticdbVersion := "4.13.9"
 
 lazy val commonSettings = Seq(
-  scalaVersion                 := "2.13.18",
-  crossScalaVersions           := List("2.13.18", "2.12.21"),
+  scalaVersion                 := "3.10.0",
+  crossScalaVersions           := List("3.10.0", "2.12.21"),
   Global / cancelable          := true,
   scalafmtOnCompile            := false,
   ThisBuild / scapegoatVersion := Versions.Scapegoat,
