@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        java: [11]
+        java: [17]
         distribution: [temurin]
     runs-on: ${{ matrix.os }}
     steps:
@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: coursier/cache-action@v8
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
@@ -29,10 +29,10 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Check formatting
-        run: sbt ";scalafix --check; scalafmtCheck; scalafmtSbtCheck; scapegoat;"
+        run: sbt ";scalafix --check; scalafmtCheck; scalafmtSbtCheck"
 
       - name: Build project
-        run: sbt +test
+        run: sbt +testFull
 
   publish:
     name: Publish Artifacts
@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        java: [8]
+        java: [17]
         distribution: [temurin]
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: coursier/cache-action@v8
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
