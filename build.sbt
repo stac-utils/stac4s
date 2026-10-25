@@ -1,19 +1,16 @@
 ThisBuild / versionScheme     := Some("semver-spec")
-ThisBuild / semanticdbVersion := "4.13.9"
+ThisBuild / semanticdbVersion := "4.17.4"
 
 lazy val commonSettings = Seq(
-  scalaVersion                 := "2.13.18",
-  crossScalaVersions           := List("2.13.18", "2.12.21"),
-  Global / cancelable          := true,
-  scalafmtOnCompile            := false,
-  ThisBuild / scapegoatVersion := Versions.Scapegoat,
-  scapegoatDisabledInspections := Seq("ObjectNames", "EmptyCaseClass"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.4" cross CrossVersion.full),
-  addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin("org.scalameta"  % "semanticdb-scalac"  % "4.17.2" cross CrossVersion.full),
+  scalaVersion        := "2.13.18",
+  crossScalaVersions  := List("2.13.18", "2.12.21"),
+  Global / cancelable := true,
+  scalafmtOnCompile   := false,
+  addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.4").cross(CrossVersion.full)),
+  addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
+  addCompilerPlugin(("org.scalameta" % "semanticdb-scalac" % "4.17.4").cross(CrossVersion.full)),
   autoCompilerPlugins := true,
   externalResolvers   := Seq(DefaultMavenRepository, Resolver.sonatypeCentralSnapshots) ++ Seq(
-    Resolver.typesafeIvyRepo("releases"),
     "locationtech-releases" at "https://repo.locationtech.org/content/groups/releases",
     "locationtech-snapshots" at "https://repo.locationtech.org/content/groups/snapshots",
     "jitpack".at("https://jitpack.io"),
@@ -99,7 +96,7 @@ val testingDependenciesJVM = Def.setting {
 val testRunnerDependenciesJVM = Seq(
   "io.circe"          %% "circe-testing"   % Versions.Circe                   % Test,
   "org.scalatest"     %% "scalatest"       % Versions.Scalatest               % Test,
-  "org.scalatestplus" %% "scalacheck-1-16" % Versions.ScalatestPlusScalacheck % Test
+  "org.scalatestplus" %% "scalacheck-1-19" % Versions.ScalatestPlusScalacheck % Test
 )
 
 lazy val root = project
@@ -116,22 +113,22 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings({
     libraryDependencies ++= Seq(
-      "com.beachape"               %%% "enumeratum"       % Versions.Enumeratum,
-      "com.beachape"               %%% "enumeratum-circe" % Versions.Enumeratum,
-      "com.chuusai"                %%% "shapeless"        % Versions.Shapeless,
-      "com.github.julien-truffaut" %%% "monocle-core"     % Versions.Monocle,
-      "com.github.julien-truffaut" %%% "monocle-macro"    % Versions.Monocle,
-      "eu.timepit"                 %%% "refined"          % Versions.Refined,
-      "io.circe"                   %%% "circe-core"       % Versions.Circe,
-      "io.circe"                   %%% "circe-generic"    % Versions.Circe,
-      "io.circe"                   %%% "circe-parser"     % Versions.Circe,
-      "io.circe"                   %%% "circe-refined"    % Versions.CirceRefined,
-      "org.typelevel"              %%% "cats-core"        % Versions.Cats,
-      "org.typelevel"              %%% "cats-kernel"      % Versions.Cats
+      "com.beachape"               %% "enumeratum"       % Versions.Enumeratum,
+      "com.beachape"               %% "enumeratum-circe" % Versions.Enumeratum,
+      "com.chuusai"                %% "shapeless"        % Versions.Shapeless,
+      "com.github.julien-truffaut" %% "monocle-core"     % Versions.Monocle,
+      "com.github.julien-truffaut" %% "monocle-macro"    % Versions.Monocle,
+      "eu.timepit"                 %% "refined"          % Versions.Refined,
+      "io.circe"                   %% "circe-core"       % Versions.Circe,
+      "io.circe"                   %% "circe-generic"    % Versions.Circe,
+      "io.circe"                   %% "circe-parser"     % Versions.Circe,
+      "io.circe"                   %% "circe-refined"    % Versions.CirceRefined,
+      "org.typelevel"              %% "cats-core"        % Versions.Cats,
+      "org.typelevel"              %% "cats-kernel"      % Versions.Cats
     )
   })
   .jvmSettings(libraryDependencies ++= coreDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % Versions.ScalaJavaTime)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
@@ -143,20 +140,20 @@ lazy val testing = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.beachape"      %%% "enumeratum"            % Versions.Enumeratum,
-      "com.beachape"      %%% "enumeratum-scalacheck" % Versions.Enumeratum,
-      "com.chuusai"       %%% "shapeless"             % Versions.Shapeless,
-      "eu.timepit"        %%% "refined-scalacheck"    % Versions.Refined,
-      "eu.timepit"        %%% "refined"               % Versions.Refined,
-      "io.chrisdavenport" %%% "cats-scalacheck"       % Versions.ScalacheckCats,
-      "io.circe"          %%% "circe-core"            % Versions.Circe,
-      "io.circe"          %%% "circe-literal"         % Versions.Circe,
-      "org.scalacheck"    %%% "scalacheck"            % Versions.Scalacheck,
-      "org.typelevel"     %%% "cats-core"             % Versions.Cats
+      "com.beachape"      %% "enumeratum"            % Versions.Enumeratum,
+      "com.beachape"      %% "enumeratum-scalacheck" % Versions.Enumeratum,
+      "com.chuusai"       %% "shapeless"             % Versions.Shapeless,
+      "eu.timepit"        %% "refined-scalacheck"    % Versions.Refined,
+      "eu.timepit"        %% "refined"               % Versions.Refined,
+      "io.chrisdavenport" %% "cats-scalacheck"       % Versions.ScalacheckCats.value,
+      "io.circe"          %% "circe-core"            % Versions.Circe,
+      "io.circe"          %% "circe-literal"         % Versions.Circe,
+      "org.scalacheck"    %% "scalacheck"            % Versions.Scalacheck,
+      "org.typelevel"     %% "cats-core"             % Versions.Cats
     )
   )
   .jvmSettings(libraryDependencies ++= testingDependenciesJVM.value)
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % Versions.ScalaJavaTime % Test)
 
 lazy val testingJVM = testing.jvm
 lazy val testingJS  = testing.js
@@ -168,13 +165,13 @@ lazy val coreTest = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"          %%% "circe-testing"        % Versions.Circe                   % Test,
-      "org.scalatest"     %%% "scalatest"            % Versions.Scalatest               % Test,
-      "org.scalatestplus" %%% "scalacheck-1-16"      % Versions.ScalatestPlusScalacheck % Test,
-      "org.typelevel"     %%% "discipline-scalatest" % Versions.DisciplineScalatest     % Test
+      "io.circe"          %% "circe-testing"        % Versions.Circe                   % Test,
+      "org.scalatest"     %% "scalatest"            % Versions.Scalatest               % Test,
+      "org.scalatestplus" %% "scalacheck-1-19"      % Versions.ScalatestPlusScalacheck % Test,
+      "org.typelevel"     %% "discipline-scalatest" % Versions.DisciplineScalatest     % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime % Test)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % Versions.ScalaJavaTime % Test)
 
 lazy val coreTestJVM = coreTest.jvm
 lazy val coreTestJS  = coreTest.js
@@ -187,22 +184,22 @@ lazy val client = crossProject(JSPlatform, JVMPlatform)
   .settings(publishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe"                      %%% "circe-core"    % Versions.Circe,
-      "io.circe"                      %%% "circe-generic" % Versions.Circe,
-      "io.circe"                      %%% "circe-refined" % Versions.CirceRefined,
-      "com.chuusai"                   %%% "shapeless"     % Versions.Shapeless,
-      "eu.timepit"                    %%% "refined"       % Versions.Refined,
-      "org.typelevel"                 %%% "cats-core"     % Versions.Cats,
-      "com.softwaremill.sttp.client4" %%% "core"          % Versions.Sttp,
-      "com.softwaremill.sttp.client4" %%% "circe"         % Versions.Sttp,
-      "com.softwaremill.sttp.client4" %%% "json-common"   % Versions.Sttp,
-      "com.softwaremill.sttp.model"   %%% "core"          % Versions.SttpModel,
-      "com.softwaremill.sttp.shared"  %%% "core"          % Versions.SttpShared,
-      "co.fs2"                        %%% "fs2-core"      % Versions.Fs2,
-      "org.scalatest"                 %%% "scalatest"     % Versions.Scalatest % Test
+      "io.circe"                      %% "circe-core"    % Versions.Circe,
+      "io.circe"                      %% "circe-generic" % Versions.Circe,
+      "io.circe"                      %% "circe-refined" % Versions.CirceRefined,
+      "com.chuusai"                   %% "shapeless"     % Versions.Shapeless,
+      "eu.timepit"                    %% "refined"       % Versions.Refined,
+      "org.typelevel"                 %% "cats-core"     % Versions.Cats,
+      "com.softwaremill.sttp.client4" %% "core"          % Versions.Sttp,
+      "com.softwaremill.sttp.client4" %% "circe"         % Versions.Sttp,
+      "com.softwaremill.sttp.client4" %% "json-common"   % Versions.Sttp,
+      "com.softwaremill.sttp.model"   %% "core"          % Versions.SttpModel,
+      "com.softwaremill.sttp.shared"  %% "core"          % Versions.SttpShared,
+      "co.fs2"                        %% "fs2-core"      % Versions.Fs2,
+      "org.scalatest"                 %% "scalatest"     % Versions.Scalatest % Test
     )
   )
-  .jsSettings(libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % Versions.ScalaJavaTime)
+  .jsSettings(libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % Versions.ScalaJavaTime)
   .jvmSettings(libraryDependencies ++= jvmGeometryDependencies.value)
 
 lazy val clientJVM = client.jvm
