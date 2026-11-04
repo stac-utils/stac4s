@@ -26,7 +26,7 @@ object Versions {
   val ScalatestPlusScalacheck = "3.2.20.0"
   val Scalatest               = "3.2.20"
   val Shapeless               = "2.3.13"
-  val Sttp                    = "4.1.0"
+  val Sttp                    = "4.1.1"
   val SttpModel               = "1.9.0"
   val SttpShared              = "1.6.0"
   val Fs2                     = "3.14.0"
