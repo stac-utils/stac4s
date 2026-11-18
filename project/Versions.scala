@@ -29,7 +29,7 @@ object Versions {
   val Sttp                    = "4.1.3"
   val SttpModel               = "1.9.0"
   val SttpShared              = "1.6.0"
-  val Fs2                     = "3.14.0"
+  val Fs2                     = "3.15.0"
   val ThreeTenExtra           = "1.11.0"
   val ScalaJavaTime           = "2.11.0"
 }
